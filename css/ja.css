@@ -1,0 +1,70 @@
+/* =====================================================================
+   「1993」日本語版の書体と文字サイズ
+   - html[lang="ja"] のときだけ効く（ロシア語・英語などに切り替えたときは無関係）
+   - 書体：KHドット神楽坂12（平木敬太郎 / Font Silo、SIL Open Font License 1.1）
+     fonts/KHDotKagurazaka12.woff2 は配布 TTF を WOFF2 に形式変換しただけのもの（字形の改変なし）
+   ===================================================================== */
+@font-face{
+  font-family:'KH Dot Kagurazaka 12';
+  src:url('../fonts/KHDotKagurazaka12.woff2') format('woff2');
+  font-weight:400; font-style:normal; font-display:block;
+}
+
+/* 書体：設定の「書体」で切り替え（ドット / ゴシック / 明朝）。
+   フォントにない記号（· — ≈ « » ✔ ✕ ▶ ▾ など）は原作の Tiny5 などで補う */
+html[lang="ja"]{--ja-font:'KH Dot Kagurazaka 12','Tiny5',monospace;}
+html[lang="ja"][data-font="sans"]{--ja-font:'Noto Sans JP','Tiny5',sans-serif;}
+html[lang="ja"][data-font="serif"]{--ja-font:'Noto Serif JP','Tiny5',serif;}
+html[lang="ja"] body,html[lang="ja"] body *{font-family:var(--ja-font) !important;}
+html[lang="ja"] body{line-break:strict;}
+
+/* 12px 未満の指定は漢字がつぶれるので 12px（ドットフォントの原寸）にそろえる */
+html[lang="ja"] #s-map .day .n{font-size:12px;}
+html[lang="ja"] #s-map .tl .lbl{font-size:12px;}
+html[lang="ja"] #s-map .pt .mk{font-size:12px;}
+html[lang="ja"] #s-map .pt.big .mk{font-size:12px;}
+html[lang="ja"] #s-map .compass{font-size:12px;}
+html[lang="ja"] #s-map .assault .a1{font-size:12px;}
+html[lang="ja"] #s-map .target h3{font-size:12px;}
+html[lang="ja"] #s-map .act .k{font-size:12px;}
+html[lang="ja"] #s-map .btn{font-size:12px;}
+html[lang="ja"] #s-event .tag{font-size:12px;letter-spacing:1px;}
+html[lang="ja"] #s-event .meta{font-size:12px;letter-spacing:1px;}
+html[lang="ja"] #s-event .ch .k{font-size:12px;}
+html[lang="ja"] #s-wh .day .n, html[lang="ja"] #s-assault .day .n{font-size:12px;}
+html[lang="ja"] #s-wh .tabs div, html[lang="ja"] #s-assault .tabs div{font-size:12px;}
+html[lang="ja"] #s-wh .fac h2, html[lang="ja"] #s-assault .fac h2{font-size:12px;}
+html[lang="ja"] .toast .h{font-size:12px;letter-spacing:1px;}
+html[lang="ja"] .menub{font-size:12px;}
+html[lang="ja"] .fsb{font-size:12px;}
+html[lang="ja"] .sndb{font-size:12px;}
+html[lang="ja"] .fin h3{font-size:12px;}
+html[lang="ja"] .mus h3{font-size:12px;}
+html[lang="ja"] .otab th{font-size:12px;}
+html[lang="ja"] .toast .km.y .c{font-size:12px;}
+html[lang="ja"] #s-paper .kick{font-size:12px;letter-spacing:1px;}
+html[lang="ja"] #s-paper .st{font-size:12px;}
+html[lang="ja"] #s-paper .h2{font-size:12px;}
+html[lang="ja"] #s-paper .brief b{font-size:12px;}
+html[lang="ja"] #s-paper .day{font-size:12px;letter-spacing:1px;}
+html[lang="ja"] #s-paper .strk b{font-size:12px;}
+html[lang="ja"] #s-paper .bt{font-size:12px;letter-spacing:1px;}
+html[lang="ja"] #s-paper .ch .k{font-size:12px;}
+html[lang="ja"] #s-paper .go .a{font-size:12px;}
+html[lang="ja"] #s-paper .go .b{font-size:12px;}
+html[lang="ja"] .chan2 .hd{font-size:12px;}
+html[lang="ja"] .toast .km .c{font-size:12px;}
+html[lang="ja"] .chan3 .hd{font-size:12px;}
+html[lang="ja"] #s-wh .det h3{font-size:12px;}
+html[lang="ja"] #s-wh .act .k, html[lang="ja"] #s-assault .aact .k{font-size:12px;}
+html[lang="ja"] #s-assault .fac h2{font-size:12px;}
+html[lang="ja"] .incy .ph b{font-size:12px;}
+html[lang="ja"] #ach-toast small{font-size:12px;letter-spacing:1px;}
+html[lang="ja"] #ach-toast b{font-size:12px;}
+html[lang="ja"] #a-banner b{font-size:12px;}
+html[lang="ja"] #s-assault .uhint{font-size:12px;}
+html[lang="ja"] #s-assault .sh{font-size:12px;}
+html[lang="ja"] #s-assault .day .d{font-size:12px;}
+html[lang="ja"] #s-assault .nextb{font-size:12px;}
+html[lang="ja"] .ph{font-size:12px;}
+html[lang="ja"] #snd2,html[lang="ja"] .menub,html[lang="ja"] #cheat-btn{font-size:12px !important;}

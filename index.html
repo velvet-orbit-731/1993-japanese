@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,27 +7,29 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="1993">
-<meta name="description" content="Пошаговая пиксельная игра про осень 1993 года. Вы — Верховный Совет: удержите Белый дом. Играется прямо в браузере.">
+<meta name="description" content="1993年秋のモスクワを舞台にしたターン制ピクセルゲーム。あなたは最高会議。ホワイトハウスを守り抜け。ブラウザでそのまま遊べます。">
 <meta name="theme-color" content="#07070a">
-<meta name="author" content="Лосев Пётр">
+<meta name="author" content="ピョートル・ロセフ（Пётр Лосев）">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://ptrls.github.io/1993/">
+<meta property="og:url" content="https://velvet-orbit-731.github.io/1993-japanese/">
 <meta property="og:title" content="1993">
-<meta property="og:description" content="Пошаговая пиксельная игра про осень 1993 года. Вы — Верховный Совет: удержите Белый дом. Играется прямо в браузере.">
-<meta property="og:image" content="https://ptrls.github.io/1993/og.png">
+<meta property="og:description" content="1993年秋のモスクワを舞台にしたターン制ピクセルゲーム。あなたは最高会議。ホワイトハウスを守り抜け。ブラウザでそのまま遊べます。">
+<meta property="og:image" content="https://velvet-orbit-731.github.io/1993-japanese/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:locale" content="ru_RU">
+<meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@peterloss">
 <meta name="twitter:title" content="1993">
-<meta name="twitter:description" content="Пошаговая пиксельная игра про осень 1993 года. Вы — Верховный Совет: удержите Белый дом. Играется прямо в браузере.">
-<meta name="twitter:image" content="https://ptrls.github.io/1993/og.png">
-<meta name="twitter:image:alt" content="Пиксельный Белый дом в огне, баррикады на набережной">
+<meta name="twitter:description" content="1993年秋のモスクワを舞台にしたターン制ピクセルゲーム。あなたは最高会議。ホワイトハウスを守り抜け。ブラウザでそのまま遊べます。">
+<meta name="twitter:image" content="https://velvet-orbit-731.github.io/1993-japanese/og.png">
+<meta name="twitter:image:alt" content="炎上するピクセルアートのホワイトハウスと、河岸通りのバリケード">
 <title>1993</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Tiny5&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/KHDotKagurazaka12.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/screens.css?v=1795291119">
+<link rel="stylesheet" href="css/ja.css?v=0.55-ja1"><!-- 日本語版の書体・文字サイズ（html[lang="ja"] のときだけ効く） -->
 <style>
   :root{
     --bg:#0b0c0f; --panel:#15161a; --panel2:#1c1d22; --line:#33312c; --line-hi:#5a5446;
@@ -337,7 +339,7 @@
   #s-assault .nextb{height:40px} #s-assault .status.alog{max-width:246px}
 </style>
 <script>window.goatcounter={path:function(p){return p.split('?')[0].split('#')[0]}};window.Stat={ev:function(n){try{var g=window.goatcounter;if(g&&g.count)g.count({path:'ev/'+n,title:n,event:true});else(window.__statq=window.__statq||[]).push(n);}catch(e){}},once:function(n){try{var k='1993-st-'+n;if(localStorage.getItem(k))return;localStorage.setItem(k,'1');}catch(e){}this.ev(n);}};</script>
-<script data-goatcounter="https://game1993.goatcounter.com/count" async src="https://gc.zgo.at/count.js" onload="(window.__statq||[]).forEach(function(n){Stat.ev(n)});window.__statq=[]"></script>
+<!-- 日本語版では、原作者のアクセス解析（GoatCounter）への送信は行わない。実績画面の全体統計の表示（読み取り）は原作のまま -->
 </head>
 <body>
 <div id="rot">ПОВЕРНИТЕ ТЕЛЕФОН<br>игра идёт в альбомной ориентации</div>
@@ -511,10 +513,12 @@
 </div>
 
 <script>/* язык: для не-русского грузим переведённые копии скриптов, а русские теги ниже глушим комментарием */
-var SINGLE=false, LANG_BUILD='0.55';
-function langFail(){try{var o=JSON.parse(localStorage.getItem('1993-opts'))||{};delete o.lang;localStorage.setItem('1993-opts',JSON.stringify(o));}catch(e){} if(!/[?&]lang=/.test(location.search))location.reload();}
+/* 日本語版：言語が未設定なら日本語（ja）で起動する。ロシア語の原文は lang=ru で選ぶ。 */
+var SINGLE=false, LANG_BUILD='0.55-ja1';
+function langFail(){try{var o=JSON.parse(localStorage.getItem('1993-opts'))||{};o.lang='ru';localStorage.setItem('1993-opts',JSON.stringify(o));}catch(e){} if(!/[?&]lang=/.test(location.search))location.reload();}
 (function(){var L=null;try{L=(JSON.parse(localStorage.getItem('1993-opts'))||{}).lang;}catch(e){} var q=(location.search.match(/[?&]lang=(\w+)/)||[])[1]; if(q)L=q;
- if(SINGLE||!L||!/^(en|zh|ko|xx)$/.test(L))return; document.documentElement.lang=L; var v='?v='+LANG_BUILD, t='';
+ if(!L)L='ja';
+ if(SINGLE||!/^(ja|en|zh|ko|xx)$/.test(L)){document.documentElement.lang='ru';return;} document.documentElement.lang=L; var v='?v='+LANG_BUILD, t='';
  if(L==='zh'||L==='ko'){t+='<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family='+(L==='zh'?'Noto+Sans+SC':'Noto+Sans+KR')+'&display=swap">';t+='<style>html[lang="'+L+'"] body,html[lang="'+L+'"] body *{font-family:'+(L==='zh'?'"Noto Sans SC"':'"Noto Sans KR"')+',sans-serif !important}<\/style>';}
  ['js/assets.js','js/faces.js','js/title.js','js/map.js','music/music.js','js/data.'+L+'.js','js/interior.'+L+'.js','js/game.'+L+'.js','js/ach.'+L+'.js'].forEach(function(u,i){t+='<script src="'+u+v+'"'+(i===4?' onerror="this.remove()"':i===5?' onerror="langFail()"':'')+'><\/script>';});
  document.write(t+'<!--');})();</script>
