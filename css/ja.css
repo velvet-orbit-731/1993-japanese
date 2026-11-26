@@ -68,3 +68,20 @@ html[lang="ja"] #s-assault .day .d{font-size:12px;}
 html[lang="ja"] #s-assault .nextb{font-size:12px;}
 html[lang="ja"] .ph{font-size:12px;}
 html[lang="ja"] #snd2,html[lang="ja"] .menub,html[lang="ja"] #cheat-btn{font-size:12px !important;}
+
+/* タイトルの「1993」ロゴは原作の専用書体のまま */
+html[lang="ja"] #s-title .logo h1{font-family:"Logo1993","Press Start 2P",monospace !important;}
+
+/* 大きな文字はドットの原寸（12px）の整数倍にそろえる（等倍表示でドットがにじまないように） */
+html[lang="ja"] #s-intro .txt{font-size:24px;line-height:36px;}
+html[lang="ja"] #s-event h1{font-size:36px;line-height:44px;}
+html[lang="ja"] #s-paper .mast{font-size:36px;line-height:40px;letter-spacing:4px;}
+html[lang="ja"] #s-paper .h1{font-size:24px;line-height:30px;}
+
+/* 地図の人物名は折り返さない */
+html[lang="ja"] #s-map .pt .pc .wn{white-space:nowrap;}
+/* 上部の数値は原作どおり太いドット数字（日本語の単位だけドットフォント） */
+html[lang="ja"] #s-map .res .r .v,html[lang="ja"] #s-wh .r .v,html[lang="ja"] #s-assault .r .v{font-family:'Press Start 2P',var(--ja-font) !important;}
+/* ホワイトハウス画面の会派一覧：名前と注記が重ならないように */
+html[lang="ja"] #s-wh .row .nm{line-height:16px;}
+html[lang="ja"] #s-wh .row .nm small{line-height:13px;margin-top:2px;}
