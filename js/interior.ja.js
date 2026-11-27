@@ -245,7 +245,7 @@ function startAssault(){
   A.lost=0; A.muster=musterRoll(A);
   // подготовка превращается в силу штурма: Легитимность, Москва, готовность ОМОНа и лояльность ведомств сбивают стартовый дух частей
   { const L=A.muster, dn=(u,d)=>{ if(u.cur>3&&u.id!=='alpha')u.mor=clamp(uMorV(u)-d,28,100); };
-    const dl=S.leg>50?Math.round((S.leg-50)*.5):0; if(dl){for(const u of A.units)dn(u,dl); L.push({g:1,t:'正統性 '+S.leg+'：クレムリン側の部隊は気乗りしないまま進む。全部隊の士気 −'+dl});}
+    const dl=S.leg>50?Math.round((S.leg-50)*.5):0; if(dl){for(const u of A.units)dn(u,dl); L.push({g:1,t:'正統性 '+S.leg+'：クレムリン側の部隊は気乗りしないまま前進している。全部隊の士気 −'+dl});}
     const om=A.units.find(u=>u.id==='omon'), rd=S.omon==null?100:S.omon, do1=Math.round((100-rd)*.5)+(S.city>60?Math.round((S.city-60)*.3):0); if(do1&&om.cur>3){dn(om,do1); L.push({g:1,t:'OMONは戦いに乗り気でない（戦意 '+rd+'%、モスクワ '+S.city+'%）：士気 −'+do1});}
     for(const u of A.units){const U=UNITS.find(x=>x.id===u.id); if(U.src==='alpha'||u.cur<=3)continue; const v=S.pts[U.src], d=v>30?Math.round((v-30)*.3):0; if(d)dn(u,d);}
     if(S.flags.corner){A.noRes=1; for(const u of A.units)dn(u,10); L.push({g:1,t:'クレムリンは追い詰められた：命令は急ごしらえで、予備兵力はない。全部隊の士気 −10'});} }
@@ -277,7 +277,7 @@ function musterRoll(A){const L=[], add=(g,t)=>L.push({g,t}), lv=id=>S.fac[id].n>
     add(st==='vs'?1:0,f.t);}
   if((S.flags.brand||0)>=2){A.air=Math.max(0,A.air-12);add(0,'「議会にファシスト」の烙印：西側は目をそらす。放送 −12');}
   // что вы успели сделать
-  if(S.flags.tunnel){A.tunnel=1;add(1,'地下道は偵察済み：負傷者を地下から運び出せる。1時間の搬出数は2倍');}
+  if(S.flags.tunnel){A.tunnel=1;add(1,'地下道は偵察済み：負傷者を地下から運び出せる。1時間あたりの搬出数は2倍');}
   if(S.flags.noComms)add(0,'通信途絶：電話はかけられず、放送の費用は2倍');
   if(S.flags.noPower){hp(-3);add(0,'建物は停電している：決意 −3');} else if(S.flags.gen)add(1,'発電機が稼働中：電気も無線も使える');
   if(S.bar>=4)add(1,'バリケードは'+S.bar+'列：入口が長く持ちこたえる');
@@ -286,7 +286,7 @@ function musterRoll(A){const L=[], add=(g,t)=>L.push({g,t}), lv=id=>S.fac[id].n>
   return L;}
 function musterCard(){const A=S.A; A.card='muster'; save(); Sfx.play('engine');
   const col=g=>A.muster.filter(m=>m.g===g).map(m=>`<div class="ml ${g?'p':'n'}">${g?'+':'−'} ${m.t}</div>`).join('')||'<div class="ml">なし</div>';
-  $('modal-win').innerHTML=`<h2>最後の夜：誰が味方か</h2><div class="sub">この2週間にしてきたことが、いま建物の前に姿を現す。あるいは現さない。会派、軍と治安機関、報道、そしてあなた自身の決断。</div>
+  $('modal-win').innerHTML=`<h2>最後の夜：誰が味方か</h2><div class="sub">この2週間に積み重ねてきたことが、いま建物の前に姿を現す。あるいは、現さない。会派、軍と治安機関、報道、そしてあなた自身の決断。</div>
    <div class="mus"><div><h3>味方</h3>${col(1)}</div><div><h3>敵</h3>${col(0)}</div></div><div class="close">ENTER ― 戦闘へ</div>`;
   $('modal').classList.add('on'); $('modal-win').querySelector('.close').onclick=musterClose;}
 function musterClose(){const A=S.A; if(!A||A.card!=='muster')return; Sfx.play('boom'); A.card=0; $('modal').classList.remove('on'); save(); renderAssault(); if(A.allRef&&A.alpha==='wait'){alog('軍も国内軍もOMONも、建物には向かわなかった。クレムリンに残るのは特殊部隊だけだ。');return alphaCard();} incidentCard();}
@@ -316,7 +316,7 @@ function nextHour(){
     const on=att.filter(u=>uEff(u)>0), tot=on.reduce((x,u)=>x+uEff(u),0)||1; let kl=0;
     for(const u of on){const U=UNITS.find(x=>x.id===u.id); const dl=Math.min(u.cur*.3,D*.13*uEff(u)/tot); u.cur=Math.max(0,u.cur-dl); u.dead=(u.dead||0)+dl; const k=Math.round(dl*9); u.lost=(u.lost||0)+k; kl+=k;
       uMor(u,-(dl*1.0)-(Ar<=D?2:-2)); u.why=Ar<=D?'撃退':'損害';
-      if(u.dead>=U.str*.6&&u.cur>3){u.cur=0;u.st='stopped';u.why='大損害';alog(U.nm+'：兵力の半数以上を失い、部隊は建物から下げられた。');aBanner(U.nm.toUpperCase()+'：戦線離脱','兵力の半数以上を失った（'+fmt(u.lost)+'人）。司令部は部隊を建物から下げた。',true);}}
+      if(u.dead>=U.str*.6&&u.cur>3){u.cur=0;u.st='stopped';u.why='大損害';alog(U.nm+'：兵力の半数以上を失い、部隊は建物から後退した。');aBanner(U.nm.toUpperCase()+'：戦線離脱','兵力の半数以上を失った（'+fmt(u.lost)+'人）。司令部は部隊を建物から後退させた。',true);}}
     A.last[s]={D:Math.round(D),A:Math.round(Ar),lost,kl};
     const nm=SECTORS.find(x=>x.id===s).nm;
     if(Ar>0)alog(`${nm}：${Ar>D?'押されている':'持ちこたえている'}。死傷者 味方${fmt(lost)}・敵${fmt(kl)}。`,Ar>D?'bad':'');}
@@ -367,10 +367,10 @@ function finale(id,why){const A=S.A; A.card='fin'; A.finId=id; if(why!==undefine
     return `<div><b>${U.nm}</b><span class="${t[0]}">${t[1]}</span></div>`;};
   const going=A.units.filter(u=>uEff(u)>0&&u.id!=='tanks').map(u=>UNITS.find(x=>x.id===u.id).nm);
   const T={
-    fell:['建物陥落',`${why==='entr'?'20番玄関':'正面玄関'}が陥落した。守備隊は一人も残っておらず、突入部隊が各階に入り込んでいる。まだ前進していた部隊（${going.join('、')||'なし'}）が建物になだれ込んだ。士気がどうであれ、損害がどれほどであれ、もう彼らを止めるものはない。扉は開いたのだ。`],
-    broken:['射撃停止',`守備側の決意はゼロになった。戦車の砲撃、各階の火災、廊下にあふれる負傷者がそうさせたのだ。入口はまだ持ちこたえていたが、守る者がいなくなった。窓から白いシーツが垂らされた。`],
-    held:why==='dark'?['日没。突入中止',`12時間戦っても、建物は落ちなかった。闇の中、クレムリンは突入の続行に踏み切れなかった。${going.length?'まだ前進していた部隊（'+going.join('、')+'）には、建物から退くよう命令が下った。あなたは敵を打ち破ったのではない。耐え抜いたのだ。':'もはや前進できる部隊は残っていなかった。'}`]
-      :['突入は力尽きた',`${A.units.some(u=>u.cur>3)?'3時間続けて、前進する部隊は一つもなかった':'建物の前には、前進できる部隊が一つも残っていない'}。指揮官たちはクレムリンに、兵が立ち上がろうとしないと報告している。銃声はひとりでにやんだ。`]}[id];
+    fell:['建物陥落',`${why==='entr'?'20番玄関':'正面玄関'}が陥落した。守備隊は一人として残っておらず、突入部隊が各階へとなだれ込んでいる。進撃を続けていた部隊（${going.join('、')||'なし'}）が建物内へ突入した。士気がどうであれ、損害がどれほど出ていようと、もはや彼らを止めるものはない。扉は開かれたのだ。`],
+    broken:['射撃停止',`守備側の決意はゼロになった。戦車からの砲撃、各階で上がる火の手、廊下にあふれる負傷者が、その心を折ったのだ。入口こそまだ持ちこたえていたが、守る者はすでにいない。窓から白いシーツが垂らされた。`],
+    held:why==='dark'?['日没。突入中止',`12時間戦い続けても、建物は落ちなかった。暗闇の中、クレムリンは突入の続行に踏み切れなかった。${going.length?'まだ前進していた部隊（'+going.join('、')+'）には、建物から撤退せよとの命令が下った。あなたは敵を打ち破ったのではない。耐え抜いたのだ。':'もはや前進できる部隊は残っていなかった。'}`]
+      :['突入は力尽きた',`${A.units.some(u=>u.cur>3)?'3時間続けて、前進する部隊は一つも現れなかった':'建物の前には、前進できる部隊が一つも残っていない'}。指揮官たちはクレムリンへ、兵が立ち上がろうとしないと報告している。銃声はいつしかやんでいた。`]}[id];
   $('modal-win').innerHTML=`<h2>${T[0]}</h2><div class="sub">${HOURS[Math.min(A.r,HOURS.length-1)]}、戦闘${Math.min(A.r,HOURS.length)}時間経過（全${HOURS.length}時間）。${T[1]}</div>
    <div class="finl">${A.units.map(unitLine).join('')}<div><b>味方の損害</b><span>死傷者 ${fmt(A.lost||0)} · 入口：20番玄関 ${Math.round(A.ctl.entr)}%、正面玄関 ${Math.round(A.ctl.front)}% · 決意 ${S.hope}%</span></div></div><div class="close">ENTER ― その後どうなったか</div>`;
   $('modal').classList.add('on'); $('modal-win').querySelector('.close').onclick=finaleGo; renderAssaultSafe();}
@@ -379,10 +379,10 @@ function finaleGo(){const A=S.A; if(!A||A.card!=='fin')return; A.card=0; $('moda
 function alphaCard(){
   const A=S.A;
   const DS=[[S.leg>=50,'正統性 50以上（現在 '+S.leg+'）'],[A.air>=40,'放送 40以上（現在 '+Math.round(A.air)+'）']], draw=DS.every(x=>x[0]);
-  $('modal-win').innerHTML=`<h2>玄関前の「アルファ」</h2><div class="sub">${A.allRef?'命令に従った部隊は一つもない。クレムリンに残る最後の予備は「アルファ」と「ヴィンペル」だ。':'突入開始から4時間、建物はまだ落ちない。クレムリンは最後の予備、「アルファ」と「ヴィンペル」を投入する。'}彼らの将校は議会に銃を向けることを望まず、自分たちの保証のもとで人々を外へ連れ出すと申し出ている。どう決着するかは、国じゅうが彼らを見ているかどうかにかかっている。</div>`+
-    [{t:'「アルファ」を迎え入れ、その保証のもとで退去する',d:draw?'<span class="p">引き分け：</span>「アルファ」はカメラの前で突入を拒む。建物は失うが、エリツィンはもう軍に命令を下せない。':'<span class="n">敗北：</span>静かな降伏。引き分けにするには'+DS.filter(x=>!x[0]).map(x=>x[1]).join('と')+'が必要。'},
-     {t:'無線で将校たちに呼びかける',d:S.A.air>=10?`放送 −10 · 成功率 ${Math.round((.25+S.leg/250)*100)}%：「アルファ」が突入を拒んで撤収する。${S.A.allRef?'そうなれば突入する部隊はいなくなる':'ほかの部隊との戦闘は続く'}`:'<span class="n">放送が10必要</span>'},
-     {t:'戦う',d:'「アルファ」が20番玄関に突入してくる。クレムリン側で最強の部隊だ。'}]
+  $('modal-win').innerHTML=`<h2>玄関前の「アルファ」</h2><div class="sub">${A.allRef?'命令に従う部隊はもはや一つもない。クレムリンに残された最後の予備戦力は「アルファ」と「ヴィンペル」だけだ。':'突入開始から4時間、建物はまだ落ちない。クレムリンは最後の予備戦力である「アルファ」と「ヴィンペル」を投入する。'}その将校たちは議会に銃を向けることを拒み、自らの保証のもとで人々を建物の外へ退去させると申し出ている。事態がどう決着するかは、国じゅうが彼らを注視しているかどうかにかかっている。</div>`+
+    [{t:'「アルファ」を受け入れ、その保証のもとで退去する',d:draw?'<span class="p">引き分け：</span>「アルファ」はカメラの前で突入を拒む。建物を失いはするが、エリツィンはもはや軍に命令を下せない。':'<span class="n">敗北：</span>静かな降伏。引き分けに持ち込むには'+DS.filter(x=>!x[0]).map(x=>x[1]).join('と')+'が必要。'},
+     {t:'無線で将校たちに呼びかける',d:S.A.air>=10?`放送 −10 · 成功率 ${Math.round((.25+S.leg/250)*100)}%：「アルファ」が突入を拒み、撤退する。${S.A.allRef?'そうなれば突入する部隊はいなくなる':'ほかの部隊との戦闘は続く'}`:'<span class="n">放送が10必要</span>'},
+     {t:'戦う',d:'「アルファ」が20番玄関に突入してくる。クレムリン側最強の部隊だ。'}]
     .map((c,i)=>`<div class="law" data-i="${i}"><div class="t">${i+1}. ${c.t}</div><div class="d">${c.d}</div></div>`).join('');
   $('modal').classList.add('on'); A.card=1;
   $('modal-win').querySelectorAll('.law').forEach(e=>e.onclick=()=>alphaChoose(+e.dataset.i));
@@ -391,9 +391,9 @@ function alphaChoose(i){const A=S.A; const u=A.units.find(x=>x.id==='alpha'), ba
   if(i===1&&S.A.air<10)return;
   A.card=0; closeModal();
   if(i===0){S.chron.push({date:dateStr(S.day),h:'「アルファ」',ch:'交渉'});return ending(S.leg>=50&&A.air>=40?'draw_alpha':'surrender_alpha');}
-  if(i===1){S.A.air-=10; u.mor=90; if(Math.random()<.25+S.leg/250){A.alpha='refuse';u.cur=0;alog('「アルファ」は議会への突入を拒否した。');aBanner('「アルファ」が拒否','将校たちは無線であなたの訴えを聞き、突入しなかった。ほかの部隊との戦闘は続く。',true);}
+  if(i===1){S.A.air-=10; u.mor=90; if(Math.random()<.25+S.leg/250){A.alpha='refuse';u.cur=0;alog('「アルファ」は議会への突入を拒絶した。');aBanner('「アルファ」が拒否','将校たちは無線であなたの訴えを聞き入れ、突入を見送った。ほかの部隊との戦闘は続く。',true);}
     else{A.alpha='attack';u.cur=base;alog('「アルファ」の将校たちは耳を貸さなかった。玄関への突入が始まる。','bad');}}
-  if(i===2){A.alpha='attack';u.cur=base;alog('「アルファ」が20番玄関に突入する。','bad');}
+  if(i===2){A.alpha='attack';u.cur=base;alog('「アルファ」が20番玄関へ突入する。','bad');}
   S.chron.push({date:dateStr(S.day),h:'「アルファ」',ch:['交渉','無線での呼びかけ','戦闘'][i]});
   save(); renderAssault();
 }
@@ -402,7 +402,7 @@ const uMor=(u,d)=>{u.mor=clamp((u.mor==null?80:u.mor)+d,0,100);};
 const uOn=(A,id)=>uEff(A.units.find(u=>u.id===id))>0;
 function uMul(A,id,k,force){const u=A.units.find(x=>x.id===id),U=UNITS.find(x=>x.id===id); if(u.cur<=3)return; u.cur=Math.min(U.str*1.5,u.cur*k);}
 function uStop(A,id,why){const u=A.units.find(x=>x.id===id); u.cur=0;u.st='stopped';alog(UNITS.find(x=>x.id===id).nm+'：'+why+'。');}
-function uBack(A,k){const u=A.units.find(u=>(u.st==='refuse'||u.st==='stopped')&&u.id!=='alpha'); if(!u)return; const U=UNITS.find(x=>x.id===u.id); u.cur=U.str*k;u.st='attack';u.mor=Math.max(uMorV(u),60);u.dead=0;alog(U.nm+'：再び戦列に戻った。','bad');}
+function uBack(A,k){const u=A.units.find(u=>(u.st==='refuse'||u.st==='stopped')&&u.id!=='alpha'); if(!u)return; const U=UNITS.find(x=>x.id===u.id); u.cur=U.str*k;u.st='attack';u.mor=Math.max(uMorV(u),60);u.dead=0;alog(U.nm+'：再び戦列へと戻った。','bad');}
 const yCallUnit=A=>A.units.filter(u=>u.cur>3&&!u.called&&uMorV(u)<MOR_GO&&!(u.id==='alpha'&&A.alpha!=='attack')).sort((x,y)=>UNITS.find(q=>q.id===y.id).str-UNITS.find(q=>q.id===x.id).str)[0];
 const yCallLoy=u=>{const U=UNITS.find(x=>x.id===u.id);return U.src==='alpha'?40:u.id==='omon'?100-(S.omon==null?100:S.omon):S.pts[U.src];};
 const yCallGain=A=>Math.max(10,Math.round(40-yCallLoy(yCallUnit(A))/3)); // чем лояльнее вам структура, тем слабее действует звонок
@@ -410,111 +410,111 @@ const yCallTalk=A=>clamp(.15+yCallLoy(yCallUnit(A))/200+S.leg/400,.1,.7);
 const gsChance=k=>clamp(S.pts.gs/130+(S.A.gsB||0)+(k||0),.05,.75);
 const INCIDENTS=[
   // звонок в Генштаб: открывается приказом, не случайно. Генштабу подчинены только мотострелки; ВВ и ОМОН — это МВД, танки — Минобороны
-  {id:'gs_call', who:'kolesn', cond:A=>false, h:'参謀本部への電話', p:()=>{const u=S.A.units.find(x=>x.id==='taman');return `将軍出身の代議員たちが参謀総長に電話をつないだ。コレスニコフは黙って聞いている。彼の自動車化狙撃兵はいま正面玄関にいる。士気 ${Math.round(uMorV(u))}%、死傷者 ${fmt(u.lost||0)}。参謀本部の支持は${S.pts.gs}%。国内軍とOMONは彼の指揮下になく、戦車も同様だ。話ができるのはタマンスカヤ師団のことだけだ。`;},
-   ch:[{t:'師団を建物から下げるよう頼む',d:()=>'成功率 '+Math.round(gsChance()*100)+'%：自動車化狙撃兵は完全に撤収する。失敗すればクレムリンに報告され、彼らの士気 +10',run:A=>{const u=A.units.find(x=>x.id==='taman'); if(Math.random()<gsChance()){u.cur=0;u.st='stopped';u.why='参謀本部が撤収';alog('自動車化狙撃兵：参謀本部が師団を建物から下げた。');aBanner('自動車化狙撃兵：撤収','コレスニコフはタマンスカヤ師団にホワイトハウスからの撤収を命じた。',true);}else{u.mor0=uMorV(u);uMor(u,10);u.why='電話が裏目に';alog('コレスニコフは話を聞き、受話器を置いた。1分後には、電話の件がクレムリンに伝わっていた。','bad');aBanner('参謀本部は拒否','コレスニコフは電話の件をクレムリンに報告した。自動車化狙撃兵の士気 +10。',false);}}},
-       {t:'急がないよう頼む：中隊を伏せさせて待たせる',d:()=>'確実：自動車化狙撃兵の士気 −15',rq:'参謀本部 30',req:()=>S.pts.gs>=30,run:A=>{const u=A.units.find(x=>x.id==='taman');u.mor0=uMorV(u);uMor(u,-15);u.why='参謀本部の時間稼ぎ';alog('参謀本部は命令を取り消さないが、急かしもしない。自動車化狙撃兵は地に伏せた。');}},
-       {t:'大会の決議を読み上げる：命令は犯罪であり、責任は彼個人が負う',d:()=>'成功率 '+Math.round(gsChance(.2)*100)+'%：自動車化狙撃兵は撤収する。失敗すれば正統性 −3、彼らの士気 +10',rq:'正統性 60',req:()=>S.leg>=60,run:A=>{const u=A.units.find(x=>x.id==='taman'); if(Math.random()<gsChance(.2)){u.cur=0;u.st='stopped';u.why='参謀本部が撤収';alog('自動車化狙撃兵：コレスニコフは突入の責任を負いたくなかった。師団は撤収した。');aBanner('自動車化狙撃兵：撤収','コレスニコフは、突入の責任を個人として負うことを拒んだ。',true);}else{u.mor0=uMorV(u);uMor(u,10);u.why='電話が裏目に';S.leg=clamp(S.leg-3,0,100);alog('コレスニコフは、大統領に忠誠を誓った身だと答えた。通話の録音はクレムリン寄りの記者たちに渡った。','bad');}}}]},
-  {id:'y_addr', cond:A=>A.r>=1, h:'エリツィンの声明', p:'午前9時、大統領が放送に登場する。「モスクワの武装反乱は鎮圧する。平和な街に刃向かった者どもは、当然の報いを受ける」。兵士たちは無線でそれを聞いている。',
+  {id:'gs_call', who:'kolesn', cond:A=>false, h:'参謀本部への電話', p:()=>{const u=S.A.units.find(x=>x.id==='taman');return `将軍出身の代議員たちが参謀総長に電話をつないだ。コレスニコフは黙って耳を傾けている。彼の指揮下にある自動車化狙撃兵は、いま正面玄関にいる。士気 ${Math.round(uMorV(u))}%、死傷者 ${fmt(u.lost||0)}。参謀本部の支持は${S.pts.gs}%。国内軍とOMONは彼の管轄下になく、戦車部隊も同様だ。話ができるのはタマンスカヤ師団のことだけだ。`;},
+   ch:[{t:'師団を建物から引き揚げるよう求める',d:()=>'成功率 '+Math.round(gsChance()*100)+'%：自動車化狙撃兵が完全に撤収する。失敗すればクレムリンに報告され、彼らの士気 +10',run:A=>{const u=A.units.find(x=>x.id==='taman'); if(Math.random()<gsChance()){u.cur=0;u.st='stopped';u.why='参謀本部が撤収';alog('自動車化狙撃兵：参謀本部が師団を建物から引き揚げさせた。');aBanner('自動車化狙撃兵：撤収','コレスニコフはタマンスカヤ師団に、ホワイトハウスからの撤収を命じた。',true);}else{u.mor0=uMorV(u);uMor(u,10);u.why='電話が裏目に';alog('コレスニコフは話を聞き終えると、受話器を置いた。1分後には、この電話の件がクレムリンに伝わっていた。','bad');aBanner('参謀本部は拒否','コレスニコフはこの電話の件をクレムリンに報告した。自動車化狙撃兵の士気 +10。',false);}}},
+       {t:'急がないよう頼む：中隊を伏せさせて待たせる',d:()=>'確実：自動車化狙撃兵の士気 −15',rq:'参謀本部 30',req:()=>S.pts.gs>=30,run:A=>{const u=A.units.find(x=>x.id==='taman');u.mor0=uMorV(u);uMor(u,-15);u.why='参謀本部の時間稼ぎ';alog('参謀本部は命令を取り消しこそしないが、急かしもしない。自動車化狙撃兵は地面に伏せた。');}},
+       {t:'大会の決議を読み上げる：命令は犯罪であり、責任は彼個人が負う',d:()=>'成功率 '+Math.round(gsChance(.2)*100)+'%：自動車化狙撃兵が撤退する。失敗すれば正統性 −3、彼らの士気 +10',rq:'正統性 60',req:()=>S.leg>=60,run:A=>{const u=A.units.find(x=>x.id==='taman'); if(Math.random()<gsChance(.2)){u.cur=0;u.st='stopped';u.why='参謀本部が撤収';alog('自動車化狙撃兵：コレスニコフは突入の責任を背負うことを拒んだ。師団は撤収した。');aBanner('自動車化狙撃兵：撤収','コレスニコフは、突入の責任を個人として負うことを拒んだ。',true);}else{u.mor0=uMorV(u);uMor(u,10);u.why='電話が裏目に';S.leg=clamp(S.leg-3,0,100);alog('コレスニコフは、大統領に忠誠を誓った身だと答えた。通話の録音はクレムリン寄りの記者たちへと渡った。','bad');}}}]},
+  {id:'y_addr', cond:A=>A.r>=1, h:'エリツィンの声明', p:'午前9時、大統領がテレビ放送に登場する。「モスクワの武装反乱は鎮圧する。平和な街に刃向かった者どもには、当然の報いを受けさせる」。兵士たちは無線でその言葉を聞いている。',
    ch:[{t:'応じない',d:'全部隊の士気 +8 · 決意 −3',run:A=>{for(const u of A.units)uMor(u,8);S.hope=clamp(S.hope-3,0,100);}},
        {t:'生放送で反論する：撃たれているのは議場の代議員だ',d:'放送 −8 · 部隊の士気 −6',rq:'放送 30',req:()=>S.A.air>=30&&S.A.air>=8,run:A=>{S.A.air-=8;for(const u of A.units)uMor(u,-6);}},
        {t:'演説を館内に流す：何を約束されたか聞かせる',d:'決意 +4 · 過激化 +4',run:A=>{S.hope=clamp(S.hope+4,0,100);S.rad=clamp(S.rad+4,0,100);}}]},
   // тяни-толкай: когда часть встала или заколебалась, Ельцин один раз лично звонит её командиру. Вернуть каждую часть он может только однажды
-  {id:'y_call', multi:1, prio:1, cond:A=>A.r>=1&&!!yCallUnit(A), h:'クレムリンからの電話', p:()=>{const u=yCallUnit(S.A),U=UNITS.find(x=>x.id===u.id);return `${U.nm}：士気 ${Math.round(uMorV(u))}%。部隊は動揺し、半分の力でしか進んでいない。エリツィンが自ら指揮官に電話をかける。「拒めばどうなるか、分かっているな？　前進しろ」。檄が届くのはまだ戦っている部隊だけで、それも一度きりだ。部隊が立ち止まってしまえば、もう誰にも戻せない。`;},
+  {id:'y_call', multi:1, prio:1, cond:A=>A.r>=1&&!!yCallUnit(A), h:'クレムリンからの電話', p:()=>{const u=yCallUnit(S.A),U=UNITS.find(x=>x.id===u.id);return `${U.nm}：士気 ${Math.round(uMorV(u))}%。部隊は動揺し、本来の半分の勢いでしか進んでいない。エリツィンが自ら指揮官に電話をかける。「拒めばどうなるか、分かっているな？　前進しろ」。だが、その檄が届くのはまだ戦っている部隊だけで、それも一度きりだ。部隊が立ち止まってしまえば、もう誰にも動かせない。`;},
    ch:[{t:'介入しない',d:()=>'部隊の士気 +'+yCallGain(S.A),run:A=>{const u=yCallUnit(A),g=yCallGain(A);u.called=1;u.mor0=uMorV(u);uMor(u,g);u.why='エリツィンの電話';}},
        {t:'彼らの無線周波数に割り込む：「指揮官、その命令は犯罪だ。責任を問われるのはあなただ」',d:()=>'放送 −10 · 部隊の士気はわずか +'+Math.round(yCallGain(S.A)/3),rq:'放送 10',req:()=>S.A.air>=10,run:A=>{const u=yCallUnit(A),g=yCallGain(A);u.called=1;u.mor0=uMorV(u);A.air-=10;uMor(u,Math.round(g/3));u.why='電話を妨害';}},
-       {t:'白旗を掲げた将校出身の代議員を送る',d:()=>'成功率 '+Math.round(yCallTalk(S.A)*100)+'%：部隊は完全に撤収する。失敗すれば士気 +'+yCallGain(S.A)+'、決意 −3',run:A=>{const u=yCallUnit(A),U=UNITS.find(x=>x.id===u.id),g=yCallGain(A),ok=Math.random()<yCallTalk(A);u.called=1; if(ok){u.cur=0;u.st='stopped';u.why='部隊ごと離脱';alog(U.nm+'：指揮官は代議員の話を聞き入れ、部隊を引き揚げた。');aBanner(U.nm.toUpperCase()+'：離脱','指揮官は代議員の話を聞き入れ、部隊を建物から引き揚げた。',true);}else{u.mor0=uMorV(u);uMor(u,g);u.why='エリツィンの電話';S.hope=clamp(S.hope-3,0,100);alog('軍使は指揮官に近づくことさえできなかった。','bad');}}}]},
-  {id:'y_order', cond:A=>A.r>=4&&A.units.some(u=>u.cur>3&&u.mor<=45), h:'署名入りの命令', p:'各部隊の指揮官のもとに、大統領直筆の署名入り命令書が届けられた。もはや拒否はためらいでは済まない。軍法会議だ。',
+       {t:'白旗を掲げた将校出身の代議員を送る',d:()=>'成功率 '+Math.round(yCallTalk(S.A)*100)+'%：部隊が完全に撤収する。失敗すれば士気 +'+yCallGain(S.A)+'、決意 −3',run:A=>{const u=yCallUnit(A),U=UNITS.find(x=>x.id===u.id),g=yCallGain(A),ok=Math.random()<yCallTalk(A);u.called=1; if(ok){u.cur=0;u.st='stopped';u.why='部隊ごと離脱';alog(U.nm+'：指揮官は代議員の説得を聞き入れ、部隊を引き揚げさせた。');aBanner(U.nm.toUpperCase()+'：離脱','指揮官は代議員の説得を受け入れ、部隊を建物から引き揚げさせた。',true);}else{u.mor0=uMorV(u);uMor(u,g);u.why='エリツィンの電話';S.hope=clamp(S.hope-3,0,100);alog('軍使は指揮官に近づくことすらできなかった。','bad');}}}]},
+  {id:'y_order', cond:A=>A.r>=4&&A.units.some(u=>u.cur>3&&u.mor<=45), h:'署名入りの命令', p:'各部隊の指揮官のもとへ、大統領直筆の署名入り命令書が届けられた。もはや拒否はためらいでは済まない。待っているのは軍法会議だ。',
    ch:[{t:'何もしない',d:'全部隊の士気 +15',run:A=>{for(const u of A.units)if(u.cur>3)uMor(u,15);}},
        {t:'放送で念を押す：命令は違法であり、責任は実行した者が負う',d:'放送 −10 · 士気は+15ではなく+5',rq:'正統性 50',req:()=>S.leg>=50&&S.A.air>=10,run:A=>{S.A.air-=10;for(const u of A.units)if(u.cur>3)uMor(u,5);}}]},
   // ----- части Кремля: кто отказывается, кто переходит, кого дожимают. Зависит от отношений со структурой -----
-  {id:'u_tank', cond:A=>uOn(A,'tanks'), h:'乗員がエンジンを切った', p:'橋の上の戦車が1両、沈黙した。車長が無線の公開回線で問いかけている。議会を砲撃した責任は誰が取るのか、拒否した者はどうなるのか、と。',
+  {id:'u_tank', cond:A=>uOn(A,'tanks'), h:'乗員がエンジンを切った', p:'橋の上の戦車が1両、沈黙した。車長が無線の公開回線で問いかけている。議会を砲撃した責任は誰が取るのか、命令を拒んだ者はどうなるのか、と。',
    ch:[{t:'黙っている',d:'戦車 −10%',run:A=>uMul(A,'tanks',.9)},
        {t:'最高会議の名で保証する：拒否した者には手出しさせない',d:'戦車 −35%',rq:'正統性 60',req:()=>S.leg>=60,run:A=>uMul(A,'tanks',.65)},
        {t:'寝返りを誘う：「砲を逆に向けろ」',d:'戦車が正面玄関の守りにつく：入口 +15 · 過激化 +5 · 放送 −10',rq:'国防省 55',req:()=>S.pts.mo>=55,run:A=>{uMul(A,'tanks',.75);A.ctl.front=Math.min(100,A.ctl.front+15);S.rad=clamp(S.rad+5,0,100);A.air=Math.max(0,A.air-10);}}]},
-  {id:'u_paid', pic:'tank', cond:A=>uOn(A,'tanks')&&S.pts.mo<50&&A.r>=1, h:'金で雇われた戦車兵', p:'徴集兵は発砲を拒んだ。戦車には志願した将校たちが乗り込む。一人ひとりに金と住宅が約束されている。砲手は熟練ぞろいだ。',
+  {id:'u_paid', pic:'tank', cond:A=>uOn(A,'tanks')&&S.pts.mo<50&&A.r>=1, h:'金で雇われた戦車兵', p:'徴集兵たちは発砲を拒否した。戦車には志願した将校たちが乗り込んでいる。一人ひとりに金と住宅が約束されており、砲手はいずれも熟練ぞろいだ。',
    ch:[{t:'何もしない',d:'戦車 +25%',run:A=>uMul(A,'tanks',1.25)},
-       {t:'放送で名前と報酬額を暴露する',d:'放送 +2 · 戦車 +5%',rq:'放送 8',req:()=>S.A.air>=8,run:A=>{S.A.air-=8;uMul(A,'tanks',1.05);A.air=Math.min(100,A.air+10);}},
+       {t:'放送で実名と報酬額を暴露する',d:'放送 +2 · 戦車 +5%',rq:'放送 8',req:()=>S.A.air>=8,run:A=>{S.A.air-=8;uMul(A,'tanks',1.05);A.air=Math.min(100,A.air+10);}},
        {t:'師団長に電話する：「志願者を降ろせ」',d:'戦車 −15%',rq:'国防省 40',req:()=>S.pts.mo>=40&&!S.flags.noComms,run:A=>uMul(A,'tanks',.85)}]},
-  {id:'u_vv', cond:A=>uOn(A,'vv'), h:'動かない連隊', p:'国内軍の連隊長が無線で伝えてきた。部下に議会を撃たせるつもりはない。だが、こちらに寝返るつもりもない。何をしてほしいのか、と尋ねている。',
+  {id:'u_vv', cond:A=>uOn(A,'vv'), h:'動かない連隊', p:'国内軍の連隊長から無線が入った。部下に議会を撃たせる気はないが、こちらに寝返るつもりもないという。自分たちに何を望むのか、と尋ねている。',
    ch:[{t:'兵を兵舎へ引き揚げさせる',d:'国内軍 −25%',run:A=>uMul(A,'vv',.75)},
        {t:'双方の間に隊列を敷くよう頼む',d:'国内軍 −45% · 20番玄関 +8',rq:'内務省 45',req:()=>S.pts.mvd>=45,run:A=>{uMul(A,'vv',.55);A.ctl.entr=Math.min(100,A.ctl.entr+8);}},
-       {t:'武器を持って寝返るよう要求する',d:'成功率 50%：義勇兵 +80、武器 +80 · 失敗すれば連隊の反感を買い、国内軍 +15%',rq:'過激化 50%',req:()=>S.rad>=50,run:A=>{if(Math.random()<.5){S.mil+=80;S.gun+=80;uMul(A,'vv',.7);alog('国内軍の連隊が最高会議側に寝返った。');}else{uMul(A,'vv',1.15);alog('連隊長は通信を一方的に切った。国内軍が前進してくる。','bad');}}}]},
-  {id:'u_omon', cond:A=>uOn(A,'omon'), h:'OMONが停止', p:'モスクワのOMONが正面玄関の前で止まった。隊員たちは、建物の中には武装集団しかいないと聞かされている。指揮官が拡声器で叫ぶ。「中に誰がいるのか見せろ」',
+       {t:'武器を携えて寝返るよう要求する',d:'成功率 50%：義勇兵 +80、武器 +80 · 失敗すれば連隊の反感を買い、国内軍 +15%',rq:'過激化 50%',req:()=>S.rad>=50,run:A=>{if(Math.random()<.5){S.mil+=80;S.gun+=80;uMul(A,'vv',.7);alog('国内軍の連隊が最高会議側に寝返った。');}else{uMul(A,'vv',1.15);alog('連隊長は一方的に通信を切った。国内軍が前進してくる。','bad');}}}]},
+  {id:'u_omon', cond:A=>uOn(A,'omon'), h:'OMONが停止', p:'モスクワのOMONが正面玄関の前で足を止めた。隊員たちは、建物の中には武装集団しかいないと聞かされている。指揮官が拡声器で叫ぶ。「中に誰がいるのか姿を見せろ」',
    ch:[{t:'頭上への威嚇射撃で応える',d:'OMON +10% · 決意 +2',run:A=>{uMul(A,'omon',1.1);S.hope=clamp(S.hope+2,0,100);}},
-       {t:'身分証を持った代議員を階段に出す',d:'OMONが撤収',rq:'定足数：代議員'+QUORUM+'人',req:()=>deputies(S)>=QUORUM,run:A=>uStop(A,'omon','代議員の姿を見て、建物から引き揚げた')},
-       {t:'市庁舎の捨て駒にされたと訴える',d:'OMON −40%',rq:'市庁舎 40',req:()=>S.pts.mer>=40,run:A=>uMul(A,'omon',.6)}]},
-  {id:'u_general', cond:A=>A.r>=2&&A.units.some(u=>uState(u)==='waver'), h:'橋の上の将軍', p:'クレムリンは動揺する部隊のもとへ、命令書を携えた将軍を送り込んだ。従わなければ軍法会議だという。将軍は隊列を回り、指揮官たちの目をのぞき込む。',
-   ch:[{t:'待つ',d:'動揺していた部隊が全力で攻撃に出る',run:A=>{for(const u of A.units)if(uState(u)==='waver'){u.st='attack';u.mor=70;}}},
+       {t:'身分証を持った代議員を階段に出す',d:'OMONが撤収',rq:'定足数：代議員'+QUORUM+'人',req:()=>deputies(S)>=QUORUM,run:A=>uStop(A,'omon','代議員の姿を見て、部隊は建物から引き揚げた')},
+       {t:'市庁舎の捨て駒にされたのだと訴える',d:'OMON −40%',rq:'市庁舎 40',req:()=>S.pts.mer>=40,run:A=>uMul(A,'omon',.6)}]},
+  {id:'u_general', cond:A=>A.r>=2&&A.units.some(u=>uState(u)==='waver'), h:'橋の上の将軍', p:'クレムリンは動揺する部隊のもとへ、命令書を携えた将軍を送り込んだ。従わなければ軍法会議だと脅し、将軍は隊列を巡って指揮官たちの目をのぞき込む。',
+   ch:[{t:'待つ',d:'動揺していた部隊が総攻撃に出る',run:A=>{for(const u of A.units)if(uState(u)==='waver'){u.st='attack';u.mor=70;}}},
        {t:'将軍出身の代議員を差し向ける',d:'部隊は動揺したまま、戦力 15%減',rq:'参謀本部 45',req:()=>S.pts.gs>=45,run:A=>{for(const u of A.units)if(u.st==='waver')u.cur*=.85;}},
        {t:'命令書を持つ将軍を生中継で映す',d:'放送 −15 · 動揺する部隊の一つが撤収し、残りは攻撃に出る',rq:'放送 40',req:()=>S.A.air>=40,run:A=>{A.air-=15;const w=A.units.filter(u=>uState(u)==='waver').sort((a,b)=>b.cur-a.cur);if(w[0])uStop(A,w[0].id,'カメラを避けて撤収した');for(const u of w.slice(1)){u.st='attack';u.cur=UNITS.find(x=>x.id===u.id).str;}}}]},
-  {id:'u_tula', cond:A=>A.r>=5&&S.pts.gs<50, h:'トゥーラの空挺部隊', p:'トゥーラ師団の連隊がモスクワに着いた。連隊長は、誰の側に立つために連れてこられたのかいまだに分からず、モスクワ環状道路で待機している。',
+  {id:'u_tula', cond:A=>A.r>=5&&S.pts.gs<50, h:'トゥーラの空挺部隊', p:'トゥーラ師団の連隊がモスクワに到着した。連隊長は、どちらの味方として連れてこられたのかも分からぬまま、モスクワ環状道路で待機している。',
    ch:[{t:'何もしない',d:'自動車化狙撃兵 +35%',run:A=>uMul(A,'taman',1.35,1)},
-       {t:'無線で連隊長に呼びかける',d:'放送 −10 · 成功率 45%：連隊はモスクワ環状道路にとどまる',rq:'放送 10',req:()=>S.A.air>=10,run:A=>{S.A.air-=10;if(Math.random()<.45)alog('トゥーラの連隊はモスクワ環状道路で止まり、市内に入らない。');else{uMul(A,'taman',1.35,1);alog('空挺部隊が市内に入った。','bad');}}},
+       {t:'無線で連隊長に呼びかける',d:'放送 −10 · 成功率 45%：連隊はモスクワ環状道路にとどまる',rq:'放送 10',req:()=>S.A.air>=10,run:A=>{S.A.air-=10;if(Math.random()<.45)alog('トゥーラの連隊はモスクワ環状道路にとどまり、市内へは入らない。');else{uMul(A,'taman',1.35,1);alog('空挺部隊が市内に入った。','bad');}}},
        {t:'大通りを人垣でふさぐ',d:'市民 −400 · 自動車化狙撃兵 +10%',rq:'市民 1500',req:()=>S.ppl>=1500,run:A=>{S.ppl-=400;uMul(A,'taman',1.1,1);}}]},
-  {id:'u_column', cond:A=>A.r>=3&&S.pts.gs>=55, h:'号令を待つ車列', p:'モスクワ近郊の部隊の指揮官が秘匿回線で電話してきた。部隊を率いてホワイトハウスへ向かう用意があるという。必要なのは命令と署名だ。',
-   ch:[{t:'断る：軍が軍を撃ってはならない',d:'放送 +10 · 決意 −2',run:A=>{A.air=Math.min(100,A.air+10);S.hope=clamp(S.hope-2,0,100);}},
+  {id:'u_column', cond:A=>A.r>=3&&S.pts.gs>=55, h:'号令を待つ車列', p:'モスクワ近郊の部隊の指揮官から、秘匿回線で電話が入った。部隊を率いてホワイトハウスへ向かう用意はある、必要なのは命令と署名だけだという。',
+   ch:[{t:'断る：軍同士で撃ち合ってはならない',d:'放送 +10 · 決意 −2',run:A=>{A.air=Math.min(100,A.air+10);S.hope=clamp(S.hope-2,0,100);}},
        {t:'モスクワ環状道路で待機させる',d:'クレムリン側の全部隊 −12%',run:A=>{for(const u of A.units)u.cur*=.88;}},
        {t:'命令に署名する：部隊を市内へ',d:'義勇兵 +150 · 武器 +150 · 決意 +6 · 過激化 +10 · 放送 −20',rq:'過激化 50%',req:()=>S.rad>=50,run:A=>{S.mil+=150;S.gun+=150;A.ammo+=150;S.hope=clamp(S.hope+6,0,100);S.rad=clamp(S.rad+10,0,100);A.air=Math.max(0,A.air-20);}}]},
-  {id:'u_cops', cond:A=>S.pts.mvd>=50, h:'警官隊が寝返った', p:'20番玄関に、地区警察署の警官30人ほどが支給の銃を携えてやって来た。年長の警官が言う。「我々が忠誠を誓ったのは法に対してだ」',
+  {id:'u_cops', cond:A=>S.pts.mvd>=50, h:'警官隊が寝返った', p:'20番玄関に、地区警察署の警官30人ほどが官給の銃を携えてやって来た。年長の警官が言う。「我々が忠誠を誓ったのは法に対してだ」',
    ch:[{t:'窓際の守りにつける',d:'義勇兵 +40 · 武器 +40',run:A=>{S.mil+=40;S.gun+=40;}},
-       {t:'制服姿のまま負傷者と女性を連れ出させる',d:'負傷者を搬出 · 放送 +10',run:A=>{A.wnd=0;A.air=Math.min(100,A.air+10);}},
-       {t:'送り返す：仲間を説得させる',d:'国内軍とOMON −15%',run:A=>{uMul(A,'vv',.85);uMul(A,'omon',.85);}}]},
-  {id:'u_back', cond:A=>false&&A.r>=3&&A.units.some(u=>(u.st==='refuse'||u.st==='stopped')&&u.id!=='alpha'), h:'拒否部隊への締め付け', p:'突入を拒んだ部隊の指揮官が解任された。新しい指揮官が金と命令を持ってきた。兵士たちは再び隊列を組まされている。',
+       {t:'制服姿のまま、負傷者と女性たちを連れ出させる',d:'負傷者を搬出 · 放送 +10',run:A=>{A.wnd=0;A.air=Math.min(100,A.air+10);}},
+       {t:'送り返す：同僚たちを説得させる',d:'国内軍とOMON −15%',run:A=>{uMul(A,'vv',.85);uMul(A,'omon',.85);}}]},
+  {id:'u_back', cond:A=>false&&A.r>=3&&A.units.some(u=>(u.st==='refuse'||u.st==='stopped')&&u.id!=='alpha'), h:'拒否部隊への締め付け', p:'突入を拒んだ部隊の指揮官が更迭された。新たな指揮官が報奨金と命令を携えて着任し、兵士たちは再び隊列を組まされている。',
    ch:[{t:'何もしない',d:'部隊が半分の戦力で復帰する',run:A=>uBack(A,.5)},
-       {t:'兵士に呼びかける：「君たちは二度だまされている」',d:'放送 −10 · 部隊は4分の1の戦力で復帰',rq:'放送 10',req:()=>S.A.air>=10,run:A=>{S.A.air-=10;uBack(A,.25);}},
+       {t:'兵士たちに呼びかける：「君たちは二度だまされている」',d:'放送 −10 · 部隊は4分の1の戦力で復帰',rq:'放送 10',req:()=>S.A.air>=10,run:A=>{S.A.air-=10;uBack(A,.25);}},
        {t:'解任された指揮官を指揮官代行と宣言する',d:'部隊はその場にとどまる',rq:'正統性 65',req:()=>S.leg>=65,run:A=>alog('兵士たちは元の指揮官に従っている。')}]},
-  {id:'floor', cond:A=>A.fire>=3, h:'12階が燃えている', p:'火はケーブル用の縦穴を伝って燃え広がる。上の階には大会の文書庫と、逃げ遅れた人々がいる。',
+  {id:'floor', cond:A=>A.fire>=3, h:'12階が燃えている', p:'火の手はケーブルシャフトを伝って燃え広がっている。上層階には大会の文書庫と、逃げ遅れた人々がいる。',
    ch:[{t:'消火に人を送る',d:'市民 −150 · 火災 −5',run:A=>{S.ppl=Math.max(0,S.ppl-150);A.fire=Math.max(0,A.fire-5);}},
        {t:'川からバケツリレーをする',d:'市民 −60 · 火災 −8',rq:'市民 1000',req:()=>S.ppl>=1000,run:A=>{S.ppl-=60;A.fire=Math.max(0,A.fire-8);}},
        {t:'その階を放棄する',d:'火災 +2 · 決意 −4',run:A=>{A.fire=Math.min(15,A.fire+2);S.hope=clamp(S.hope-4,0,100);}}]},
-  {id:'wounded', cond:A=>A.wnd>=40, h:'20番玄関の負傷者', p:'包帯が尽き、医師たちはシーツを裂いている。通りの向こうには救急車が待機しているが、封鎖線に阻まれて入れない。',
+  {id:'wounded', cond:A=>A.wnd>=40, h:'20番玄関の負傷者', p:'包帯が尽き、医師たちはシーツを裂いて処置にあたっている。通りの向こうには救急車が待機しているが、封鎖線に阻まれて近づけない。',
    ch:[{t:'銃火の中を運び出す',d:'負傷者 −60% · 義勇兵 −20',run:A=>{A.wnd=Math.round(A.wnd*.4);S.mil=Math.max(0,S.mil-20);}},
        {t:'内務省の将校に通路を開けてもらう',d:'負傷者を搬出 · 放送 +10',rq:'内務省 30',req:()=>S.pts.mvd>=30,run:A=>{A.wnd=0;A.air=Math.min(100,A.air+10);}},
        {t:'日没まで動かさない',d:'決意 −6',run:A=>{S.hope=clamp(S.hope-6,0,100);}}]},
-  {id:'cnn', cond:A=>true, h:'生中継', p:'向かいの屋上に据えられたCNNのカメラが、建物を世界中に映している。カメラマンが手を振る。誰か映る人を出してくれ、と。',
+  {id:'cnn', cond:A=>true, h:'生中継', p:'向かいの屋上に据えられたCNNのカメラが、建物の姿を世界中に中継している。カメラマンが手を振り、誰か画面の前に出てくれと合図している。',
    ch:[{t:'ハズブラートフが窓際に立つ',d:'放送 +20',run:A=>{A.air=Math.min(100,A.air+20);}},
-       {t:'代議員と女性を映し、自動小銃を持つ者は下げる',d:'放送 +35',rq:'過激化 40%以下',req:()=>S.rad<=40,run:A=>{A.air=Math.min(100,A.air+35);}},
+       {t:'代議員や女性を映し、自動小銃を持つ者は下がらせる',d:'放送 +35',rq:'過激化 40%以下',req:()=>S.rad<=40,run:A=>{A.air=Math.min(100,A.air+35);}},
        {t:'カメラどころではない',d:'決意 +2',run:A=>{S.hope=clamp(S.hope+2,0,100);}}]},
-  {id:'snipers', cond:A=>true, h:'屋上の狙撃手', p:'正体不明の狙撃手が屋上から、こちらの人々にも兵士にも発砲している。どちらの側も、相手の仕業だと思い込んでいる。',
+  {id:'snipers', cond:A=>true, h:'屋上の狙撃手', p:'正体不明の狙撃手が屋上から、こちらの人々にも部隊の兵士にも発砲している。双方が相手の仕業だと思い込んでいる。',
    ch:[{t:'人々を物陰に避難させる',d:'正面玄関 −8',run:A=>{A.ctl.front=Math.max(1,A.ctl.front-8);}},
        {t:'自力で狙撃手を排除する',d:'義勇兵 −15 · 決意 +4',rq:'義勇兵 150',req:()=>S.mil>=150,run:A=>{S.mil-=15;S.hope=clamp(S.hope+4,0,100);}},
        {t:'放送で訴える：「撃っているのは我々ではない」',d:'放送 −10 · 国内軍が弱まる',rq:'放送 30',req:()=>S.A.air>=30,run:A=>{A.air-=10;const u=A.units.find(x=>x.id==='vv');u.cur*=.75;}}]},
-  {id:'parley', cond:A=>A.r>=2, h:'軍使', p:'白旗を掲げた将校が、女性と負傷者を外へ出すための30分間の休戦を申し出た。そのあとはもっとひどくなる、と彼は言う。',
+  {id:'parley', cond:A=>A.r>=2, h:'軍使', p:'白旗を掲げた将校が、女性と負傷者を外へ出すための30分間の停戦を申し出てきた。そのあとはもっとひどい攻撃になる、と彼は言う。',
    ch:[{t:'受け入れる',d:'市民 −300 · 負傷者を搬出 · 決意 −3',run:A=>{S.ppl=Math.max(0,S.ppl-300);A.wnd=0;S.hope=clamp(S.hope-3,0,100);}},
        {t:'仲介者を求める：総主教、憲法裁判所、地方',d:'放送 +15 · 攻勢が弱まる',rq:'正統性 70',req:()=>S.leg>=70,run:A=>{A.air=Math.min(100,A.air+15);for(const u of A.units)u.cur*=.9;}},
        {t:'拒否する',d:'決意 +3',run:A=>{S.hope=clamp(S.hope+3,0,100);}}]},
-  {id:'hall', pic:'tank', cond:A=>A.units.find(u=>u.id==='tanks').cur>0, h:'議場に砲弾', p:'炸薬のない砲弾が議場の壁を撃ち抜いた。代議員たちは座席の間に伏せている。地下室へ下りようと言い出す者もいる。',
+  {id:'hall', pic:'tank', cond:A=>A.units.find(u=>u.id==='tanks').cur>0, h:'議場に砲弾', p:'炸薬のない砲弾が議場の壁を撃ち抜いた。代議員たちは座席の間に身を伏せている。地下室へ下りようと言い出す者もいる。',
    ch:[{t:'全員地下室へ',d:'決意 −4',run:A=>{S.hope=clamp(S.hope-4,0,100);}},
        {t:'審議を続ける',d:'決意 +5 · 放送 +10 · 代議員10人が去る',rq:'決意 50%',req:()=>S.hope>=50,run:A=>{S.hope=clamp(S.hope+5,0,100);A.air=Math.min(100,A.air+10);S.fac.kol.n=Math.max(0,S.fac.kol.n-10);}}]},
-  {id:'ammo', cond:A=>A.r>=1, h:'弾薬', p:'各玄関に残る弾は、銃1丁につき弾倉1本分だけだ。指揮官たちは、どこで補充すればいいのかと尋ねている。',
+  {id:'ammo', cond:A=>A.r>=1, h:'弾薬', p:'各玄関に残る弾薬は、銃1丁につき弾倉1本分だけだ。指揮官たちは、どこで補充すればいいのかと尋ねている。',
    ch:[{t:'単発で撃つ',d:'弾薬 +40 · 両入口 −6',run:A=>{A.ammo+=40;A.ctl.entr=Math.max(1,A.ctl.entr-6);A.ctl.front=Math.max(1,A.ctl.front-6);}},
        {t:'各階と非武装の者から集める',d:'弾薬 +100 · 市民 −80',rq:'市民 500',req:()=>S.ppl>=500,run:A=>{A.ammo+=100;S.ppl-=80;}},
        {t:'非常用の備蓄を開ける',d:'弾薬 +200',rq:'武器 300',req:()=>S.gun>=300,run:A=>{A.ammo+=200;}}]},
-  {id:'crowd', cond:A=>S.city>=35, h:'河岸通り', p:'橋の上と河岸通りに、数千人のモスクワ市民がいる。映画でも見るように眺める者もいれば、建物へ向かおうとする者もいる。',
+  {id:'crowd', cond:A=>S.city>=35, h:'河岸通り', p:'橋の上や河岸通りに、数千人のモスクワ市民が集まっている。まるで映画でも見るように眺める者もいれば、建物へ向かおうとする者もいる。',
    ch:[{t:'射線から離れるよう頼む',d:'決意 +1',run:A=>{S.hope=clamp(S.hope+1,0,100);}},
        {t:'人間の鎖で建物を囲むよう呼びかける',d:'1時間後に +800人 · 放送 +10',rq:'モスクワ 55%',req:()=>S.city>=55,run:A=>{A.incoming+=800;A.air=Math.min(100,A.air+10);}}]},
-  {id:'water', cond:A=>A.fire>=2, h:'消火栓は空', p:'建物の水道は1週間前から止められている。消火ホースは空になり、消火器も尽きかけている。',
+  {id:'water', cond:A=>A.fire>=2, h:'消火栓は空', p:'建物の水道は1週間前から止められたままだ。消火ホースは空で、消火器も尽きかけている。',
    ch:[{t:'銃火の中、川から水を運ぶ',d:'市民 −120 · 火災 −4',run:A=>{S.ppl=Math.max(0,S.ppl-120);A.fire=Math.max(0,A.fire-4);}},
-       {t:'バリケードの砂をかけて消す',d:'火災 −5 · 両入口 −5',run:A=>{A.fire=Math.max(0,A.fire-5);A.ctl.entr=Math.max(1,A.ctl.entr-5);A.ctl.front=Math.max(1,A.ctl.front-5);}},
+       {t:'バリケードの砂をかけて消火する',d:'火災 −5 · 両入口 −5',run:A=>{A.fire=Math.max(0,A.fire-5);A.ctl.entr=Math.max(1,A.ctl.entr-5);A.ctl.front=Math.max(1,A.ctl.front-5);}},
        {t:'燃えるに任せる',d:'火災 +2',run:A=>{A.fire=Math.min(15,A.fire+2);}}]},
-  {id:'defect', cond:A=>A.units.some(u=>u.id==='taman'&&u.cur>0), h:'寝返る兵士たち', p:'自動車化狙撃兵の1個小隊が基壇の陰に伏せたまま、撃とうとしない。中尉が、こんなことに加わりたくないと叫んでいる。',
+  {id:'defect', cond:A=>A.units.some(u=>u.id==='taman'&&u.cur>0), h:'寝返る兵士たち', p:'自動車化狙撃兵の1個小隊が基壇の陰に伏せたまま、撃とうとしない。中尉が、こんな戦いに加わりたくはないと叫んでいる。',
    ch:[{t:'立ち去るよう叫ぶ',d:'自動車化狙撃兵が弱まる',run:A=>{const u=A.units.find(x=>x.id==='taman');u.cur*=.85;}},
        {t:'武器ごと中へ引き入れる',d:'義勇兵 +30 · 武器 +60',rq:'参謀本部 40',req:()=>S.pts.gs>=40,run:A=>{S.mil+=30;S.gun+=60;const u=A.units.find(x=>x.id==='taman');u.cur*=.8;}},
        {t:'テレビで彼らを映す',d:'放送 +15',rq:'放送 20',req:()=>S.A.air>=20,run:A=>{A.air=Math.min(100,A.air+15);}}]},
-  {id:'cellar', cond:A=>A.r>=2, h:'地下室', p:'防空壕には数百人の女性たちがいる。食堂の店員、タイピスト、それに職員の子どもたちも。もう上の階へは戻れない。',
+  {id:'cellar', cond:A=>A.r>=2, h:'地下室', p:'防空壕には数百人の女性たちが身を寄せている。食堂の店員やタイピスト、それに職員の子どもたちもいる。もう上の階へは戻れない。',
    ch:[{t:'20番玄関から避難させる',d:'市民 −200 · 放送 +10 · 20番玄関 −6',run:A=>{S.ppl=Math.max(0,S.ppl-200);A.air=Math.min(100,A.air+10);A.ctl.entr=Math.max(1,A.ctl.entr-6);}},
-       {t:'日没まで地下室にとどめる',d:'決意 −3',run:A=>{S.hope=clamp(S.hope-3,0,100);}}]},
-  {id:'btr', cond:A=>A.r>=3, h:'戦利品', p:'正面玄関の前に、弾薬を満載したままの装甲兵員輸送車が乗り捨てられている。乗員は逃げた。',
+       {t:'日没まで地下室にとどまらせる',d:'決意 −3',run:A=>{S.hope=clamp(S.hope-3,0,100);}}]},
+  {id:'btr', cond:A=>A.r>=3, h:'戦利品', p:'正面玄関の前に、弾薬を満載した装甲兵員輸送車が乗り捨てられている。乗員は逃げ去った。',
    ch:[{t:'敵に渡さぬよう燃やす',d:'正面玄関 +4',run:A=>{A.ctl.front=Math.min(100,A.ctl.front+4);}},
-       {t:'味方を乗せ、機関銃を敵に向ける',d:'正面玄関 +15 · 武器 +80 · 放送 −10',rq:'義勇兵 250',req:()=>S.mil>=250,run:A=>{A.ctl.front=Math.min(100,A.ctl.front+15);S.gun+=80;A.air=Math.max(0,A.air-10);}}]},
-  {id:'planes', cond:A=>A.r>=1, h:'無線で叫ぶルツコイ', p:'副大統領が無線の公開回線で叫ぶ。「同志諸君、飛行機を飛ばせ！」　それを飛行士も、記者も、クレムリンも聞いている。',
+       {t:'味方を乗り込ませ、機関銃を敵に向ける',d:'正面玄関 +15 · 武器 +80 · 放送 −10',rq:'義勇兵 250',req:()=>S.mil>=250,run:A=>{A.ctl.front=Math.min(100,A.ctl.front+15);S.gun+=80;A.air=Math.max(0,A.air-10);}}]},
+  {id:'planes', cond:A=>A.r>=1, h:'無線で叫ぶルツコイ', p:'副大統領が無線の公開回線で叫ぶ。「同志諸君、飛行機を飛ばせ！」　その叫びを、パイロットも、記者も、クレムリンも聞いている。',
    ch:[{t:'叫ばせておく',d:'決意 +4 · 放送 −15',run:A=>{S.hope=clamp(S.hope+4,0,100);A.air=Math.max(0,A.air-15);}},
        {t:'無線機を取り上げる：世界に仲介を求める',d:'放送 +10',rq:'決意 40%',req:()=>S.hope>=40,run:A=>{A.air=Math.min(100,A.air+10);}}]},
   {id:'truce', cond:A=>A.r>=6, h:'静寂の1時間', p:'クレムリンが、負傷者を収容するための1時間の停戦を提案してきた。その1時間のうちに増援が到着することは、双方とも承知している。',
    ch:[{t:'受け入れる',d:'負傷者を搬出 · 両入口 +6 · クレムリン側の部隊が増強',run:A=>{A.wnd=0;A.ctl.entr=Math.min(100,A.ctl.entr+6);A.ctl.front=Math.min(100,A.ctl.front+6);for(const u of A.units)if(u.cur>3)u.cur*=1.12;}},
        {t:'拒否する',d:'決意 +2',run:A=>{S.hope=clamp(S.hope+2,0,100);}},
        {t:'受け入れ、記者を負傷者のもとへ案内する',d:'同上 · 放送 +20',rq:'放送 25',req:()=>S.A.air>=25,run:A=>{A.wnd=0;A.air=Math.min(100,A.air+20);A.ctl.entr=Math.min(100,A.ctl.entr+6);A.ctl.front=Math.min(100,A.ctl.front+6);for(const u of A.units)if(u.cur>3)u.cur*=1.12;}}]},
-  {id:'rne', cond:A=>S.fac.rne.n>0, h:'バルカショフ派が去る', p:'RNEが地下道への入り口を見つけ、手遅れになる前に脱出しようとしている。銃の3分の1が彼らとともに消える。',
+  {id:'rne', cond:A=>S.fac.rne.n>0, h:'バルカショフ派が去る', p:'RNEが地下道への入り口を見つけ、手遅れになる前に脱出しようとしている。銃の3分の1が彼らとともに消えてしまう。',
    ch:[{t:'行かせる',d:'RNEが建物を去る',run:A=>{S.fac.rne.n=0;}},
        {t:'隊列の前で恥を知れと叱りつける',d:'残留 · 決意 +2',rq:'決意 60%',req:()=>S.hope>=60,run:A=>{S.hope=clamp(S.hope+2,0,100);}},
        {t:'武器と引き換えに残らせる',d:'武器 −100 · 残留',rq:'武器 100',req:()=>S.gun>=100,run:A=>{S.gun-=100;if(S.mil>S.gun)S.mil=S.gun;}}]},
@@ -538,7 +538,7 @@ const A_ORDERS=[
    run:()=>{const s=S.A.ctl.entr<=S.A.ctl.front?'entr':'front';S.A.ctl[s]=Math.min(100,S.A.ctl[s]+20);S.mil-=50;for(const u of S.A.units)if(UNITS.find(x=>x.id===u.id).target===s&&u.cur>3){uMor(u,-7);u.lost=(u.lost||0)+15;}alog('「'+SECTORS.find(x=>x.id===s).nm+'」で反撃に出た。');}},
   {t:'手薄な入口をふさぐ',      d:'市民 −100 · 入口 +10', req:()=>S.ppl>=100||'100人必要',
    run:()=>{const s=S.A.ctl.entr<=S.A.ctl.front?'entr':'front';S.ppl-=100;S.A.ctl[s]=Math.min(100,S.A.ctl[s]+10);alog('人々が家具や金庫を「'+SECTORS.find(x=>x.id===s).nm+'」へ運び込む。');}},
-  {t:'参謀本部に電話',           d:()=>'コレスニコフと自動車化狙撃兵について話す', once:1, req:()=>S.flags.noComms?'通信途絶':deputies(S)<5?'代議員がいない':uEff(S.A.units.find(u=>u.id==='taman'))>0||'自動車化狙撃兵は戦っていない',
+  {t:'参謀本部に電話',           d:()=>'コレスニコフと自動車化狙撃兵について話し合う', once:1, req:()=>S.flags.noComms?'通信途絶':deputies(S)<5?'代議員がいない':uEff(S.A.units.find(u=>u.id==='taman'))>0||'自動車化狙撃兵は戦っていない',
    run:()=>{const A=S.A; A.card='inc'; A.incId='gs_call'; incidentCard();}},
   {t:'代議員を議場へ',          d:'決意 +8', once:1, req:()=>true, run:()=>{S.hope=clamp(S.hope+8,0,100);alog('砲火の中、大会は審議を続けている。人々は持ちこたえている。');}},
   {t:'消火する',               d:'市民 −100 · 火災 −6', req:()=>(S.A.fire>=1&&S.ppl>=100)||(S.A.fire<1?'燃えているものはない':'100人必要'),
@@ -546,16 +546,16 @@ const A_ORDERS=[
   {t:'市民を武装させる',            d:()=>{const k=Math.min(100,S.ppl,freeGuns(S));return '市民 −'+k+' · 義勇兵 +'+k;}, req:()=>(S.ppl>=20&&freeGuns(S)>=20)||(freeGuns(S)<20?'空いている銃がない':'人手がない'),
    run:()=>{const k=Math.min(100,S.ppl,freeGuns(S));S.ppl-=k;S.mil+=k;alog('さらに'+k+'人が武器を受け取り、窓際についた。');}},
   {t:'戦闘員に食料と水',          d:'物資 −2 · 決意 +5', req:()=>S.A.stock>=2||'物資が2必要',
-   run:()=>{S.A.stock-=2;S.hope=clamp(S.hope+5,0,100);alog('各階にパンと茶と水が配られる。');}},
+   run:()=>{S.A.stock-=2;S.hope=clamp(S.hope+5,0,100);alog('各階にパンとお茶、水が配られる。');}},
   {t:'負傷者に包帯',  d:'物資 −2 · 負傷者 −60%', req:()=>S.A.wnd<20?'負傷者は少ない':S.A.stock>=2||'物資が2必要',
-   run:()=>{S.A.stock-=2;S.A.wnd=Math.round(S.A.wnd*.4);alog('20番玄関で、包帯の最後の箱が開けられた。');}},
+   run:()=>{S.A.stock-=2;S.A.wnd=Math.round(S.A.wnd*.4);alog('20番玄関で、最後の包帯の箱が開けられた。');}},
   {t:'バリケードに軽油',       d:'物資 −3 · 手薄な入口 +12 · 火災 +1', req:()=>S.A.stock>=3||'物資が3必要',
    run:()=>{const s=S.A.ctl.entr<=S.A.ctl.front?'entr':'front';S.A.stock-=3;S.A.ctl[s]=Math.min(100,S.A.ctl[s]+12);S.A.fire+=1;alog('「'+SECTORS.find(x=>x.id===s).nm+'」のバリケードに軽油をまき、火を放った。');}},
   {t:'白旗',                 d:'降伏する', flag:1, req:()=>true, run:()=>ending('surrender')},
 ];
 // ---------- the air during the assault: what you ask the world for. One request an hour, paid in Эфир ----------
 const AIR=[
-  {t:'モスクワ市民を建物に呼ぶ', cost:10, d:()=>`1時間後に${fmt(300+S.city*10)}人が来る`, run:A=>{A.incoming+=300+S.city*10;alog('放送：モスクワ市民にホワイトハウスへの結集を呼びかけた。');}},
+  {t:'モスクワ市民を建物へ呼ぶ', cost:10, d:()=>`1時間後に${fmt(300+S.city*10)}人が来る`, run:A=>{A.incoming+=300+S.city*10;alog('放送：モスクワ市民にホワイトハウスへの結集を呼びかけた。');}},
   {t:'負傷者搬出のための停戦を求める', cost:8, d:()=>`成功率 ${Math.round(Math.min(.9,.3+S.A.air/100)*100)}%：負傷者を搬出、決意 +3`, req:()=>S.A.wnd>=20||'負傷者は少ない',
    run:A=>{if(Math.random()<Math.min(.9,.3+A.air/100)){A.wnd=0;S.hope=clamp(S.hope+3,0,100);alog('銃撃が20分間やんだ。救急車が負傷者を運び出した。');}else alog('停戦は拒否された。','bad');}},
   {t:'兵士に呼びかける：「撃つな」', cost:12, d:()=>`成功率 ${Math.round(Math.min(.45,.1+S.A.air/200)*100)}%：動揺する部隊が一つ停止する。失敗しても攻勢 −6%`,
@@ -573,7 +573,7 @@ const airGain=()=>1+Math.floor(OUTLETS.filter(o=>outSt(S,o)==='vs').length/4)+(S
 const airCost=o=>o.cost*(S.flags.noComms?2:1);
 function airState(i){const o=AIR[i],A=S.A; if(A.airUsed)return 'この時間はすでに放送した'; if(S.A.air<airCost(o))return '放送が'+airCost(o)+'必要'; const r=o.req?o.req():true; return r;}
 function openAir(){const A=S.A; if(!A||screen!=='assault'||A.card)return;
-  $('modal-win').innerHTML=`<h2>ホワイトハウスからの放送</h2><div class="sub">放送：<b style="color:var(--paper)">${Math.round(A.air)}</b>／100。味方の媒体から毎時 +${airGain()}。放送の値が高いあいだは世界が注目しています。攻勢は弱まり、部隊の士気は下がり、60以上なら動揺する部隊が停止することもあります。呼びかけには放送を消費します。呼びかけは1時間に1回までで、命令の回数は減りません。${S.flags.noComms?'<span class="n">通信が途絶しているため、外国メディアを通じてしか放送できません。費用はすべて2倍です。</span>':''}放送の値が高いほど攻勢は弱まり、呼びかけも聞き入れられやすくなります。</div><div class="app2">`+
+  $('modal-win').innerHTML=`<h2>ホワイトハウスからの放送</h2><div class="sub">放送：<b style="color:var(--paper)">${Math.round(A.air)}</b>／100。味方の媒体から毎時 +${airGain()}。放送の値が高いあいだは世界が注目しています。攻勢は弱まり、部隊の士気は下がり、60以上なら動揺する部隊が停止することもあります。呼びかけには放送を消費します。呼びかけは1時間に1回までで、命令の回数は減りません。${S.flags.noComms?'<span class="n">通信が途絶しているため、外国メディア経由でしか放送できません。費用はすべて2倍になります。</span>':''}放送の値が高いほど攻勢は弱まり、呼びかけも聞き入れられやすくなります。</div><div class="app2">`+
     AIR.map((o,i)=>{const st=airState(i);return `<div class="law${st!==true?' lock':''}" data-i="${i}"><div class="t">${o.t} <span class="cst">${airCost(o)?"放送 −"+airCost(o):"無料"}</span></div><div class="e">${st===true?o.d():`<span class="n">${st}</span>`}</div></div>`;}).join('')+
     `</div><div class="close">ESC ― 閉じる</div>`;
   $('modal').classList.add('on');
@@ -607,7 +607,7 @@ function renderAssault(){
     const st=uState(u), m=Math.round(uMorV(u)), dm=u.mor0==null?0:Math.round(m-u.mor0);
     const on=Math.ceil(uEff(u)/50*8);
     const sub=u.cur<=3&&st!=='wait'?`死傷者 ${fmt(u.lost||0)}${u.why?' · '+u.why:''}`:`死傷者 ${fmt(u.lost||0)} · 士気 ${m}%`+(dm?` <span class="${dm<0?'p':'n'}">${dm<0?'▼':'▲'}${Math.abs(dm)}${u.why?' '+u.why:''}</span>`:'');
-    return `<div class="urow ${st}"><span class="nm">${U.nm}<small>${sub}</small></span><span class="stt">${STANCE_NM[st]}</span><div class="b r" title="現在の戦闘力">${Array.from({length:8},(_,i)=>`<i class="${i<on?'on':''}"></i>`).join('')}</div></div>`;}).join('')+'<div class="uhint">士気50以上：前進 · 25–49：半分の力 · 25未満：戦闘から完全に離脱</div>';
+    return `<div class="urow ${st}"><span class="nm">${U.nm}<small>${sub}</small></span><span class="stt">${STANCE_NM[st]}</span><div class="b r" title="現在の戦闘力">${Array.from({length:8},(_,i)=>`<i class="${i<on?'on':''}"></i>`).join('')}</div></div>`;}).join('')+'<div class="uhint">士気50以上：前進 · 25–49：戦力半減 · 25未満：戦闘から完全に離脱</div>';
   // sectors
   $('a-sect').innerHTML=`<h2>防衛 <span>戦力 ${fmt(F)} · 弾薬 残り${S.mil>0?Math.floor(A.ammo/Math.max(1,Math.round(S.mil/8))):'—'}時間分</span></h2>`+SECTORS.map(s=>{const sh=A.shares[s.id];const c=A.ctl[s.id];
     const pr=s.id==='tower'?`<small class="${sh<10?'n':'p'}">${sh<10?'無人：上階に正体不明の狙撃手、決意 −2/時':'狙撃手：両入口への攻勢 −'+Math.round(towerCut(A)*100)+'%'}</small>`:(()=>{const {D,A:a}=assaultSector(s.id);const L=A.last&&A.last[s.id];return `<small class="${a>D?'n':'p'}">防衛 ${Math.round(D)} 対 攻勢 ${Math.round(a)}：${a>D?'押されている':'持ちこたえている'}${L?` · 直近1時間：味方 −${fmt(L.lost)}、敵 −${fmt(L.kl)}`:''}</small>`;})();
