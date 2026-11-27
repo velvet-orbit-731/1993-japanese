@@ -157,12 +157,12 @@ addEventListener('pointerdown',()=>Music.sync());addEventListener('keydown',()=>
 
 // ---------- intro: a slide show before a new game ----------
 const INTRO=[
-  {pic:['wh'],      st:'モスクワ · 1993', t:'ソ連が消えて2年目になる。価格は自由化され、預金は紙くず同然となり、工場は止まって賃金も出ない。国はいまも1978年制定のロシア共和国（RSFSR）憲法のもとにあり、そこにはすでに数百もの修正が加えられている。'},
-  {pic:['yeltsin'], st:'大統領',      t:'ボリス・エリツィンは1991年6月に大統領に選ばれた。市場経済改革を進めているが、議会のせいで最後までやり遂げられないと考えている。彼に必要なのは、強い大統領を定めた新しい憲法だ。'},
-  {pic:['hasb'],    st:'議会',      t:'人民代議員大会と最高会議は1990年に選ばれた。現行憲法のもとでは、国の最高権力は彼らにある。最高会議議長は、つい最近までエリツィンの盟友だったルスラン・ハズブラートフだ。'},
-  {pic:['yeltsin','hasb'], st:'二重権力', t:'1992年12月、大会はガイダルの首相就任を承認しなかった。1993年3月には大統領の罷免を試みたが、72票足りなかった。いまや法律も大統領令も、ことごとく相手側に覆される。'},
-  {pic:['wh'],      st:'4月25日 · 「賛成、賛成、反対、賛成」', t:'国民投票では、多数が大統領とその改革を支持した。だが、大統領と議会のどちらについても前倒し選挙は行われない。両陣営とも勝利を宣言した。'},
-  {pic:['rutskoy'], st:'副大統領', t:'将軍でソ連邦英雄のアレクサンドル・ルツコイは議会側に移り、閣僚たちの不正を暴く資料が「スーツケース何個分も」あると予告した。9月1日、エリツィンは大統領令で彼の職務を停止した。最高会議はこの大統領令を違法とみなしている。'},
+  {pic:['wh'],      st:'モスクワ · 1993', t:'ソ連が崩壊して2年目になる。価格は自由化され、預金は紙くず同然となり、工場は停止して賃金も支払われない。国はいまも1978年制定のロシア共和国（RSFSR）憲法のもとにあり、そこにはすでに数百もの修正が加えられている。'},
+  {pic:['yeltsin'], st:'大統領',      t:'ボリス・エリツィンは1991年6月に大統領に選出された。市場経済改革を進めているが、議会に阻まれて最後までやり遂げられないと考えている。彼に必要なのは、強い大統領権限を定めた新たな憲法だ。'},
+  {pic:['hasb'],    st:'議会',      t:'人民代議員大会と最高会議は1990年に選出された。現行憲法のもとでは、国の最高権力は彼らの手にある。最高会議議長を務めるのは、つい最近までエリツィンの盟友だったルスラン・ハズブラートフだ。'},
+  {pic:['yeltsin','hasb'], st:'二重権力', t:'1992年12月、大会はガイダルの首相就任を承認しなかった。1993年3月には大統領の罷免を試みたが、72票足りなかった。いまや法律も大統領令も、ことごとく相手の手によって覆されている。'},
+  {pic:['wh'],      st:'4月25日 · 「賛成、賛成、反対、賛成」', t:'国民投票では、多数が大統領とその改革を支持した。だが、大統領と議会のどちらの前倒し選挙も行われず、両陣営がそれぞれ勝利を宣言した。'},
+  {pic:['rutskoy'], st:'副大統領', t:'将軍にしてソ連邦英雄のアレクサンドル・ルツコイは議会側に転じ、閣僚たちの不正を暴く資料が「スーツケース何個分も」あると予告した。9月1日、エリツィンは大統領令で彼の職務を停止した。最高会議はこの大統領令を違法とみなしている。'},
   {pic:['wh'],      st:'9月14日',    t:'あなたは最高会議だ。手元にあるのは、クラスノプレスネンスカヤ河岸通りの建物、265人の代議員、法、そしてその壁のもとへ駆けつける人々。大統領は軍に「決定的な9月」を約束した。この先どうなるかは、誰にもわからない。'},
 ];
 let introI=0,introN=0,introT=null,introGo=null;
@@ -229,7 +229,7 @@ function legDrift(S){const P=[],add=(v,t)=>{if(v)P.push([v,t]);};
 const pressLeg=S=>OUTLETS.reduce((a,o)=>{const st=outSt(S,o),e=st==='vs'?o.pas:st==='kr'?o.kpas:null;return a+((e&&e.fx.leg)||0);},0);
 // давление кольца за ночь; S.hold — что игрок оплачивает, чтобы терпеть
 function ringPress(S){const h=S.hold||{}, hv=(S.ring==null?100:S.ring)>=50; return {leg:h.cour?(hv?-2:-1):(hv?-4:-2), hope:h.ration?0:(hv?-3:-2), sup:(h.port||S.flags.gap>0)?0:(hv?.6:.4), med:h.cour?0:(hv?-2:-1), dep:h.cour?0:(hv?4:2)};}
-function syncRing(){ if(S.cordon){ if(S.ring==null)S.ring=100; if(S.ring<=0){S.cordon=0;S.ring=null;S.flags.ringOff=1;S.flags.gap=0;S.hold={};apply({hope:5,leg:3});log('包囲網が解けた。ホワイトハウスへ再び人と車が向かっている。');} } else S.ring=null; }
+function syncRing(){ if(S.cordon){ if(S.ring==null)S.ring=100; if(S.ring<=0){S.cordon=0;S.ring=null;S.flags.ringOff=1;S.flags.gap=0;S.hold={};apply({hope:5,leg:3});log('包囲網が解かれ、ホワイトハウスへ再び人と車が向かっている。');} } else S.ring=null; }
 function halve(fx){const o={};for(const k in fx){const v=fx[k]; o[k]=typeof v==='object'?halve(v):(v<0?Math.ceil(v/2):Math.floor(v/2));}return o;}
 // лояльность фракций двигается каждую ночь: её тянут издания, которые фракция читает, и общее положение дел
 function facDrift(){const out=[]; for(const F of FACTIONS){const f=S.fac[F.id]; f.tr=null; if(F.kind!=='dep'||f.n<=0)continue; let v=0; const up=[],dn=[];
@@ -305,7 +305,7 @@ function renderMap(){
     d.querySelector('.mk').onclick=d.querySelector('.pc').onclick=()=>{S.sel=p.id;renderMap();firstLook('p',p.id);};
     map.appendChild(d);}
   syncRing(); const tags=[]; if(S.cordon)tags.push({x:12,y:2,t:'包囲網 '+S.ring+(S.flags.gap>0?'、抜け道あり':'')+' ▸ 解除方法',c:'btn',on:openSiege});
-  if(S.flags.noComms)tags.push({x:12,y:7,t:'通信途絶：電話も編集部も使えない ▸',c:'btn red',on:openSiege});
+  if(S.flags.noComms)tags.push({x:12,y:7,t:'通信途絶：電話も編集部も不通 ▸',c:'btn red',on:openSiege});
   if(S.strike){const T=STRIKES.find(x=>x.id===S.strike.id);tags.push({x:12,y:S.flags.noComms&&S.cordon?12:(S.flags.noComms||S.cordon)?7:2,t:'今夜のエリツィンの攻撃：'+T.nm+(T.cover(S)?' · 対処済み':' · 未対処')+' ▸',c:'btn'+(T.cover(S)?'':' red'),on:openStrike});}
   if(S.phase>1&&S.rad>=40)tags.push({x:84.5,y:95.5,t:'衝突',c:'red'});
   for(const tg of tags){const d=document.createElement('div');d.className='tag '+tg.c;d.textContent=tg.t;d.style.left=(tg.x*4-40)+'px';d.style.top=(tg.y*4+4)+'px';if(tg.on)d.onclick=tg.on;map.appendChild(d);}
@@ -337,9 +337,9 @@ function actState(pid,i){const a=ACTIONS[pid][i];
   if(a.once&&S.once[pid+i])return '実行済み';
   if(S.used[pid+i])return '今日は実行済み';
   if(a.phone&&S.flags.noComms)return '電話が不通';
-  if(S.cordon&&pid!=='wh'&&!a.phone&&!/封鎖線/.test(a.t)&&!(S.flags.gap>0||S.flags.tunnel))return '包囲網：鉄条網の外に出られない';
+  if(S.cordon&&pid!=='wh'&&!a.phone&&!/封鎖線/.test(a.t)&&!(S.flags.gap>0||S.flags.tunnel))return '包囲網：鉄条網の外へは出られない';
   if(a.req){const r=a.req(S);if(r!==true)return r;}
-  if(a.dep&&deputies(S)-S.away<a.dep)return '手の空いた代議員が足りない';
+  if(a.dep&&deputies(S)-S.away<a.dep)return '手の空いている代議員が足りない';
   if(!S.orders)return '朝まで命令なし';
   return true;}
 function renderTarget(){
@@ -359,14 +359,14 @@ function renderTarget(){
     <div class="own">${S.phase===1?'傾向':'掌握'}：<span style="color:${OWN_COL[o]}">${OWN_NM[o]}</span></div></div></div>
     <div class="split"><div class="a" style="width:${v}%"></div><div class="b" style="width:${100-v}%"></div></div>
     <div class="split-l"><span>最高会議 ${v}%</span><span>クレムリン ${100-v}%</span></div>
-    <div class="facts">${(T=>T?`<span class="${tugSide(v)==='vs'?'p':'n'}">現在、毎晩：${T.t}${fxText(T.fx)?'（'+fxText(T.fx).replace(/<[^>]+>/g,'')+'）':''}${T.ph&&S.phase<T.ph?' ― 危機が始まってから':''}</span><br>`:POINT_TUG[p.id]?'65%以上で毎晩あなたに有利に、35%以下でクレムリンに有利に働きます。<br>':'')(POINT_TUG[p.id]&&tugSide(v)&&POINT_TUG[p.id][tugSide(v)])}${(p.id==='mo'||p.id==='gs')&&S.phase===2?`突入時の${p.id==='mo'?'戦車':'自動車化狙撃兵'}：<span style="color:var(--paper)">${v>=65?'出動しない':v>=45?'及び腰で出動':'命令を実行'}</span>（45以上でためらい、65以上で拒否）。`:''}${p.id==='mvd'&&S.phase===2?`<span style="color:var(--paper)">OMONの戦意：${S.omon==null?100:S.omon}%</span>（60以下でためらい、30以下で出動しない）。`:''}${p.id==='wh'?'ここで大会が開かれています。会派と最高会議の活動は「ホワイトハウス」画面で確認できます。':''}${p.id!=='wh'?`<span style="color:var(--paper)">命令の実行率：${Math.round(execChance(p.id)*100)}%</span>${S.flags.noComms?'（通信途絶：−15%）':''}`:''}</div>
+    <div class="facts">${(T=>T?`<span class="${tugSide(v)==='vs'?'p':'n'}">現在、毎晩：${T.t}${fxText(T.fx)?'（'+fxText(T.fx).replace(/<[^>]+>/g,'')+'）':''}${T.ph&&S.phase<T.ph?' ― 危機が始まってから':''}</span><br>`:POINT_TUG[p.id]?'65%以上なら毎晩あなたに有利に、35%以下ならクレムリンに有利に働きます。<br>':'')(POINT_TUG[p.id]&&tugSide(v)&&POINT_TUG[p.id][tugSide(v)])}${(p.id==='mo'||p.id==='gs')&&S.phase===2?`突入時の${p.id==='mo'?'戦車':'自動車化狙撃兵'}：<span style="color:var(--paper)">${v>=65?'出動しない':v>=45?'及び腰で出動':'命令を実行'}</span>（45以上でためらい、65以上で拒否）。`:''}${p.id==='mvd'&&S.phase===2?`<span style="color:var(--paper)">OMONの戦意：${S.omon==null?100:S.omon}%</span>（60以下でためらい、30以下で出動しない）。`:''}${p.id==='wh'?'ここで大会が開かれています。各会派と最高会議の動向は「ホワイトハウス」画面で確認できます。':''}${p.id!=='wh'?`<span style="color:var(--paper)">命令の実行率：${Math.round(execChance(p.id)*100)}%</span>${S.flags.noComms?'（通信途絶：−15%）':''}`:''}</div>
     <div class="acts">${acts}</div>`;
   $('target').querySelectorAll('.act').forEach(e=>e.onclick=()=>doAction(p.id,+e.dataset.i));
 }
 function doAction(pid,i){
   if(i===undefined||actState(pid,i)!==true)return;
   const a=ACTIONS[pid][i]; let fx, txt; S.uses=S.uses||{};
-  if(Math.random()>execChance(pid)){S.orders--; S.used[pid+i]=1; log(POINTS.find(q=>q.id===pid).nm.replace(/ ↑.*/,'')+'：最高会議の命令は実行されなかった。正統性が足りない。','bad'); Sfx.play('fail'); S.st=S.st||{}; S.st.fail=(S.st.fail||0)+1; save(); renderMap(); return;}
+  if(Math.random()>execChance(pid)){S.orders--; S.used[pid+i]=1; log(POINTS.find(q=>q.id===pid).nm.replace(/ ↑.*/,'')+'：最高会議の命令は実行されなかった。正統性が不足している。','bad'); Sfx.play('fail'); S.st=S.st||{}; S.st.fail=(S.st.fail||0)+1; save(); renderMap(); return;}
   Sfx.play(actSound(a.t));
   if(a.chance){const ok=Math.random()<a.chance(S); fx=ok?a.ok:a.fail; txt=ok?a.okLog:a.failLog; log(txt,ok?'':'bad');}
   else{fx=actFx(pid,i); S.uses[pid+i]=(S.uses[pid+i]||0)+1; txt=POINTS.find(q=>q.id===pid).nm.replace(/ ↑.*/,'')+'：'+a.t+'。'; log(txt);}
@@ -378,7 +378,7 @@ function doAction(pid,i){
 // ---------- decrees ----------
 function openLaws(){
   const n=S.lawCharges;
-  $('modal-win').innerHTML=`<h2>最高会議の決議</h2>${resStrip('law')}<div class="sub">${n?'採択できる決議：'+n+'件。新しい決議は2日に1回です。正統性が高いほど決議の効果は大きくなります（現在 ×'+(.5+S.leg/100).toFixed(1)+'）。':'今日は採択できません。新しい決議は2日に1回です。'}</div>`+
+  $('modal-win').innerHTML=`<h2>最高会議の決議</h2>${resStrip('law')}<div class="sub">${n?'採択できる決議：'+n+'件。新たな決議は2日に1回行えます。正統性が高いほど決議の効果は大きくなります（現在 ×'+(.5+S.leg/100).toFixed(1)+'）。':'今日は採択できません。新しい決議は2日に1回です。'}</div>`+
     LAWS.filter(inPh).map(l=>`<div class="law${S.laws[l.id]?' done':!n?' lock':''}" data-id="${l.id}"><div class="t">${l.t}</div><div class="d">${l.d}</div><div class="e">${S.laws[l.id]?'採択済み':(!n?'<span class="n">採択できる決議がない：新しい決議は2日に1回</span> · ':'')+fxText(lawFx(l))}</div></div>`).join('')+
     `<div class="close">ESC：閉じる</div>`;
   $('modal').classList.add('on');
@@ -392,7 +392,7 @@ let etherSel=null;
 function outWayState(o,k){const W=OUT_WAYS[k]; if(S.appeals.pull)return '今日はすでに編集部に働きかけた'; return W.req(S,o);}
 function outWin(o,k){const W=OUT_WAYS[k]; if(outWayState(o,k)!==true||outLocked(S,o))return; const st=outSt(S,o);
   apply(W.cost(o)); if(W.order)S.orders--; if(W.run)W.run(S); S.appeals.pull=1; S.did.media=1; Sfx.play(k==='p'?'crowd':k==='z'?'stamp':'paper');
-  if(W.chance&&Math.random()>W.chance){apply({city:-3}); log('放送：'+o.nm+'への圧力は失敗。編集部は「暴徒」について書き立てている。');}
+  if(W.chance&&Math.random()>W.chance){apply({city:-3}); log('放送：'+o.nm+'への圧力は失敗に終わった。編集部は「暴徒」と書き立てている。');}
   else{S.out[o.id]=st==='kr'?'neu':'vs'; log('放送：'+o.nm+(st==='kr'?'はもうクレムリンの言いなりではない。':'が最高会議に発言の場を与えるようになった。'));}
   save(); showMain(); openEther();}
 function outActState(o,a,key){if(S.flags.noComms&&o.id!=='radio'&&o.id!=='for')return '通信途絶'; if(S.appeals[key])return '今日は実施済み'; if(S.med<a.cost)return '放送'+a.cost+'が必要'; return true;}
@@ -414,14 +414,14 @@ function openEther(){
   const st=outSt(S,o); let det=`<div class="odet"><div class="ph">媒体 · ${st==='vs'?'味方：指示を出す（1日1回）':st==='off'?'停止中':'引き込む方法（1日1件'+(S.appeals.pull?'、実施済み':'')+'）'}</div><div class="oh"><b>${o.nm}</b> <span>影響力 ${o.r} · ${SN[st]}。${o.about||''}</span></div><div class="obtn">`;
   if(st==='vs'){det+=[['o'+o.id,o.act],['p'+o.id,o.act2]].filter(x=>x[1]).map(([key,a])=>{const s2=outActState(o,a,key);return `<div class="law oact${s2!==true?' lock':''}" data-k="${key}"><div class="t">${a.t} <span class="cst">放送 −${a.cost}</span></div><div class="e">${s2===true?[fxText(fxOf(a)),a.e].filter(Boolean).join(' · '):`<span class="n">${s2}</span>`}</div></div>`;}).join('');}
   else if(st==='off')det+=`<div class="oa n">現在は停止中。</div>`;
-  else if(outLocked(S,o))det+=`<div class="oa n">引き込めない。</div>`;
+  else if(outLocked(S,o))det+=`<div class="oa n">取り込めない。</div>`;
   else det+=(o.ways||'').split('').map(k=>{const W=OUT_WAYS[k], s2=outWayState(o,k), c=fxText(W.cost(o))||(k==='z'?'決議':'');return `<div class="law oway${s2!==true?' lock':''}" data-w="${k}"><div class="t">${W.t} <span class="cst">${c||'命令'}</span></div><div class="e">${s2===true?W.d(o)+(st==='kr'?'。中立になる':'。味方になる'):`<span class="n">${s2}</span>`}</div></div>`;}).join('');
   det+='</div></div>';
   const win=$('modal-win'); win.classList.add('wide');
   win.innerHTML=`<h2>放送 · モスクワをめぐる攻防</h2>
    <div class="tug"><span class="l">最高会議側 ${S.city}%</span><div class="tb"><i style="width:${S.city}%"></i></div><span class="r">クレムリン側 ${100-S.city}%</span></div>
    ${resStrip('med')}
-   <div class="sub">あなたの発信力 <b style="color:var(--ok)">${inc}</b> 対 クレムリンの発信力 <b style="color:#7fa0cf">${kv}</b>：今夜のモスクワは <b class="${dc<0?'n':'p'}">${dc?sg(dc):'変化なし'}</b>。モスクワを動かす手段は、「モスコフスキー・コムソモーレツ」と「モスクワのこだま」（味方になった媒体1つにつき毎晩+1、現在 +${moscOut()}）、下のキャンペーン、朝刊での反論です。表から媒体を選んでください。${S.flags.noComms?' <span class="n">通信途絶：使えるのは館内のラジオ、外国メディア、館内に招き入れた者だけです。</span>':''}${S.kmed?' <span class="n">昨夜、クレムリンが放送で攻勢をかけた。</span>':''}</div>
+   <div class="sub">あなたの発信力 <b style="color:var(--ok)">${inc}</b> 対 クレムリンの発信力 <b style="color:#7fa0cf">${kv}</b>：今夜のモスクワは <b class="${dc<0?'n':'p'}">${dc?sg(dc):'変化なし'}</b>。モスクワの世論を動かす手段は、「モスコフスキー・コムソモーレツ」と「モスクワのこだま」（味方媒体1つにつき毎晩+1、現在 +${moscOut()}）、下記のキャンペーン、朝刊での反論です。表から媒体を選んでください。${S.flags.noComms?' <span class="n">通信途絶：利用できるのは館内ラジオ、海外メディア、館内に招き入れた者のみです。</span>':''}${S.kmed?' <span class="n">昨夜、クレムリンが放送で攻勢を仕掛けてきた。</span>':''}</div>
    <table class="otab"><tr><th>媒体</th><th>影響力</th><th>陣営</th><th>影響対象</th><th>味方のときの行動</th><th>味方の間の毎ターン効果</th><th>クレムリン側の間</th></tr>${rows}</table>
    <div class="eth3">${det}<div><div class="ph">共通キャンペーン · 媒体に関係なく放送を消費（現在 ${fmt(S.med)}）</div><div class="app2 a1">`+
    APPEALS.filter(inPh).map(a=>{const nc=S.flags.noComms&&a.id!=='foreign', used=S.appeals[a.id]||nc, poor=S.med<a.cost;
@@ -443,10 +443,10 @@ function openSiege(){ syncRing();
   const grp=(t,l)=>l.length?`<div class="ph">${t}</div><div class="sg2">${l.map(card).join('')}</div>`:'';
   const ringL=L.filter(x=>x.a.ring&&x.a.ring<100), sum=ringL.filter(can).reduce((a,x)=>a+x.a.ring,0), oth=L.filter(x=>!x.a.ring||x.a.ring>=100).filter(x=>S.cordon||!/包囲網がない/.test(x.st));
   win.innerHTML=`<h2>封鎖${S.cordon?' · 包囲網 '+S.ring+'/100':''}</h2>${resStrip('ord')}${S.cordon?`<div class="tug"><span class="l">解除 ${100-S.ring}</span><div class="tb"><i style="width:${100-S.ring}%"></i></div><span class="r">残り ${S.ring}</span></div>`:''}
-   <div class="sub">${S.cordon?(RP=>'現在の包囲網による一晩の影響：<span class="n">正統性 '+RP.leg+(RP.hope?'、決意 '+RP.hope:'')+(RP.med?'、放送 '+RP.med:'')+(RP.sup?'、補給 −'+String(RP.sup)+'日':'')+(RP.dep?'、さらに代議員'+RP.dep+'人が去る':'')+'</span>。人は来ず、鉄条網の外にも出られません。'+(S.ring>=50?'50を下回ると圧力は弱まります。':'包囲網は弱まっており、圧力も小さくなっています。')+'包囲網は毎晩2ずつ締め直されます。<b style="color:var(--paper);font-weight:400">解除まで残り'+S.ring+'。いま使える手段の合計は −'+sum+'。</b>'+(S.flags.gap>0?' <span class="p">抜け道あり：あと'+S.flags.gap+'晩。</span>':''))(ringPress(S)):'包囲網はありません。ここでは通信と電気の復旧もできます。'}
-   ${S.flags.noComms?' <span class="n">通信途絶。</span>':''}${S.flags.noPower?' <span class="n">市庁舎により電気と水道が止められている。</span>':''}</div>`+
-   (S.cordon?`<div class="ph">耐えて支払う · 毎晩、命令は消費しない、取り消し可能</div><div class="sg3">`+HOLDS.map(H=>{const on=(S.hold||{})[H.id],c=H.can(S);return `<div class="law hold${on?' on2':c!==true?' lock':''}" data-h="${H.id}"><div class="t">${H.t} <span class="cst">${fxText(H.cost)}（毎晩）</span></div><div class="e">${on?'<span class="p">✓ 実施中。</span> '+H.d+'。押すと取り消します':c!==true?`<span class="n">${c}</span>`:H.d}</div></div>`;}).join('')+'</div>':'')+
-   (S.cordon?grp('包囲網を少しずつ解く · 実行可能 · 各行動で命令を1つ消費',ringL.filter(can))+grp('包囲網を少しずつ解く · 未解放（不足しているものを表示）',ringL.filter(x=>!can(x))):'')+
+   <div class="sub">${S.cordon?(RP=>'現在の包囲網による一晩の影響：<span class="n">正統性 '+RP.leg+(RP.hope?'、決意 '+RP.hope:'')+(RP.med?'、放送 '+RP.med:'')+(RP.sup?'、補給 −'+String(RP.sup)+'日':'')+(RP.dep?'、さらに代議員'+RP.dep+'人が去る':'')+'</span>。人は来ず、鉄条網の外へも出られません。'+(S.ring>=50?'50を下回れば、包囲の圧力は和らぎます。':'包囲網は緩みつつあり、圧力も和らいでいます。')+'包囲網は毎晩2ずつ締め直されます。<b style="color:var(--paper);font-weight:400">解除まで残り'+S.ring+'。現在利用できる手段の合計は −'+sum+'。</b>'+(S.flags.gap>0?' <span class="p">抜け道あり：あと'+S.flags.gap+'晩。</span>':''))(ringPress(S)):'包囲網は敷かれていません。ここでは通信と電力の復旧も行えます。'}
+   ${S.flags.noComms?' <span class="n">通信途絶。</span>':''}${S.flags.noPower?' <span class="n">市庁舎により電気と水道が遮断されている。</span>':''}</div>`+
+   (S.cordon?`<div class="ph">耐えて代価を払う · 毎晩適用、命令消費なし、取り消し可能</div><div class="sg3">`+HOLDS.map(H=>{const on=(S.hold||{})[H.id],c=H.can(S);return `<div class="law hold${on?' on2':c!==true?' lock':''}" data-h="${H.id}"><div class="t">${H.t} <span class="cst">${fxText(H.cost)}（毎晩）</span></div><div class="e">${on?'<span class="p">✓ 実施中。</span> '+H.d+'。押すと取り消します':c!==true?`<span class="n">${c}</span>`:H.d}</div></div>`;}).join('')+'</div>':'')+
+   (S.cordon?grp('包囲網を少しずつ解く · 実行可能 · 各行動で命令を1つ消費',ringL.filter(can))+grp('包囲網を少しずつ解く · 未解放（不足要件を表示）',ringL.filter(x=>!can(x))):'')+
    grp(S.cordon?'突破・迂回・通信・電気':'通信・電気',oth.filter(can).concat(oth.filter(x=>!can(x))))+`<div class="close xtop">✕ 閉じる</div>`;
   $('modal').classList.add('on');
   win.querySelectorAll('.law.hold').forEach(e=>e.onclick=()=>{const H=HOLDS.find(x=>x.id===e.dataset.h); S.hold=S.hold||{}; if(!S.hold[H.id]&&H.can(S)!==true)return; S.hold[H.id]=S.hold[H.id]?0:1; Sfx.play('bolt'); save(); showMain(); openSiege();});
@@ -465,31 +465,31 @@ function firstLook(kind,id){S.seen=S.seen||{}; const key=kind+id; if(S.seen[key]
 function resStrip(hl){const it=[['leg','正統性',S.leg],['dep','代議員',deputies(S)],['ppl','市民',fmt(S.ppl)],['mil','義勇兵',fmt(S.mil)],['gun','空いている武器',fmt(freeGuns(S))],['med','放送',fmt(S.med)+' <i>+'+mediaGain()+'/ターン</i>'],['sup','補給',Math.floor(S.sup)+'日'],['hope','決意',S.hope+'%'],['rad','過激化',S.rad+'%'],['city','モスクワ',S.city+'%'],['ord','命令',S.orders],['law','決議',S.lawCharges]];
   return '<div class="rstrip">'+it.map(([k,n,v])=>`<span class="${k===hl?'hl':''}">${n} <b>${v}</b></span>`).join('')+'</div>';}
 function openStrike(){const T=S.strike&&STRIKES.find(x=>x.id===S.strike.id); if(!T)return; const ok=T.cover(S);
-  $('modal-win').innerHTML=`<h2>エリツィンの主攻撃 · ${T.nm.toUpperCase()}</h2><div class="sub">${T.warn}<br><br>攻撃は今夜、一か所に集中し、深刻な打撃となります：${fxText(T.hit(S))||T.e}${T.e&&fxText(T.hit(S))?' · <span class="n">'+T.e+'</span>':''}。<br><br>対処法：<b style="color:var(--paper)">${T.guard}</b>。${ok?'<span class="p">今日はすでに対処済みです。</span>':'<span class="n">まだ対処していません。</span>'}${S.flags.shield?'<br>醜聞の暴露が効いています：攻撃が通っても威力は半分です。':'<br>「放送」画面の「政府の醜聞を暴く」キャンペーンで、攻撃の威力を半分にできます。'}</div><div class="close">ESC：閉じる</div>`;
+  $('modal-win').innerHTML=`<h2>エリツィンの主攻撃 · ${T.nm.toUpperCase()}</h2><div class="sub">${T.warn}<br><br>今夜の攻撃は一箇所に集中し、深刻な打撃をもたらします：${fxText(T.hit(S))||T.e}${T.e&&fxText(T.hit(S))?' · <span class="n">'+T.e+'</span>':''}。<br><br>対処法：<b style="color:var(--paper)">${T.guard}</b>。${ok?'<span class="p">今日はすでに対処済みです。</span>':'<span class="n">まだ対処していません。</span>'}${S.flags.shield?'<br>醜聞の暴露が功を奏しています：攻撃を受けても威力は半減します。':'<br>「放送」画面の「政府の醜聞を暴く」キャンペーンで、攻撃の威力を半減できます。'}</div><div class="close">ESC：閉じる</div>`;
   $('modal').classList.add('on'); $('modal-win').querySelector('.close').onclick=closeModal;}
 
 function openHelp(){
   const LD=legDrift(S);
-  const H=[['正統性','建物の外で命令が実行される確率（現在 '+Math.round(execChance('x')*100)+'%）、決議の効果倍率、イベントでの判定に影響します。上限はありませんが毎晩減っていき、70を超えると増える量は半分になります。現在の一晩の変化：'+LD.P.map(p=>p[1]+' '+sg(p[0])).join('、')+'、媒体 '+(pressLeg(S)?sg(pressLeg(S)):'0')+'。'],
-   ['代議員','その人数こそが議会の権限の裏付けです。1日に5人去るごとに正統性が1下がります。危機フェーズでは消耗戦となり、毎晩誰かが去ります。包囲網、停電、エリツィンの「保証」の後は離脱が増え、決意と会派の忠誠度が離脱を抑えます。'+QUORUM+'人を下回ると定足数割れとなり、正統性が毎晩−3。'],
-   ['市民','人手です。ピケ、輸送隊、バリケード、消火に使います。危機フェーズで'+PERIM+'人を下回ると外周を守る者がいなくなり、決意が毎晩−2。2500人以上いるとクレムリンは突入をためらいますが、群衆は補給を食いつぶし、過激化を進めます。'],
-   ['義勇兵','武器を持った人々です。突入時に入口を守り、200人以上で決意を高め、武力による選択肢を開きます。'],
-   ['武器','銃器です。武装した人は義勇兵の戦闘員となり、武器を手元に置き続けます。在庫は減りませんが、空いている武器が減ります。'],
+  const H=[['正統性','建物の外で命令が実行される確率（現在 '+Math.round(execChance('x')*100)+'%）、決議の効果倍率、イベント判定に影響します。上限はありませんが毎晩低下し、70を超えると増加量は半減します。現在の一晩の変化：'+LD.P.map(p=>p[1]+' '+sg(p[0])).join('、')+'、媒体 '+(pressLeg(S)?sg(pressLeg(S)):'0')+'。'],
+   ['代議員','この人数こそが議会の権限の裏付けです。1日に5人去るごとに正統性が1低下します。危機フェーズに入ると消耗戦となり、毎晩のように離脱者が出ます。包囲網、停電、エリツィンの「保証」の後は離脱が増えますが、決意と会派の忠誠度が離脱を抑えます。'+QUORUM+'人を下回ると定足数割れとなり、正統性が毎晩−3。'],
+   ['市民','人手です。ピケ、輸送隊、バリケード、消火に使います。危機フェーズで'+PERIM+'人を下回ると外周の守り手がいなくなり、決意が毎晩−2。2500人以上いればクレムリンは突入をためらいますが、群衆は補給を食いつぶし、過激化を加速させます。'],
+   ['義勇兵','武器を手にした人々です。突入時には入り口を守り、200人以上集まれば決意を高め、武力行使の選択肢を開きます。'],
+   ['武器','銃器です。武装した人は義勇兵の戦闘員となり、武器を手元に置き続けます。在庫総数は減りませんが、空いている武器が減ります。'],
    ['放送','唯一のメディア通貨です。味方の媒体から毎晩入ってきます。編集部への働きかけ、キャンペーン、新聞への反論に使い、正統性、モスクワ、会派の忠誠度に換わります。'],
-   ['補給','食料と軽油が何日分あるかです。ゼロになると人々が去り、決意が下がります。'],
-   ['モスクワ','街の空気です。人の流入、正統性、突入の速さに影響します。「放送」画面で争います。'],
-   ['決意','建物内の結束です。45%を下回ると代議員の離脱が速まります。ゼロになると終わりです。'],
-   ['過激化','緊張の度合いです。武力による選択肢を開き、交渉の道を閉ざします。60%以上ではクレムリンの攻撃が強まります。'],
-   ['地図上の勢力','最高会議とクレムリンの綱引きです。65%以上ならその勢力は毎晩あなたに有利に、35%以下ならクレムリンに有利に働きます。クレムリンは毎晩すべての勢力を自陣へ引き寄せ、2〜3日に1度はエリツィンがそのうち1つに本格的な攻撃をかけます。朝刊が予告します。'],
-   ['包囲網','建物を囲む封鎖線（0〜100）です。存在する間は毎晩、正統性、決意、放送、補給を削り、代議員を去らせます。50を下回ると圧力は弱まります。耐えて代価を払う（伝令、2倍の配給、夜間の荷運び）か、少しずつ解除するかを選べます。地図上の「封鎖」画面から操作します。']];
+   ['補給','食料と軽油の備蓄日数です。ゼロになると人々は去り、決意が低下します。'],
+   ['モスクワ','街の空気です。人の流入、正統性、突入までの時間に影響します。「放送」画面で奪い合います。'],
+   ['決意','建物内の結束です。45%を下回ると代議員の離脱が加速します。ゼロになると終わりです。'],
+   ['過激化','事態の緊迫度です。武力行使の選択肢が開かれる一方、交渉の道は閉ざされます。60%を超えるとクレムリンの攻撃が激化します。'],
+   ['地図上の勢力','最高会議とクレムリンの綱引きです。65%以上ならその勢力は毎晩あなたに有利に、35%以下ならクレムリンに有利に働きます。クレムリンは毎晩すべての勢力を自陣へ引き寄せようとし、2〜3日に1度はエリツィンがそのうち1つに本格的な攻勢をかけます。その標的は朝刊で予告されます。'],
+   ['包囲網','建物を囲む封鎖線（0〜100）です。存在する限り毎晩、正統性、決意、放送、補給を削り、代議員を去らせます。50を下回ると圧力は和らぎます。耐えて代価を払う（伝令、2倍の配給、夜間の荷運び）か、少しずつ解除するかを選べます。操作は地図上の「封鎖」画面から行います。']];
   $('modal-win').innerHTML='<h2>指標：何が何に影響するか</h2>'+H.map(h=>`<div class="hlp"><b>${h[0]}</b><span>${h[1]}</span></div>`).join('')+'<div class="close">ESC：閉じる</div>';
   $('modal').classList.add('on'); $('modal-win').querySelector('.close').onclick=closeModal;
 }
 function closeModal(){ $('modal-win').classList.remove('wide'); $('modal-win').classList.remove('full'); if(S&&S.A&&S.A.card&&screen==='assault')return; $('modal').classList.remove('on');}
 function openChron(){
   const c=(S&&S.chron&&S.chron.length?S.chron:store.get(CHRON))||[];
-  $('modal-win').innerHTML=`<h2>出来事の年代記</h2><div class="sub">直近のプレイでの決断。</div><div class="chron">`+
-   (c.length?c.map(x=>`<div><b>${x.date}</b> ${x.h}：${x.ch}</div>`).join(''):'<div>まだ何もありません。新しいゲームを始めてください。</div>')+`</div><div class="close">ESC：閉じる</div>`;
+  $('modal-win').innerHTML=`<h2>出来事の年代記</h2><div class="sub">直近のプレイで下した決断。</div><div class="chron">`+
+   (c.length?c.map(x=>`<div><b>${x.date}</b> ${x.h}：${x.ch}</div>`).join(''):'<div>記録はまだありません。新しくゲームを始めてください。</div>')+`</div><div class="close">ESC：閉じる</div>`;
   $('modal').classList.add('on'); $('modal-win').querySelector('.close').onclick=closeModal;
 }
 $('modal').onclick=e=>{if(e.target.id==='modal')closeModal();};
@@ -527,7 +527,7 @@ function endTurn(){ Sfx.play('night'); const d0={...snap(),hope:S.hope,rad:S.rad
   if(S.sup<1){S.hope=clamp(S.hope-8,0,100);S.ppl=Math.round(S.ppl*.9);S.mil=Math.round(S.mil*.95);log('館内に食料がない。人々が去っていく。','bad');}
   // the perimeter needs hands: too few people and the House feels abandoned
   if(S.phase===2&&S.ppl<PERIM){S.hope=clamp(S.hope-2,0,100);notes.push('市民が'+PERIM+'人を下回り、外周を守る者がいない：決意 −2');}
-  if(S.flags.gap>0){S.flags.gap--; notes.push(S.flags.gap?'封鎖線の抜け道はまだ使える':'封鎖線の抜け道がふさがれた：鉄条網が三重に張られた');}
+  if(S.flags.gap>0){S.flags.gap--; notes.push(S.flags.gap?'封鎖線の抜け道はまだ使える':'封鎖線の抜け道がふさがれた：鉄条網が三重に張り巡らされた');}
   // people come and go
   const inflow=shut?Math.max(0,(S.city-55)*4):Math.max(0,Math.round((S.hope-40)*1+(S.city-40)*(S.phase===1?2:4)));
   S.ppl=Math.max(0,S.ppl+inflow-Math.round(S.ppl*(shut?.08:S.phase===2?.06:.03)));
@@ -561,7 +561,7 @@ function endTurn(){ Sfx.play('night'); const d0={...snap(),hope:S.hope,rad:S.rad
   for(const F of FACTIONS){const b=facBonus(S,F); if(b&&b.on){fb=merge(fb,b.fx);fbn++;}}
   if(fbn){apply(fb); S.sup=Math.max(0,S.sup); const t=fxText(fb); if(t)notes.push('会派：'+t.replace(/<[^>]+>/g,''));}
   // deputies come back to a Congress that looks alive
-  if(S.phase===2&&S.leg>=60&&S.hope>=65&&(!S.cordon||S.flags.tunnel||S.flags.gap>0||S.city>=55)){const F0=FACTIONS.find(x=>x.id==='kol'),k=Math.min(F0.n-S.fac.kol.n,2+Math.floor(Math.random()*4)); if(k>0){S.fac.kol.n+=k; notes.push('去っていた代議員'+k+'人が選挙区から戻った：大会は健在と見られている');}}
+  if(S.phase===2&&S.leg>=60&&S.hope>=65&&(!S.cordon||S.flags.tunnel||S.flags.gap>0||S.city>=55)){const F0=FACTIONS.find(x=>x.id==='kol'),k=Math.min(F0.n-S.fac.kol.n,2+Math.floor(Math.random()*4)); if(k>0){S.fac.kol.n+=k; notes.push('去っていた代議員'+k+'人が選挙区から戻った：大会は健在と見なされている');}}
   for(const k in S.uses||{})if(S.day%2===0&&S.uses[k]>0&&!S.used[k])S.uses[k]--;
   for(const F of FACTIONS){const f=S.fac[F.id]; if(f.n<=0)continue;
     if(S.hope<40&&Math.random()<.5)f.loy=Math.max(0,f.loy-1);
@@ -591,20 +591,20 @@ function endTurn(){ Sfx.play('night'); const d0={...snap(),hope:S.hope,rad:S.rad
   if(S.strike){const T=STRIKES.find(x=>x.id===S.strike.id); struck=true;
     if(T.cover(S)){rep.push({t:T.okT,h:T.okH,e:'<span class="p">攻撃を撃退</span>',c:'エリツィン',g:1,y:1}); S.st.blk=(S.st.blk||0)+1;}
     else{const half=!!S.flags.shield; let fx=T.hit(S); if(half)fx=halve(fx); apply(fx); if(T.run)T.run(S,half); S.flags.shield=0; S.st.hit=(S.st.hit||0)+1; S.hope=clamp(S.hope-2,0,100); if(S.lastStrikeId==='mvd'||T.id==='mvd')S.omon=clamp((S.omon==null?100:S.omon)+10,0,100);
-      rep.push({t:T.hitT+(half?'醜聞の暴露で勢いがそがれ、攻撃は半減した。':''),h:T.hitH,e:[fxText(fx),T.e?'<span class="n">'+T.e+'</span>':''].filter(Boolean).join(' · '),c:'エリツィン',y:1});}
+      rep.push({t:T.hitT+(half?'醜聞の暴露で勢いをそがれ、攻撃は半減した。':''),h:T.hitH,e:[fxText(fx),T.e?'<span class="n">'+T.e+'</span>':''].filter(Boolean).join(' · '),c:'エリツィン',y:1});}
     S.lastStrike=S.strike.id; S.strike=null;}
   // Ельцин лично
   if(!struck){S.ydone=S.ydone||{}; const y=YELTSIN.find((y,i)=>!S.ydone[i]&&y.ph===S.phase&&y.w(S)); if(y){S.ydone[YELTSIN.indexOf(y)]=1; apply(y.fx); if(/給与/.test(y.h))S.flags.bribe=1; if(y.run)y.run(S); rep.push({t:y.t,h:y.h,e:fxText(y.fx),c:'エリツィン',y:1}); moves.pop();}}
   // клеймо: пока РНЕ в здании, либеральная пресса бьёт каждую ночь и всё сильнее
   if(S.phase===2){const b0=S.flags.brand||0; if(S.fac.rne.n>0){S.flags.rneWas=1;const b=Math.min(3,b0+1);S.flags.brand=b;const fx={city:-b,leg:b>=3?-2:b>=2?-1:0};apply(fx);const T=BRAND_T[b-1];rep.push({t:T[S.day%T.length],e:fxText(fx),c:'烙印'});}
-    else{ if(b0>0)S.flags.brand=b0-1; if(S.rad>=60){apply({city:-1});rep.push({t:'新聞はホワイトハウスの「赤褐色勢力」について書き立てている。発砲をめぐる話が多すぎるのだ。',e:fxText({city:-1}),c:'烙印'});}}}
+    else{ if(b0>0)S.flags.brand=b0-1; if(S.rad>=60){apply({city:-1});rep.push({t:'新聞各紙はホワイトハウスの「赤褐色勢力」について書き立てている。発砲をめぐる噂が多すぎるのだ。',e:fxText({city:-1}),c:'烙印'});}}}
   // издания работают каждую ночь на того, чьё они; в газету попадают самые громкие, остальное одной строкой
   {const agg={vs:{},kr:{}},L=[]; for(const o of OUTLETS){const sd=outSt(S,o),e=sd==='vs'?o.pas:sd==='kr'?o.kpas:null; if(!e)continue; apply(e.fx); agg[sd]=merge(agg[sd],e.fx); L.push({sd,e:S.phase===1&&e.t1?{...e,t:e.t1}:e});}
    const sh=a=>a.sort(()=>Math.random()-.5), tx=f=>fxText(f).replace(/<[^>]+>/g,'');
    for(const x of sh(L.filter(x=>x.sd==='vs')).slice(0,1))rep.push({t:x.e.t,e:fxText(x.e.fx),c:'味方の報道',g:1});
    for(const x of sh(L.filter(x=>x.sd==='kr')).slice(0,S.phase===2?2:1))rep.push({t:x.e.t,e:fxText(x.e.fx),c:'敵側の報道'});
    if(tx(agg.vs))notes.push('味方媒体の一夜の効果：'+tx(agg.vs)); if(tx(agg.kr))notes.push('クレムリン側媒体の一夜の効果：'+tx(agg.kr));}
-  if(S.flags.leak)rep.push({t:'リークが功を奏した：クレムリンの一手が事前に察知され、阻止された。',e:'',c:'味方の報道',g:1}); if(S.flags.cam)rep.push({t:'カメラが一晩中封鎖線のそばに張りついた。挑発は起きなかった。',e:'',c:'味方の報道',g:1}); S.flags.leak=0;S.flags.cam=0;
+  if(S.flags.leak)rep.push({t:'リークが功を奏した：クレムリンの次の一手を事前に察知し、阻止した。',e:'',c:'味方の報道',g:1}); if(S.flags.cam)rep.push({t:'カメラが一晩中封鎖線に張りついたため、挑発は起きなかった。',e:'',c:'味方の報道',g:1}); S.flags.leak=0;S.flags.cam=0;
   for(const k0 of moves){const k=k0.tf?Object.assign({},k0,{t:k0.tf(S)}):k0; if(!k.t)continue; const fx=merge(k.fx,k.dyn?k.dyn(S):{}); apply(fx); if(k0.tf){S.kmed=1;kmed=1;S.kmedT=k.t;} if(k.run)k.run(S); if(k.once)S.kdone[k.t]=1;
     if(fx.city<0||fx.med<0){kmed=1;S.kmedT=k.t;} rep.push({t:k.t,e:fxText(fx)||k.e||'',c:k.c,g:k.good?1:0});}
   if(Math.random()<(S.phase===1?.3:.45)){const pool=KCRISIS.filter(k=>!S.kdone[k.t]&&k.w(S)>0); const k=pool[Math.floor(Math.random()*pool.length)];
@@ -679,14 +679,14 @@ function showPaper(){const k=S.kremlin; if(!k){S.paper=0;return startDay();}
   const now={...snap(),hope:S.hope,rad:S.rad,city:S.city,pr:S.pr}, o=k.d0||now;
   const row=(nm,key,suf,inv)=>{const v=Math.round(now[key]*10)/10, dl=Math.round((now[key]-o[key])*10)/10; return `<div class="row"><span>${nm}</span><span><b>${fmt(v)}${suf||''}</b> ${dl?`<span class="${(dl>0)!==!!inv?'p':'n'}">${dl>0?'+':'−'}${fmt(Math.abs(dl))}</span>`:''}</span></div>`;};
   $('np-side').innerHTML=`<div class="day">朝 · ${S.day}日目</div><div class="big">朝刊</div>
-    <div class="npw">今日の一面を書いているのは<b class="${ours?'v':''}">${ours?'最高会議側':'クレムリン側'}</b>の報道です。${ours?'味方の編集部が多いうちは、主要ニュースはこちらのものです。':'「放送」画面で編集部を引き込めば、見出しはこちらのものになります。'}</div>
+    <div class="npw">今日の一面を飾っているのは<b class="${ours?'v':''}">${ours?'最高会議側':'クレムリン側'}</b>の報道です。${ours?'味方の編集部が多いうちは、主要ニュースの主導権はこちらのものです。':'「放送」画面で編集部を味方に引き込めば、見出しはこちらのものになります。'}</div>
     <div class="press"><i class="k" style="width:${kr/tot*100}%"></i><i class="n" style="width:${nu/tot*100}%"></i><i class="v" style="width:${vs/tot*100}%"></i></div>
     <div class="pl"><span>クレムリン側 ${kr}</span><span>沈黙 ${nu}</span><span>最高会議側 ${vs}</span></div>
     <div class="box"><div class="bt">一夜の結果</div>${row('正統性','leg')}${row('代議員','dep')}${row('市民','ppl')}${row('放送','med')}${row('補給','sup','日')}${row('決意','hope','%')}${row('過激化','rad','%',1)}${row('モスクワの支持','city','%')}</div>
     <div class="bt" style="margin-top:10px;margin-bottom:0">一面への応答</div>`+
     k.rep.map((r,i)=>{const st=r.req?r.req():true;return `<div class="ch${st!==true?' lock':''}" data-i="${i}"><span class="k">${i+1}</span><span>${r.t}</span><span class="e">${st!==true?`<span class="n">${st}</span>`:[fxText(r.fx),r.e2].filter(Boolean).join(' · ')||r.e||''}</span></div>`;}).join('')+
     `<div class="go" id="np-go"><span class="a">${S.day}日目を始める</span><span class="b">ENTER</span></div>`;
-  if(ST){const w=$('np-side').querySelector('.npw'); w.className='strk'; w.innerHTML=`<b>今夜のエリツィンの主攻撃：${ST.nm.toUpperCase()}</b>対処法：${ST.guard}。対処しなければ深刻な打撃を受けます。${S.flags.shield?'醜聞の暴露が効いています：威力は半分になります。':''}`;}
+  if(ST){const w=$('np-side').querySelector('.npw'); w.className='strk'; w.innerHTML=`<b>今夜のエリツィンの主攻撃：${ST.nm.toUpperCase()}</b>対処法：${ST.guard}。手を打たなければ深刻な打撃を受けます。${S.flags.shield?'醜聞の暴露が効いています：威力は半減します。':''}`;}
   $('np-side').querySelectorAll('.ch').forEach(e=>e.onclick=()=>paperGo(+e.dataset.i)); $('np-go').onclick=()=>paperGo(-1);
 }
 function paperGo(i){const k=S.kremlin; if(!k||screen!=='paper')return; const r=k.rep&&k.rep[i];
@@ -958,40 +958,40 @@ function choose(i){
 
 // ---------- assault intro and endings ----------
 function ASSAULT(){return {id:'assault',pic:unitStance(UNITS.find(u=>u.id==='tanks'))==='refuse'?'whf':'tank',time:'07:00',urgent:1,tag:'フェーズ3 · 突入',h:'突入',q:'ノヴォアルバーツキー橋に戦車',
-  p:(S.flags.corner==='army'?'軍がクレムリンの手を離れつつある。国防省と参謀本部はほぼ公然と大会側についた。明日になれば突入させる部隊がいなくなると悟ったエリツィンは、まだ命令に従う者たちに今日のうちに命令を下す。':S.flags.corner==='elect'?'憲法裁判所、地方、そしてモスクワが選挙を求めている。追い詰められたエリツィンは、命令がまだ通るうちに力で決着をつけようとする。部隊の足取りは重い。':'')+'夜明け、装甲車両がホワイトハウスへ向けて動き出した。軍や治安部隊のうち誰が命令に従い、誰が拒むかは、あなたが誰と話をつけておいたかにかかっている。防衛戦は1時間ごとに進み、夕方まで続く。',
+  p:(S.flags.corner==='army'?'軍がクレムリンの統制を離れつつある。国防省と参謀本部はほぼ公然と大会側についた。明日になれば突入させる部隊がいなくなると悟ったエリツィンは、まだ命令に従う部隊に対し、今日のうちに突入を命じる。':S.flags.corner==='elect'?'憲法裁判所、地方、そしてモスクワが選挙を求めている。追い詰められたエリツィンは、命令がまだ通るうちに力ずくで決着をつけようとする。だが、部隊の足取りは重い。':'')+'夜明け、装甲車両がホワイトハウスへ向けて動き出した。軍や治安部隊のうち誰が命令に従い、誰が拒絶するかは、事前に誰と話をつけておいたかにかかっている。防衛戦は1時間ごとに進行し、夕方まで続く。',
   ch:[
     {t:'武器を取れ！　防衛につく',e:`戦闘員 ${fmt(S.mil)} · 非武装 ${fmt(S.ppl)} · バリケード ${S.bar}/5`,go:()=>startAssault()},
     {t:'安全の保証を得て人々を外に出す',e:'代議員は戦わずに投降する',go:()=>ending('surrender')},
   ]};}
 const ENDINGS={
   win_army:{win:1,pic:'wh',h:'軍は人民とともに',q:'国防省と参謀本部が大会を支持',
-    p:'軍管区司令官たちは大統領令第1400号の執行を拒んだ。議会に突入する者はいない。軍がなければ、クレムリンに打つ手はない。エリツィンは大統領の前倒し選挙に同意する。'},
+    p:'軍管区司令官たちは大統領令第1400号の執行を拒んだ。議会に突入する部隊はない。軍の後ろ盾を失ったクレムリンに打つ手はなく、エリツィンは大統領選の前倒しに同意する。'},
   win_elect:{win:1,pic:'whf',h:'選挙',q:'突入を撃退、クレムリンは後退',
-    p:'エリツィンは力で決着をつけようとして失敗した。憲法裁判所も地方議会も報道も、大統領令は違法だと口をそろえる。クレムリンは封鎖を解き、大会の条件での同時選挙に同意する。'},
+    p:'エリツィンは力ずくで決着をつけようとしたが失敗した。憲法裁判所も地方議会も報道各社も、大統領令は違法だと口をそろえる。クレムリンは封鎖を解き、大会側の条件での同時選挙に同意する。'},
   elect_deal:{tier:'neu',pic:'wh',h:'ゼロ・オプション',q:'突入ではなく選挙',
-    p:'銃撃戦には至らなかった。憲法裁判所、地方、報道が両陣営を引き下がらせた。大統領令第1400号は撤回され、大会の決定も取り消され、同時選挙が決まった。最高会議は選挙までもちこたえたが、これは勝利ではない。選挙ではテレビも資金も選挙管理委員会もクレムリンが握っており、新しい議会法はもはやあなた抜きで書かれた。最高会議がかつての役割を取り戻すことはない。'},
+    p:'銃撃戦には至らなかった。憲法裁判所、地方、報道各社が両陣営を引き下がらせたのだ。大統領令第1400号は撤回され、大会の決定も取り消されて同時選挙が決まった。最高会議は選挙まで持ちこたえたが、これは勝利ではない。選挙ではテレビも資金も選挙管理委員会もクレムリンが握っており、新しい議会法はもはやあなた抜きで書かれた。最高会議がかつての役割を取り戻すことはない。'},
   held:{win:1,pic:'whf',h:'持ちこたえた',q:'突入は頓挫した',
-    p:'ホワイトハウスは燃えているが、入口は守り抜いた。夕方までに数万人のモスクワ市民が建物に集まってくる。クレムリンは停戦を宣言する。'},
+    p:'ホワイトハウスは炎上しているが、入口は死守した。夕方までに数万人のモスクワ市民が建物に集まってくる。クレムリンは停戦を宣言する。'},
   held_iso:{tier:'neu',pic:'whf',h:'撃退、しかし孤立',q:'突入は退けたが、誰も認めない',
-    p:'入口は守り抜いた。だが国民がテレビで目にしたのは自動小銃を持った男たちだけで、耳にしたのは報復の呼びかけだけだった。地方は沈黙し、西側は反乱を口にし、モスクワ市民は河岸通りに近寄ろうとしない。クレムリンは部隊を下げて様子をうかがっている。大会は焼け焦げた建物に居座るが、それを権力と認める者はいない。勝者はどこにもいない。'},
+    p:'入口は守り抜いた。だが国民がテレビで目にしたのは自動小銃を手にした男たちの姿ばかりで、耳にしたのは報復を叫ぶ声だけだった。地方は沈黙し、西側諸国は反乱だと非難し、モスクワ市民は河岸通りに近寄ろうとしない。クレムリンは部隊を退いて様子をうかがっている。大会は焼け焦げた建物に居座り続けるが、それを正統な権力と認める者はいない。勝者はどこにもいない。'},
   pyrrhic:{tier:'neu',pic:'whf',h:'クレムリンのピュロスの勝利',q:'建物は落ちたが、権力は保てず',
-    p:'ホワイトハウスは制圧されたが、国民は議会が砲撃されるのを見た。一部の部隊は命令に従わず、地方と憲法裁判所は大統領令を認めない。エリツィンはクレムリンにいながら統治できない。彼の命令は実行されないまま戻ってくる。この先に待つのは二重権力と駆け引きの数か月であり、そこでは双方とも敗者だ。'},
+    p:'ホワイトハウスは制圧されたが、国民は議会が砲撃される光景を目の当たりにした。一部の部隊は命令に従わず、地方や憲法裁判所は大統領令を認めようとしない。エリツィンはクレムリンにいながら統治できず、下した命令は実行されないまま戻ってくる。この先に待つのは、二重権力と駆け引きの数か月であり、そこでは双方が敗者となる。'},
   draw_alpha:{tier:'neu',pic:'wh',h:'「アルファ」は撃たない',q:'特殊部隊が突入を拒み、自ら人々を連れ出した',
-    p:'「アルファ」の将校たちは丸腰で建物に入り、カメラの前で、議会への発砲命令には従わないと述べた。代議員と守備隊は彼らの保証のもとで外に出た。ホワイトハウスは失われたが、大統領の命令は彼自身の特殊部隊によって公然と拒まれた。エリツィンはもはや指揮をとれず、大統領令第1400号が何だったのか、誰の目にも明らかだ。大会も消えた。国は勝者のいない長い危機に入っていく。'},
+    p:'「アルファ」の将校たちは丸腰で建物に入り、カメラの前で、議会への発砲命令には従わないと宣言した。代議員と守備隊は彼らの保証のもとで外に出た。ホワイトハウスは失われたが、大統領の命令は自らの特殊部隊によって公然と拒まれた。エリツィンはもはや指揮を執れず、大統領令第1400号が何だったのかは誰の目にも明らかだ。大会も姿を消した。国は勝者のいない長い危機へと入っていく。'},
   fell:{pic:'whf',h:'10月4日',q:'ホワイトハウス炎上',
-    p:'突入部隊が建物になだれ込んだ。夕方、守備隊は護送されて出てくる。最高会議は消滅した。'},
+    p:'突入部隊が建物になだれ込んだ。夕暮れ時、守備隊は護送されて連れ出される。最高会議は消滅した。'},
   broken:{pic:'whf',h:'砲火やむ',q:'守備隊は武器を置いた',
-    p:'戦車の砲撃のあと、もう持ちこたえる者はいない。人々は白いシーツを掲げて玄関から出てくる。大会は解散させられた。'},
+    p:'戦車の砲撃を受け、もはや持ちこたえられる者はいない。人々は白いシーツを掲げて玄関から出てくる。大会は解散に追い込まれた。'},
   surrender:{pic:'wh',h:'降伏',q:'代議員が建物を後にする',
-    p:'仲介者の保証のもと、守備隊は武器を引き渡してバスへ向かう。流血は少なくて済んだが、大会はもう存在しない。'},
+    p:'仲介者の保証のもと、守備隊は武器を引き渡してバスへと向かう。流血こそ最小限に抑えられたが、大会はもはや存在しない。'},
   surrender_alpha:{pic:'whf',h:'「アルファ」の保証のもとで',q:'将校たちが燃える建物から人々を連れ出した',
-    p:'「アルファ」は突入を拒み、自ら代議員と守備隊を封鎖線の外へ連れ出した。もっと血が流れていてもおかしくなかった。最高会議はもう存在しない。'},
+    p:'「アルファ」は突入を拒み、自ら代議員と守備隊を封鎖線の外へと連れ出した。もっと多くの血が流れていてもおかしくなかった。最高会議はもはや存在しない。'},
   lose_hope:{pic:'wh',h:'散り散りに',q:'守備隊はバリケードを去った',
-    p:'寒さと飢えと先の見えない不安が、じわじわと効いた。ホワイトハウスは一発の銃声もなく空になっていく。大統領令第1400号が発効する。'},
+    p:'寒さと飢え、そして先の見えない不安がじわじわと気力を蝕んでいった。ホワイトハウスは一発の銃声も響かぬまま、もぬけの殻となっていく。大統領令第1400号が発効する。'},
   lose_leg:{pic:'yeltsin',h:'大会の崩壊',q:'もはや誰も最高会議を信じない',
-    p:'地方は大統領令を受け入れ、代議員は次々と代議員資格を返上していく。クレムリンには突入の必要すらない。'},
-  lose_ppl:{pic:'wh',h:'無人のバリケード',q:'ホワイトハウスを守る者はいない',
-    p:'最後の志願者たちも去った。夜、OMONは難なく建物を占拠する。'},
+    p:'地方は大統領令を受け入れ、代議員たちは次々とその資格を返上していく。クレムリンにとって、もはや突入の必要すらない。'},
+  lose_ppl:{pic:'wh',h:'無人のバリケード',q:'ホワイトハウスを守る者は誰もいない',
+    p:'最後の志願者たちも立ち去った。夜、OMONは何の抵抗もなく建物を占拠する。'},
 };
 // условия выборов без штурма (нужны все)
 function dealScore(){const mine=OUTLETS.filter(o=>outSt(S,o)==='vs').length, kr=OUTLETS.filter(o=>outSt(S,o)==='kr').length, ci=ACTIONS.kre.findIndex(a=>/^憲法裁判所に提訴/.test(a.t));
@@ -1027,188 +1027,188 @@ function ending(id,exact){
 // ===== эпилог: слайды «что стало с каждым». Гипотетические судьбы зависят от исхода, лояльности фракции, того, на чьей стороне была сила, и решений партии =====
 // фракции: [ушли до конца, победа+верны, победа+колебались, поражение+верны, поражение+колебались]
 const EPI_FAC={
-  ros:['会派「ロシア」は地方のソヴィエトを糾合しようと各地へ散り、結末に間に合わなかった。バブーリンは後に、仲間たちは去るのが早すぎたと語った。同じことを人から言われても、反論はしなかった。',
-       'バブーリンは新憲法起草委員会の委員長に就いた。包囲下の建物で決議を書いていた会派「ロシア」の法律家たちが、今度は国の基本法を起草している。その草案では、議会が大統領より強い権限を持つ。',
-       '会派「ロシア」は勝利した大会に残ったが、その票を得るために説得を重ねねばならなかった日々を、誰も忘れてはいない。バブーリンは憲法委員会に迎えられたが、委員長ではなく副委員長としてだった。',
-       'バブーリンは最後に建物を出た者の一人で、近くのスタジアムのそばで殴打された。12月、オムスクの有権者は再び彼を議員に選び、彼は国家院の演壇から、ホワイトハウスで語ったのと同じことを繰り返した。',
-       '最後の数日、会派の面々はすでに一人ひとり抜け道を探していた。それでもバブーリンは建物を出るときに殴打された。12月、オムスクは彼を議会に送り返したが、今度は会派抜きだった。'],
-  kr: ['「ロシアの共産主義者」は決着を待たずに去った。ルイプキンは誰よりも早く政府と話をつけ、選挙に向けて党を守り抜いた。',
-       '共産主義者たちは挙国一致政府で3つの大臣ポストを得た。人々をホワイトハウスへ連れ出した党細胞は、ひと秋のうちに国内で最もよく組織された勢力になった。',
-       '共産主義者たちは大会に残ったが、大臣ポストは与えられなかった。どちらが勝つか、あまりに長く様子をうかがっていたからだ。ルイプキンは自分の最も得意なことに専念し、あらゆる陣営の間を取り持つ仲介役になった。',
-       '会派は最後まで踏みとどまり、党は数週間にわたって活動を禁じられた。禁止は12月の選挙までに解かれた。ルイプキンは国家院に当選し、その初代議長になった。',
-       '共産主義者たちは終わりの前日に建物を去り、それが手柄として認められた。党はすぐに選挙への参加を許された。ルイプキンは新しい国家院の議長になったが、ホワイトハウスを守った人々は彼と挨拶を交わさなくなった。'],
-  agr:['農業派の代議員たちは、事態が決着する前に地元の州へ帰っていった。「収穫は待ってくれない」とラプシンは言った。',
-       '「農業同盟」は、土地の自由売買を認めない自派の案どおりに、土地法を大会で通した。籠城中の建物にジャガイモを運び込んだソフホーズは、債務を帳消しにされた。',
-       '農業派は残ったが、最後の日まで条件をめぐって駆け引きを続けた。土地法は妥協案で成立し、ラプシンが得たのは大臣のポストではなく委員長のポストだった。',
-       'ラプシンは仲間とともに護送されて建物を出て、1か月後に農業党を立て直した。12月、党は国家院に議席を得て、ホワイトハウスを砲撃した者たちを相手に農村予算をめぐる駆け引きをした。',
-       '農業派は、コルホーズには手を出さないという約束と引き換えに代議員資格を返上した。約束が守られたのは1年だった。農業党は国家院に議席を得て、政府の予算案に賛成票を投じた。'],
-  otc:['会派「祖国」の軍人代議員たちは去り、軍管区との人脈も持ち去った。決定的な夜、各司令部に電話をかけられる者はもう誰もいなかった。',
-       '「祖国」の将軍たちは勝者として国防省に戻った。タラソフは国防次官の椅子を手にし、真っ先に軍の削減を止めた。',
-       '「祖国」は勝利までどうにか持ちこたえたが、軍管区への電話は本部が求めたよりも控えめだった。国防省で会派の将軍たちに与えられたのは、指揮する部隊のない執務室だった。',
-       '「祖国」の将軍たちは、軍服着用の権利も認められないまま予備役に回された。タラソフは1年後に政界へ戻ったが、もはや肩章も会派もなかった。',
-       '「祖国」は終わりの数日前に軍管区への電話をやめた。それでも将軍たちは軍を追われた。クレムリンが覚えていたのは、どう終わったかではなく、どう始まったかだった。'],
-  sm: ['「スメナ」は誰よりも早くカメラの前に出て、エリツィンもハズブラートフも立候補しない選挙を提案した。その姿はひと晩だけ、全チャンネルで流された。',
-       '「スメナ」は、恥じる必要のない勝利の顔になった。若い代議員たちが選挙をめぐる交渉にあたり、モスクワで勝ったのはバリケードではなく議会なのだと西側に説明した。',
-       '「スメナ」は残ったが、最後までどちらの側にも扉を開けたままにしていた。選挙をめぐる交渉にゴロヴィンが呼ばれたのは、代表団長としてではなく顧問としてだった。',
-       '会派はその週のうちに瓦解した。所属代議員は新しい政党に散り、ゴロヴィンはその後何年も、自分は大統領令にも発砲にも反対だったと説明し続けた。',
-       '「スメナ」は決着より早く、白旗を掲げて建物を出た。クレムリンは礼を言ったが、有権者は許さなかった。12月の選挙で、会派から当選した者はほとんどいなかった。'],
-  kol:['態度未定の代議員たちは一人また一人と去った。大統領令は一人ひとりに役職と1年分の給与を約束しており、ほぼ全員がそれを手にした。',
-       '態度未定の代議員たちは残り、のちに「一瞬たりとも迷わなかった」と語った。アブドゥラチポフは地方との調停委員会を率い、まさに適任であることを示した。',
-       '態度未定の代議員たちは、出口をうかがいながら勝利まで居残った。そのことは忘れられなかった。新しい大会では、もう誰も彼らの票を最初から計算に入れなかった。',
-       '彼らは最後まで残り、自分たちでもそれに驚いた。役職はもう提示されなかった。それでもアブドゥラチポフは数か月後、新しい議会の上院に席を得ていた。',
-       '彼らはクレムリンから約束どおりの役職と補償を受け取った。アブドゥラチポフは連邦院の副議長になり、9月のことは思い出したがらなかった。'],
+  ros:['会派「ロシア」は地方ソヴィエトを結集しようと各地へ散り、結末に間に合わなかった。バブーリンは後に、仲間たちの離脱は早すぎたと語った。人から同じ指摘をされても、彼は反論しなかった。',
+       'バブーリンは新憲法起草委員会の委員長に就任した。包囲された建物で決議文を練っていた会派「ロシア」の法律家たちが、今度は国家の基本法を起草している。その草案では、議会が大統領を上回る強い権限を持つ。',
+       '会派「ロシア」は勝利した大会に踏みとどまったが、その賛成票を得るために説得を重ねねばならなかった日々のことを、誰も忘れてはいない。バブーリンは憲法委員会に迎えられたものの、委員長ではなく副委員長のポストだった。',
+       'バブーリンは最後まで建物に残った一人であり、近くのスタジアムの脇で暴行を受けた。12月、オムスクの有権者は再び彼を議員に選び、彼は国家院の演壇から、ホワイトハウスで訴えたのと同じ主張を繰り返した。',
+       '最後の数日、会派の面々はすでにめいめい逃げ道を探していた。それでもバブーリンは建物を出る際に暴行を受けた。12月、オムスクの有権者は彼を議会へと送り返したが、今度はもはや会派の仲間はいなかった。'],
+  kr: ['「ロシアの共産主義者」は決着を待たずに去った。ルイプキンは誰よりも早く政府と手を打ち、次の選挙に向けて党を守り抜いた。',
+       '共産主義者たちは挙国一致政府で3つの大臣ポストを獲得した。大衆をホワイトハウスへと動員した党細胞は、この秋の間に国内で最も強固に組織された勢力となった。',
+       '共産主義者たちは大会に残ったものの、大臣ポストは与えられなかった。どちらが勝つのか、あまりに長く日和見を決め込んでいたからだ。ルイプキンは自らの最も得意とすることに専念し、あらゆる陣営の間を取り持つ仲介役となった。',
+       '会派は最後まで踏みとどまり、党は数週間にわたって活動を禁じられた。この活動禁止は12月の選挙までに解除された。ルイプキンは国家院議員に当選し、その初代議長となった。',
+       '共産主義者たちは幕引きの前日に建物を去り、それが手柄として認められた。党はすぐに選挙への参加を許された。ルイプキンは新たな国家院の議長となったが、ホワイトハウスを守った人々は、もはや彼と挨拶すら交わさなくなった。'],
+  agr:['農業派の代議員たちは、事態が決着を見る前に地元の州へと帰っていった。「収穫は待ってくれない」とラプシンは言った。',
+       '「農業同盟」は、土地の自由売買を認めない自派の案どおりに、土地法を大会で通過させた。籠城中の建物にジャガイモを運び込んだソフホーズは、債務を帳消しにされた。',
+       '農業派は残ったものの、最後の日まで条件をめぐる駆け引きを続けた。土地法は妥協案で成立し、ラプシンが得たのは大臣のポストではなく委員長の座だった。',
+       'ラプシンは仲間とともに護送されて建物を退去したが、1か月後には農業党を立て直した。12月、党は国家院に議席を獲得し、ホワイトハウスを砲撃した張本人たちを相手に、農村予算をめぐる駆け引きを繰り広げた。',
+       '農業派は、コルホーズには手を出さないという約束と引き換えに代議員資格を返上した。だが、その約束が守られたのはわずか1年だった。農業党は国家院に議席を得ると、政府の予算案に賛成票を投じるようになった。'],
+  otc:['会派「祖国」の軍人代議員たちは去り、軍管区とのパイプも持ち去ってしまった。運命を分ける夜、各司令部に電話をかけられる者はもう誰もいなかった。',
+       '「祖国」の将軍たちは勝者として国防省へと復帰した。タラソフは国防次官の椅子を手にし、真っ先に軍の兵力削減を凍結した。',
+       '「祖国」は勝利までどうにか持ちこたえたものの、軍管区への電話は本部が望んだよりも控えめだった。国防省で会派の将軍たちにあてがわれたのは、指揮すべき部隊のない執務室だった。',
+       '「祖国」の将軍たちは、軍服着用の権利すら認められないまま予備役に回された。タラソフは1年後に政界へと復帰したが、その身にはもはや肩章も会派もなかった。',
+       '「祖国」は終わりの数日前に軍管区への電話をやめた。それでも将軍たちは軍を追われた。クレムリンが覚えていたのは、どう幕を引いたかではなく、どう事を始めたかだった。'],
+  sm: ['「スメナ」は誰よりも早くカメラの前に立ち、エリツィンもハズブラートフも立候補しない選挙を提案した。その姿はひと晩だけ、全チャンネルで放映された。',
+       '「スメナ」は、恥じることのない勝利の顔となった。若い代議員たちが選挙をめぐる交渉にあたり、モスクワで勝ったのはバリケードではなく議会なのだと西側に説いて回った。',
+       '「スメナ」は踏みとどまったが、最後までどちらの側にも道を開けたままにしていた。選挙をめぐる交渉にゴロヴィンが呼ばれたのも、代表団長としてではなく一顧問としてだった。',
+       '会派はその週のうちに瓦解した。所属代議員は新たな政党へと散り散りになり、ゴロヴィンはその後何年にもわたり、自分は大統領令にも発砲にも反対だったと弁明し続けた。',
+       '「スメナ」は決着を待たず、白旗を掲げて建物を去った。クレムリンは謝意を示したものの、有権者が許すことはなかった。12月の選挙で、会派から当選した者はほぼ皆無だった。'],
+  kol:['態度未定の代議員たちは、一人、また一人と去っていった。大統領令は一人ひとりに役職と1年分の給与を約束しており、ほぼ全員がそれを受け取った。',
+       '態度未定の代議員たちは踏みとどまり、のちに「一瞬たりとも迷わなかった」と語った。アブドゥラチポフは地方との調停委員会を率い、自身がまさに適任であることを証明してみせた。',
+       '態度未定の代議員たちは、逃げ道をうかがいながら勝利まで居残った。そのことは忘れられなかった。新たな大会では、彼らの票を最初から当てにする者はいなかった。',
+       '彼らは最後まで残り、そのことには当の本人たちすら驚いた。もはや役職が提示されることはなかったが、それでもアブドゥラチポフは数か月後、新議会の上院に議席を得ていた。',
+       '彼らはクレムリンから約束どおりの役職と補償を受け取った。アブドゥラチポフは連邦院の副議長に収まり、あの9月のことは思い出したがらなかった。'],
 };
 // силы: [победа+были за Совет, победа+были за Кремль или колебались, поражение+были за Совет, поражение+за Кремль]
 const EPI_PT={
-  mer:['ルシコフは時機を逃さず風向きを読み、頼まれる前に建物の電気を戻した。市長の座にはとどまったが、今ではモスクワ市議会が彼の予算を一行ずつ承認している。',
-       'ルシコフは最後の日までホワイトハウスの電気と水を止め続けた。モスクワ市議会は勝利後の最初の決定で彼を解任した。2年後、彼は市政に返り咲いた。',
-       '市庁舎は、クレムリンが我慢できる以上に長く迷い続けた。ルシコフは市長の座を守ったが、その代償はモスクワ市議会だった。市内の各議会は、ほかならぬ彼の命令で解散させられた。',
-       'ルシコフは建物の電気・水道・下水を止め、そのことを一度も後悔しなかった。モスクワ市議会は解散され、彼は2010年まで市長の座にあった。'],
-  smo:['アンピロフがスモレンスカヤ広場に集めた群衆はあまりに多く、警察は退いた。勝利の後、「勤労ロシア」は政府を裁判にかけろと要求し、大会は味方であるはずの彼らに、勝利は報復を意味しないと説いて聞かせねばならなかった。',
-       'アンピロフは決着より前に街頭を奪い返されていた。大会の勝利を、彼は閉ざされた扉の前でメガホンを手に迎え、勝利は自分から盗まれたのだと考えた。',
-       'アンピロフは最後まで広場を守り抜いた。3日後、彼はトゥーラ近郊の村で逮捕された。1994年2月に恩赦で釈放されると、彼は再び広場に戻った。',
-       'スモレンスカヤ広場はひと晩で掃討された。アンピロフはトゥーラ近郊の村で捕らえられ、1994年2月に恩赦で釈放された。'],
-  mo: ['グラチョフは、クレムリンが待っていた命令をついに出さなかった。それでも国防相の座にはとどまれなかった。大会が求めたのは即座に「ノー」と言った人物であって、2週間黙っていた人物ではなかった。',
-       'グラチョフは命令を実行する用意があったが、命令は戦車まで届かなかった。彼は停戦の日に辞任し、あのとき軍は双方から裏切られたのだと生涯考え続けた。',
-       'グラチョフは決断を引き延ばし、書面による命令を求めた。それを受け取ったのは明け方だった。エリツィンはこれを許さず、数か月後に国防相を更迭した。',
-       'グラチョフは書面による命令を求め、それを受け取った。戦車は橋の上に進み出た。彼は1996年まで国防相の座にあった。'],
-  gs: ['参謀本部はクレムリンに1個師団たりとも差し出さなかった。コレスニコフは新政権のもとでも参謀総長にとどまった。軍を兵営から出さなかった人物を替えようとする者はいなかった。',
-       'コレスニコフは事の成り行きを見守り、その結末を見届けた。大会のもとでさらに半年勤めたのち、自ら職を退いた。',
-       '参謀本部はできる限りの手で命令をサボタージュした。暗号電報は行方不明になり、車列はエンジンがかからなかった。それで突入を遅らせることはできたが、中止させることはできなかった。1年後、コレスニコフはひっそりと職を解かれた。',
-       '参謀本部は熱意もなく、遅滞もなく命令を実行した。コレスニコフは1996年までその職にとどまった。'],
-  mvd:['国内軍の将校たちは鉄条網の封鎖線に立つことを拒み、エリンは手足を失った内務相になった。彼は停戦の日に辞任した。',
-       'エリンは最後の1時間まで封鎖線を維持した。大会の勝利後、彼は解任され、当時の命令について取り調べを受けた。だが裁判には至らなかった。',
-       '内務省には、警備の持ち場を引き払い、見て見ぬふりをした将校たちがいた。彼らはその秋のうちに解任された。エリンはロシア連邦英雄の称号を受けた。',
-       'OMONと国内軍は求められたとおりのことをした。エリンはロシア連邦英雄の称号を受け、辞任したのはようやく1995年、ブジョンノフスク事件のあとだった。'],
-  ost:['オスタンキノは大会に放送枠を与え、国民は初めて包囲された建物の内側を目にした。ブラーギンは解任され、テレビセンターは議会の監督評議会の管理下に移った。',
-       'オスタンキノは最後までクレムリンに都合のよいものを流し続けた。ブラーギンは勝利の翌日に解任され、テレビは大会の管理下に置かれた。',
-       'オスタンキノには、代議員を放送に出す編集者たちがいた。真っ先に解雇されたのは彼らだった。ブラーギンも12月にクレムリンによって解任された。余計なものを放送に流しすぎたのだ。',
-       'オスタンキノはこの間ずっとクレムリンの声であり続けた。それでもブラーギンは12月、政権にとって不本意な結果に終わった選挙のあとで解任された。'],
+  mer:['ルシコフは機敏に風向きを読み、頼まれるよりも早く建物への送電を再開した。市長の座には踏みとどまったものの、今ではモスクワ市議会が彼の予算案を一行ずつ承認している。',
+       'ルシコフは最後の日までホワイトハウスの電気と水道を止め続けた。モスクワ市議会は勝利後の最初の決定で彼を解任した。だが2年後、彼は市政への返り咲きを果たした。',
+       '市庁舎は、クレムリンの忍耐の限界を超えるほど長く迷い続けた。ルシコフは市長の座を守り抜いたが、その代償となったのはモスクワ市議会だった。市内の各議会は、ほかならぬ彼自身の命令によって解散させられた。',
+       'ルシコフは建物の電気・水道・下水を遮断し、その決断を一度たりとも後悔しなかった。モスクワ市議会は解散に追い込まれ、彼は2010年まで市長の座にとどまり続けた。'],
+  smo:['アンピロフがスモレンスカヤ広場に集結させた群衆はあまりに膨大で、警察も退くほかなかった。勝利の後、「勤労ロシア」は政府を裁判にかけるよう要求し、大会側は味方であるはずの彼らに、勝利は報復を意味するものではないと言い聞かせねばならなかった。',
+       'アンピロフは、事態が決着する前に街頭を奪い返されていた。大会の勝利を、彼は閉ざされた扉の前でメガホンを手に迎え、勝利は自分から盗まれたのだと考えた。',
+       'アンピロフは最後まで広場を死守した。3日後、トゥーラ近郊の村で逮捕されたものの、1994年2月に恩赦で釈放されると、彼は再び広場へと戻っていった。',
+       'スモレンスカヤ広場は一夜にして掃討された。アンピロフはトゥーラ近郊の村で身柄を拘束され、1994年2月に恩赦によって釈放された。'],
+  mo: ['グラチョフは、クレムリンが待ち望んでいた命令をついに出さなかった。それでも国防相の座にとどまることはできなかった。大会側が求めていたのは即座に「ノー」と突きつけた人物であり、2週間も沈黙を守り続けた人物ではなかったのだ。',
+       'グラチョフに命令を実行する用意はあったが、その命令が戦車部隊に届くことはなかった。彼は停戦の日に辞任し、あのとき軍は双方から裏切られたのだと生涯思い続けた。',
+       'グラチョフは決断を先延ばしにし、書面での命令を要求した。それを受け取ったのは明け方のことだった。エリツィンはこの対応を許さず、数か月後に彼を国防相から更迭した。',
+       'グラチョフは書面による命令を求め、それを受け取った。戦車は橋の上へと進出した。彼は1996年まで国防相の座にとどまり続けた。'],
+  gs: ['参謀本部はクレムリンに対し、1個師団たりとも差し出さなかった。コレスニコフは新政権下でも参謀総長に留任した。軍を兵舎にとどめ置いた人物をすげ替えようとする者など、誰一人いなかった。',
+       'コレスニコフは事態の推移を静観し、その結末を見届けた。大会のもとでさらに半年務めたのち、自ら職を辞した。',
+       '参謀本部はあらゆる手段で命令をサボタージュした。暗号電報は紛失し、車両のエンジンはかからなかった。突入を遅らせることには成功したものの、中止に追い込むことはできなかった。1年後、コレスニコフはひっそりと解任された。',
+       '参謀本部は熱意こそ見せなかったものの、一切の遅滞なく命令を遂行した。コレスニコフは1996年までその職にとどまり続けた。'],
+  mvd:['国内軍の将校たちが鉄条網の封鎖線に立つことを拒んだため、エリンは手足を奪われた内務相となった。彼は停戦の日に辞任した。',
+       'エリンは最後の1時間まで封鎖線を維持し続けた。大会の勝利後、彼は解任されて当時の命令について取り調べを受けたが、裁判にかけられることはなかった。',
+       '内務省には、持ち場を放棄して見て見ぬふりをした将校たちもいた。彼らはその秋のうちに免職となった。一方、エリンにはロシア連邦英雄の称号が授与された。',
+       'OMONと国内軍は命じられた任務を忠実に遂行した。エリンはロシア連邦英雄の称号を授かり、辞任したのはようやく1995年、ブジョンノフスク事件の後のことだった。'],
+  ost:['オスタンキノが大会側に放送枠を割り当てたことで、国民は包囲された建物の内部を初めて目にすることとなった。ブラーギンは解任され、テレビセンターは議会の監督評議会による管理下へと移った。',
+       'オスタンキノは最後までクレムリンに都合のよい報道を流し続けた。ブラーギンは大会側の勝利の翌日に解任され、テレビ局は大会の統制下に置かれた。',
+       'オスタンキノには、代議員を番組に出演させた編集者たちもいた。真っ先に解雇されたのは彼らだった。ブラーギンもまた12月にクレムリンから解任された。余計なものを放送しすぎたのだ。',
+       'オスタンキノはこの間、終始クレムリンの代弁者であり続けた。それでもブラーギンは12月、政権側にとって不本意な結果に終わった選挙ののちに解任された。'],
 };
 // ничья и «нулевой вариант»: [были верны, колебались]
 const EPI_FAC_N={
-  ros:['会派「ロシア」の法律家たちは最後の日まで決議を書き続け、そのどれひとつとして、のちに裁判所で覆されることはなかった。バブーリンは、譲りもせず勝ちもしなかった男として政界に残った。オムスクでは選挙のたびに彼が選ばれた。',
-       '会派「ロシア」の面々は、最後の数日には一人ひとり抜け道を探していた。危機が勝者のないまま終わると、バブーリンは会派を立て直したが、かつての重みはもうなかった。'],
-  kr: ['共産主義者たちは最後まで残り、誰も禁止に踏み切れなかった党を携えて危機を抜け出した。次の選挙では、クレムリンも大会も許さなかった人々の票を集めた。',
-       '共産主義者たちはどちらが勝つかを計算していたが、結局どちらも勝たなかった。ルイプキンは真っ先に政府との交渉の席に着き、選挙に向けて党を守り抜いた。'],
-  agr:['農業派は最後の日まで、包囲された建物に食料を届け続けた。土地法は元のまま残った。どちらの側にも、それを書き換えるだけの力がなかったからだ。ラプシンはこれを自分の最大の勝利と呼んだ。',
-       '農業派は双方と取引をし、どちらにも借りを残さなかった。1か月後、ラプシンは農業党をまとめ上げ、選挙に臨んだ。'],
-  otc:['「祖国」の将軍たちは最後の夜まで軍管区に電話をかけ続けた。軍に戻されることはなかったが、不名誉な形で追放する決断も下されなかった。あの電話を覚えている指揮官があまりに多かったからだ。',
-       '「祖国」は本部が求めたよりも控えめにしか軍管区に電話をかけなかった。会派の将軍たちは静かに予備役に退いた。タラソフは1年後、肩章を外して政界に戻った。'],
-  sm: ['「スメナ」は、互いに口をききたがらない者たち全員に代わって交渉にあたった。危機が勝者のないまま終わったとき、それこそが彼らの狙いだったとわかった。ゴロヴィンはあらゆる調停委員会に呼ばれた。',
-       '「スメナ」はどちらの側にも扉を開けておき、開いたほうの扉をくぐった。所属代議員は新しい政党に散り、ゴロヴィンはその後も長いこと、自分はどちらの側にも反対だったと説明し続けた。'],
-  kol:['態度未定の代議員たちは最後まで残り、自分たちでもそれに驚いた。アブドゥラチポフは地方との調停委員会を率いた。誰も勝たなかったとき、英雄よりも必要とされたのは仲介者だった。',
-       '態度未定の代議員たちは結末を待ったが、はっきりした答えは出なかった。クレムリンが約束した役職を得られたのは一部だけだった。それでもアブドゥラチポフは新しい議会の上院に席を得た。'],
+  ros:['会派「ロシア」の法律家たちは最後の日まで決議文を起草し続け、そのいずれもが、のちに法廷で覆されることはなかった。バブーリンは、屈服も勝利もしなかった男として政界に生き残った。オムスクの選挙では、彼が選ばれ続けた。',
+       '会派「ロシア」の面々は、最後の数日になるとめいめい抜け道を探していた。勝者のないまま危機が収束すると、バブーリンは会派を立て直したものの、往時の影響力はすでに失われていた。'],
+  kr: ['共産主義者たちは最後まで踏みとどまり、誰も活動禁止に踏み切れなかった党組織を抱えたまま危機を切り抜けた。そして次の選挙で、クレムリンも大会も許せなかった人々の票を集めた。',
+       '共産主義者たちはどちらの陣営が勝つかを値踏みしていたが、結局のところ、どちらも勝者にはなれなかった。ルイプキンはいち早く政府との交渉の席に着き、選挙に向けて党を守り抜いた。'],
+  agr:['農業派は最後の日まで、包囲された建物に食料を届け続けた。土地法は手つかずのまま残った。どちらの側にも、それを書き換えるだけの力がなかったからだ。ラプシンはこれを自らの最大の勝利と呼んだ。',
+       '農業派は双方と取引をし、どちらに対しても借りを残さなかった。1か月後、ラプシンは農業党をまとめ上げ、選挙に臨んだ。'],
+  otc:['「祖国」の将軍たちは最後の夜まで軍管区に電話をかけ続けた。軍に戻されることはなかったが、不名誉な形で追放されることもなかった。あの電話を覚えている指揮官があまりに多かったからだ。',
+       '「祖国」は、本部が求めたほど熱心には軍管区に電話をかけなかった。会派の将軍たちは静かに予備役に退いた。タラソフは1年後、肩章を外して政界へと戻った。'],
+  sm: ['「スメナ」は、互いに口もききたがらない者たちの間に立って交渉にあたった。危機が勝者のないまま終わったとき、それこそが彼らの狙いだったと明らかになった。ゴロヴィンはあらゆる調停委員会から声がかかった。',
+       '「スメナ」はどちらの側にも扉を開けておき、開いたほうの扉をくぐった。所属代議員は新たな政党へと散り、ゴロヴィンはその後も長いあいだ、自分はどちらの側にも反対だったのだと説明し続けた。'],
+  kol:['態度未定の代議員たちは最後まで残り、自分たち自身でもそれに驚いた。アブドゥラチポフは地方との調停委員会を率いた。勝者がいなかったとき、英雄よりも必要とされたのは仲介者だった。',
+       '態度未定の代議員たちは結末を待ったが、はっきりした答えは出なかった。クレムリンが約束した役職を得られたのはごく一部だけだった。それでもアブドゥラチポフは、新議会の上院に議席を得た。'],
 };
 // ничья: [были за Совет, были за Кремль или колебались]
 const EPI_PT_N={
-  mer:['ルシコフはニュース次第で、建物の電気をつけてはまた消した。彼は市長の座にとどまった。国に勝者がいないとき、街を取り仕切る者はどちらの側にも必要なのだ。',
-       'ルシコフはこの間ずっと、ホワイトハウスの電気と水を止めていた。危機が勝者のないまま終わると、モスクワ市議会は彼の辞任を要求したが、票が集まらなかった。彼はその後も長く市長の座にあった。'],
-  smo:['アンピロフは最後までスモレンスカヤ広場を守り、代議員よりも街頭のほうが多くを成し遂げたと考えていた。「勤労ロシア」は政府を裁判にかけろと要求した。裁判は開かれず、集会は続いた。',
-       'アンピロフは決着より前に街頭を奪い返されていた。彼は逮捕されず、メガホンも手放さなかった。あんな秋のあとで、彼を捕まえる理由はなかった。'],
-  mo: ['グラチョフは、ついに軍をまるごとクレムリンに差し出すことはなかった。エリツィンはそれを許さず、大会は彼を信用しなかった。数か月後に国防相は交代させられ、双方がそれを自分の手柄とみなした。',
-       'グラチョフは、実行すべき命令がある限りクレムリンの命令に従った。勝者のない結末のあとも国防相の座に残ったが、その軍はもう二度とモスクワに呼び出されたくないと思っていた。'],
-  gs: ['参謀本部はできる限りの手で命令をサボタージュした。暗号電報は行方不明になり、車列はエンジンがかからなかった。コレスニコフはそのことで褒賞も処罰も受けなかった。さらに半年勤めたのち、自ら職を退いた。',
-       '参謀本部は熱意もなく、遅滞もなく命令を実行した。コレスニコフはその職にとどまり、軍を去るまであの秋の話を避け続けた。'],
-  mvd:['内務省には、警備の持ち場を引き払い、見て見ぬふりをした将校たちがいた。エリンは彼らを解任できなかった。決着があまりに危ういものだったからだ。エリン自身も1年後に辞任した。',
-       'エリンは最後の1時間まで封鎖線を維持した。だがその功でロシア連邦英雄の称号を受けることはなかった。誰も勝たなかった秋の働きを表彰する決断を、クレムリンは下せなかった。'],
-  ost:['オスタンキノは代議員に発言の場を与え、国民は包囲された建物の内側を目にした。ブラーギンは解任された。テレビセンターには監督評議会が置かれたが、そこではクレムリン側と議会側がその後1年にわたって互いの決定を阻み合った。',
-       'オスタンキノは最後までクレムリンに都合のよいものを流し続けた。それでもブラーギンは解任された。国民がテレビを信じなかったことの責任を、誰かが負わねばならなかった。'],
+  mer:['ルシコフはニュースの動向次第で、建物の電気をつけてはまた消した。彼は市長の座にとどまった。国に勝者がいないとき、街を取り仕切る者はどちらの側にとっても必要なのだ。',
+       'ルシコフはこの間ずっと、ホワイトハウスへの電気と水を遮断していた。危機が勝者のないまま終わると、モスクワ市議会は彼の辞任を要求したが、票は集まらなかった。彼はその後も長く市長の座にあった。'],
+  smo:['アンピロフは最後までスモレンスカヤ広場を守り、代議員たちよりも街頭のほうが多くを成し遂げたと信じていた。「勤労ロシア」は政府を法廷に引き出すよう要求した。裁判が開かれることはなく、集会だけが続いた。',
+       'アンピロフは、事態の決着を前に街頭を奪い返されていた。彼は逮捕されず、メガホンも手放さなかった。あのような秋が過ぎ去ったあとで、彼を捕らえる理由などなかった。'],
+  mo: ['グラチョフは、ついに軍をまるごとクレムリンに差し出すことはなかった。エリツィンはそれを許さず、大会は彼を信用しなかった。数か月後に国防相は更迭され、双方がそれを自らの手柄とみなした。',
+       'グラチョフは、実行すべき命令がある限りクレムリンの命令に従った。勝者のない結末のあとも国防相の座にとどまったが、その軍はもう二度とモスクワに呼び出されたくはないと思っていた。'],
+  gs: ['参謀本部はあらゆる手を使って命令をサボタージュした。暗号電報は行方不明になり、車列のエンジンはかからなかった。コレスニコフはそのことで褒賞を受けることも、処罰されることもなかった。さらに半年勤めたのち、自ら職を退いた。',
+       '参謀本部は熱意こそ見せなかったが、遅滞なく命令を実行した。コレスニコフはその職にとどまり、軍を去るまであの秋の話を避け続けた。'],
+  mvd:['内務省には、警備の持ち場を引き払い、見て見ぬふりをした将校たちがいた。エリンは彼らを解任できなかった。決着があまりに危うい均衡の上にあったからだ。エリン自身も1年後に辞任した。',
+       'エリンは最後の1時間まで封鎖線を維持した。だがその功績でロシア連邦英雄の称号を受けることはなかった。誰も勝たなかった秋の働きを表彰する決断を、クレムリンは下せなかったのだ。'],
+  ost:['オスタンキノは代議員に発言の場を与え、国民は包囲された建物の内部を目撃した。ブラーギンは解任された。テレビセンターには監督評議会が置かれたが、そこではクレムリン側と議会側が、その後1年にわたって互いの決定を阻み合い続けた。',
+       'オスタンキノは最後までクレムリンに都合のよい映像を流し続けた。それでもブラーギンは解任された。国民がテレビを信じなくなった責任を、誰かが負わねばならなかったのだ。'],
 };
 // поражение без штурма («Разошлись», «Съезд распался», «Пустые баррикады», сдача до боя): замены для текстов, где упомянуты штурм и танки
 const EPI_NOA={
-  ros3:'バブーリンは、人の去っていく建物を最後に出た一人だった。12月、オムスクの有権者は再び彼を議員に選び、彼は国家院の演壇から、9月に語ったのと同じことを繰り返した。',
-  ros4:'最後の数日、会派の面々は一人ひとり抜け道を探していた。12月、オムスクはバブーリンを議会に送り返した。ただし、それはもう別の議会だった。',
-  agr3:'ラプシンは最後に仲間を連れて建物を去り、1か月後に農業党を立て直した。12月、党は国家院に議席を得て、農村予算をめぐる駆け引きをした。',
-  mo2:'グラチョフは決断を引き延ばし、書面による命令を求めた。だが命令は必要なかった。ホワイトハウスはひとりでに空になった。エリツィンは国防相が待ったことを忘れず、数か月後に彼を更迭した。',
-  mo3:'グラチョフは命令を実行する用意があった。戦車を出す必要はなかった。建物は一発の銃声もなく空になった。彼は1996年まで国防相の座にあった。',
-  gs2:'参謀本部はできる限りの手で命令をサボタージュした。暗号電報は行方不明になり、車列はエンジンがかからなかった。それで足りたのかどうかは、確かめる機会がなかった。突入には至らなかったからだ。',
-  gs3:'参謀本部は、熱意はなくとも遅滞なく命令を実行する構えだった。命令は必要なかった。コレスニコフは1996年までその職にとどまった。',
+  ros3:'バブーリンは、人々が去っていく建物を最後に出た一人だった。12月、オムスクの有権者は再び彼を議員に選び、彼は国家院の演壇から、9月に語ったのと同じ言葉を繰り返した。',
+  ros4:'最後の数日、会派の面々は一人ひとり生き残りの道を探していた。12月、オムスクの有権者はバブーリンを議会に送り返した。ただし、それはもう別の議会だった。',
+  agr3:'ラプシンは最後に仲間を連れて建物を去り、1か月後に農業党を立て直した。12月、党は国家院に議席を得て、農村予算をめぐる駆け引きに身を投じた。',
+  mo2:'グラチョフは決断を引き延ばし、書面による命令を求め続けた。だが命令は必要なかった。ホワイトハウスはひとりでに空になったからだ。エリツィンは国防相が躊躇したことを忘れず、数か月後に彼を更迭した。',
+  mo3:'グラチョフには命令を実行する用意があった。だが戦車を出す必要はなかった。建物は一発の銃声も響かぬまま空になった。彼は1996年まで国防相の座にとどまった。',
+  gs2:'参謀本部はあらゆる手を使って命令をサボタージュした。暗号電報は行方不明になり、車列のエンジンはかからなかった。それで足りたのかどうかを確かめる機会はなかった。突入には至らなかったからだ。',
+  gs3:'参謀本部は、熱意はなくとも遅滞なく命令を実行する構えだった。だが命令は必要なかった。コレスニコフは1996年までその職にとどまった。',
 };
 function epilogue(){
   const id=S.endId||'', K=id==='elect_deal'?'deal':endTier(id)==='neu'?'draw':/army/.test(id)?'army':id==='win_elect'?'elect':id==='held'?'held':/fell|broken/.test(id)?'fell':/surrender/.test(id)?'surr':'fade', win=K==='army'||K==='elect'||K==='held', neu=K==='deal'||K==='draw', noA=!win&&!neu&&!(S.A&&S.A.units);
   const L=[], add=(pic,h,q,p)=>L.push({pic,h,q,p});
-  add(win?'wh':K==='fell'?'whf':'wh','エピローグ','それぞれのその後','ここから先は、実際には起こらなかったこと。あるいは、実際とは違う形で起きたこと。人々の運命を決めるのは、あなたの秋がどう終わったか、誰が最後まであなたと共にいたか、そして軍、警察、市庁舎、放送がどちらの側についたかだ。');
-  add('hasb','ハズブラートフ','最高会議議長',{army:'ハズブラートフは、2週間ろうそくの灯りで過ごしたのと同じ議場で、政府の総辞職を受理した。繰り上げ選挙まで、彼は国のナンバー2であり続けた。いや、ナンバー1だと見る者も多かった。',
-    deal:'ハズブラートフは「ゼロ・オプション」に署名し、選挙まで議長の座にとどまった。彼はこれを法の勝利と呼んだ。新しい法律のもとで選ばれた新議会には、もはやそれほどの権限を持つ議長は存在しなかった。',
-    elect:'ハズブラートフは突入を退け、大統領と議会の同時選挙に同意した。自らは出馬しなかった。自分の務めは議会を守ることであって、再びその長になることではない、と彼は言った。',
-    held:'ハズブラートフは焼け焦げた壁のそばで人々の前に姿を現し、停戦を宣言した。勝利は死者の名簿とともに彼の手に渡り、その名簿はその後、選挙のたびに彼に突きつけられた。',
-    draw:S.endId==='held_iso'?'ハズブラートフは、封鎖線の内側でしか認められない議会の議長として残った。彼は過激派に黙れと迫ったが、マイクはもう彼の手にはなかった。':'ハズブラートフは自由の身で建物を出た。カメラがあれだけのものを映し出したあとで、議会の議長を逮捕する度胸はクレムリンになかった。彼は、大会は国内のどこの議場でも活動を続けると宣言した。すると地方が次々に、その議場を提供すると申し出た。',
-    fell:'ハズブラートフは護送されて建物から連れ出され、レフォルトヴォ拘置所へ送られた。1994年2月26日、国家院の決議した恩赦で釈放され、プレハーノフ経済大学の教壇に戻った。',
-    surr:'ハズブラートフは降伏の条件に署名し、代議員たちとともにバスへ向かった。レフォルトヴォ拘置所、1994年2月の恩赦、そしてプレハーノフ経済大学の教壇。',
-    fade:'ハズブラートフは人の去っていく建物に、ほとんど一人で残った。逮捕すらされなかった。クレムリンにとっては、逮捕すべき者などいないと示すほうが重要だったのだ。彼は大学の教壇に戻った。'}[K]);
-  add('rutskoy','ルツコイ','副大統領',K==='deal'?'ルツコイは、大統領令第1400号が撤回されたその日に、大統領代行の権限を返上した。彼はこの妥協を「双方そろっての降伏」と呼んだ。選挙には自ら出馬して敗れたが、3年後にクルスク州知事となった。':K==='draw'&&S.endId==='held_iso'?'ルツコイはホワイトハウスの中庭で、防衛にあたった者たちの閲兵を行った。彼の大統領令が効力を持ったのは、半径300メートルの範囲だけだった。その外には、クレムリンを爆撃せよという彼の呼びかけを忘れていない国が広がっていた。':K==='draw'?'ルツコイは最後に建物を出て、グリースも拭っていない自動小銃を記者たちに見せた。国の半分は彼を大統領代行とみなし、残る半分は反乱者とみなした。どちらもそれぞれに正しかった。結局、彼が裁かれることはなかった。':win?(S.rad>=60?'ルツコイは大統領代行として宣誓し、バルコニーで約束したことの半分を実行した。残る半分は投獄にかかわるもので、大会はそれを承認しなかった。':'ルツコイは繰り上げ選挙まで大統領代行を務め、大方の予想を裏切って、本当に選挙を実施した。'):
-    (K==='fade'?'ルツコイは、大会のほかには誰も認めていなかった権限を自ら返上した。3年後、彼はクルスク州知事に選ばれた。':'ルツコイは最後に投降し、記者たちにグリースが付いたままの自動小銃を見せた。撃っていないという証しだった。レフォルトヴォに収監され、1994年2月に恩赦で出所した。1996年、彼はクルスク州知事に選ばれた。'));
-  add('yeltsin','エリツィン','ロシア大統領',{army:'軍が命令に従わなかった時点で、すべては終わっていた。エリツィンは繰り上げ選挙に同意したが自らは出馬せず、本を書くためにバルヴィハの別荘へ去った。',
-    deal:'エリツィンは大統領令第1400号を撤回し、それを「合意への一歩」と呼んだ。選挙までに彼は議会に関する法律を改め、テレビ局の首脳陣も入れ替えた。選挙には勝った。それがどこまで公正だったかは、今も議論が続いている。',
+  add(win?'wh':K==='fell'?'whf':'wh','エピローグ','それぞれのその後','ここから先は、実際には起こらなかったこと。あるいは、実際とは違う形で起きたことだ。人々の運命を決めるのは、あなたの秋がどう終わったか、誰が最後まであなたと共にいたか、そして軍、警察、市庁舎、放送がどちらの側についたかである。');
+  add('hasb','ハズブラートフ','最高会議議長',{army:'ハズブラートフは、2週間にわたってろうそくの灯りで過ごしたあの議場で、政府の総辞職を受理した。繰り上げ選挙まで、彼は国のナンバー2であり続けた。いや、ナンバー1だと見る者さえ多かった。',
+    deal:'ハズブラートフは「ゼロ・オプション」に署名し、選挙まで議長の座にとどまった。彼はこれを法の勝利と呼んだ。だが新しい法律のもとで選ばれた新議会には、もはやそれほどの権限を持つ議長は存在しなかった。',
+    elect:'ハズブラートフは突入を退け、大統領と議会の同時選挙に同意した。自らは出馬しなかった。自分の務めは議会を守ることであって、再びその長に就くことではない、と彼は語った。',
+    held:'ハズブラートフは焼け焦げた壁のそばで人々の前に姿を現し、停戦を宣言した。勝利は死者の名簿とともに彼の手へ渡り、その名簿はその後、選挙のたびに彼に突きつけられた。',
+    draw:S.endId==='held_iso'?'ハズブラートフは、封鎖線の内側でしか認められない議会の議長として取り残された。彼は過激派に黙れと迫ったが、マイクはもう彼の手にはなかった。':'ハズブラートフは自由の身で建物をあとにした。カメラがあれだけの光景を映し出した後では、議会の議長を逮捕する度胸などクレムリンにはなかった。彼は、大会は国内のどの議場であっても活動を続けると宣言した。すると地方が次々と、議場の提供を申し出た。',
+    fell:'ハズブラートフは護送されて建物から連れ出され、レフォルトヴォ拘置所へ送られた。1994年2月26日、国家院が決議した恩赦によって釈放され、プレハーノフ経済大学の教壇に戻った。',
+    surr:'ハズブラートフは降伏条件に署名し、代議員たちとともにバスへ向かった。待っていたのはレフォルトヴォ拘置所、1994年2月の恩赦、そしてプレハーノフ経済大学の教壇だった。',
+    fade:'ハズブラートフは、人の去った建物にほぼ一人で残った。逮捕すらされなかった。クレムリンにとっては、逮捕すべき者などいないと見せつけることのほうが重要だったのだ。彼は大学の教壇に戻った。'}[K]);
+  add('rutskoy','ルツコイ','副大統領',K==='deal'?'ルツコイは、大統領令第1400号が撤回されたその日に大統領代行の権限を返上した。彼はこの妥協を「双方そろっての降伏」と呼んだ。選挙には自ら出馬したものの敗れ、3年後にクルスク州知事となった。':K==='draw'&&S.endId==='held_iso'?'ルツコイはホワイトハウスの中庭で、防衛にあたった者たちを閲兵した。彼の大統領令が効力を持ったのは、半径300メートルの範囲だけだった。その外側には、クレムリンを爆撃せよという彼の呼びかけを忘れていない国が広がっていた。':K==='draw'?'ルツコイは最後に建物をあとにし、グリースも拭っていない自動小銃を記者たちに見せた。国の半分は彼を大統領代行とみなし、残る半分は反乱者とみなした。どちらの言い分もそれぞれに正しかった。結局、彼が裁かれることはなかった。':win?(S.rad>=60?'ルツコイは大統領代行として宣誓し、バルコニーで約束したことの半分を実行した。残る半分は投獄に関わるものであり、大会はそれを承認しなかった。':'ルツコイは繰り上げ選挙まで大統領代行を務め、大方の予想を裏切って、本当に選挙を実施してみせた。'):
+    (K==='fade'?'ルツコイは、大会のほかには誰も認めていなかった権限を自ら返上した。3年後、彼はクルスク州知事に選ばれた。':'ルツコイは最後に投降し、記者たちにグリースがついたままの自動小銃を見せた。撃っていないという証しだった。レフォルトヴォ拘置所に収監され、1994年2月に恩赦で釈放された。1996年、彼はクルスク州知事に選ばれた。'));
+  add('yeltsin','エリツィン','ロシア大統領',{army:'軍が命令に従わなかった時点で、すべては終わっていた。エリツィンは繰り上げ選挙に同意したものの自らは出馬せず、本を書くためにバルヴィハの別荘へ去った。',
+    deal:'エリツィンは大統領令第1400号を撤回し、それを「合意への一歩」と呼んだ。選挙までに彼は議会に関する法律を改め、テレビ局の首脳陣も入れ替えた。選挙には勝った。それがどこまで公正だったのかは、今も議論が続いている。',
     elect:'エリツィンは「合意への一歩」と称して大統領令第1400号を撤回した。同時選挙には自ら立候補した。その結果がどうなったかは、このゲームにもわからない。',
-    held:'突入は全世界の見守る前で頓挫した。エリツィンは停戦を宣言し、1週間後に選挙に同意した。発砲を命じた者たちの名を一人ひとり挙げたが、その中に自分の名はなかった。',
-    draw:'エリツィンはクレムリンに残ったが、そこから出る命令はもう実行されなかった。軍管区は書面での確認を待ち、地方は税を手元に留め、憲法裁判所は大統領令第1400号をクーデターと呼んだ。数か月後、彼は繰り上げ選挙に同意し、自らは出馬しなかった。',
+    held:'突入は全世界が見守る前で頓挫した。エリツィンは停戦を宣言し、1週間後には選挙の実施に同意した。発砲を命じた者たちの名を一人ひとり挙げたが、その中に自分の名はなかった。',
+    draw:'エリツィンはクレムリンに残ったが、そこから下される命令はもはや実行されなかった。軍管区は書面での確認を待ち、地方は税を手元に留め、憲法裁判所は大統領令第1400号をクーデターと呼んだ。数か月後、彼は繰り上げ選挙に同意し、自らは出馬しなかった。',
     fell:'エリツィンは12月まで大統領令で統治した。1993年12月12日、強い大統領と弱い議会を定めた新憲法が国民投票で採択された。この憲法は今も効力を持っている。',
-    surr:'エリツィンは大きな戦闘なしに建物を手に入れ、それを自らの手柄とした。12月には彼の憲法が採択された。投降した者たちに与えられた保証が思い出されたのは、2月に国家院が恩赦を宣言したときだった。',
-    fade:'クレムリンに突入は必要なかった。エリツィンは新しい議会の選挙に関する大統領令に署名し、12月には自らの憲法を国民投票で通した。'}[K]);
+    surr:'エリツィンは大きな戦闘もなく建物を手中に収め、それを自らの手柄とした。12月には彼の憲法が採択された。投降した者たちに与えられた保証が思い出されたのは、2月に国家院が恩赦を宣言したときだった。',
+    fade:'クレムリンにとって突入は必要なかった。エリツィンは新たな議会選挙に関する大統領令に署名し、12月には自らの憲法を国民投票で通過させた。'}[K]);
   for(const F of FACTIONS){ if(F.kind!=='dep')continue; const f=S.fac[F.id], T=EPI_FAC[F.id]; if(!T)continue; const gone=f.n<=0, loyal=f.loy>=6;
     add(FAC_WHO[F.id],F.nm.replace(/"/g,'「').replace(/「([^「]*)「/,'「$1」').toUpperCase(),gone?'決着前に去った':LOY[loyLvl(f.loy)].nm[0].toUpperCase()+LOY[loyLvl(f.loy)].nm.slice(1)+' · 残り'+f.n,gone?T[0]:neu?EPI_FAC_N[F.id][loyal?0:1]:win?T[loyal?1:2]:(noA&&EPI_NOA[F.id+(loyal?3:4)])||T[loyal?3:4]); }
   { const f=S.fac.rne, was=f.n>0||S.flags.rneWas;
-    add('barkash','RNE',f.n>0?'最後まで建物に残った':was?'追い出されたか、自ら去った':'建物に入れてもらえなかった',
-      neu?(f.n>0?'バルカショフ派は決着がつくまで建物に残り、武器を持ったまま去った。彼らが隊列を組む映像を、クレムリンは機会があるたびに流した。「こんな連中と交渉しろと言うのか」。大会はついに、この映像の汚名を拭い去れなかった。'
-            :was?'決着の時には、RNEはもう建物にいなかった。バルカショフは裏切られたと語った。それでも守備側にはファシストのレッテルが貼られたが、なかなか定着しなかった。映し出せる者がいなかったからだ。'
-            :'バルカショフは門前払いされた。ホワイトハウス前の写真に黒い制服は写っておらず、それがクレムリンが議会を反乱と断じられなかった理由の一つになった。')
-      :noA?(f.n>0?'バルカショフ派は最後に、隊列を組み、武器を携えて建物を出た。その隊列の映像を、クレムリンは冬じゅう流し続けた。「中にいたのはこういう連中だ」。バルカショフは冬に逮捕され、2月に恩赦で釈放された。'
-            :was?'最後の時点で、RNEはもう建物にいなかった。それでも守備側にはファシストのレッテルが貼られたが、効き目は薄かった。映し出せる者がいなかったからだ。'
-            :'バルカショフは門前払いされた。議会の壁際の鉤十字をテレビで映せた者はいなかったが、それでホワイトハウスが救われることはなかった。')
-      :f.n>0?(win?'バルカショフ派は20番玄関を守り抜き、勝利の分け前を要求した。拠点となる部屋、武器、大会警備の持ち場である。リベラル系の新聞は、その後10年にわたって載せ続けることになる写真を手に入れた。議会の階段に並ぶ黒い制服だ。RNEの武装解除は、新しい政権が自ら行わねばならなかった。'
-                 :'バルカショフ派は玄関で誰よりも長く戦い、その後、武器を持ったまま地下道から脱出した。彼らが隊列を組む映像は、突入を正当化する最大の根拠になった。「あそこにはファシストがいた」。バルカショフは冬に逮捕され、2月に恩赦で釈放された。')
-      :was?(win?'勝利したホワイトハウスにRNEはおらず、大会の勝利をファシストの勝利と呼べる者はいなかった。バルカショフは裏切られたと語った。1年後には、彼の組織が報じられるのは事件記事だけになっていた。'
-              :'大会はRNEを追い出し、最精鋭の部隊を失った。バルカショフは部下を連れて去り、戦闘には加わらなかった。それでも守備側にはファシストのレッテルが貼られたが、効き目は薄かった。映し出せる者がいなかったからだ。')
-      :(win?'バルカショフは門前払いされた。これはあの秋で最も安上がりな決断の一つとなった。写真に黒い制服が写っていなかったため、西側はその日のうちに議会の勝利を承認した。'
-           :'バルカショフは門前払いされた。突入の日には訓練された戦闘員120人の不在が響いたが、その代わり、議会の壁際の鉤十字をテレビで映せた者はいなかった。')); }
-  { const f=S.fac.so; add('terekh','「将校同盟」',f.n>0?'最後まで建物内に':'建物にいなかった',neu?(f.n>0?'テレホフの将校たちは最後の日まで建物の防衛を担った。クレムリンはテレホフを逮捕する勇気もなく、軍への復帰も拒んだ。「将校同盟」は結局、元のまま、軍人たちの政治サークルにとどまった。':'「将校同盟」は防衛に加わらなかった。テレホフは国防相の裁判を求めたかと思えば辞任を求め、どちらも実現しなかった。'):f.n>0?(win?'テレホフの将校たちは階級を回復されて軍に戻った。テレホフ本人は参謀本部に迎えられなかった。勝利した大会に必要なのは軍であって、軍の中の政治サークルではなかった。':'テレホフは逮捕され、取り調べで暴行を受けた。1994年2月に恩赦で出所し、今度は武器を持たずに「将校同盟」を再建した。')
-      :(win?'「将校同盟」は防衛に加わらなかった。勝利の後、テレホフは国防省の粛清を求めたが、丁重に聞き流された。':'テレホフは独自に動き、決着を待たずに逮捕された。1994年2月の恩赦で自由は戻ったが、階級は戻らなかった。')); }
+    add('barkash','RNE',f.n>0?'最後まで建物に残った':was?'追い出されたか、自ら去ったか':'建物に入れてもらえなかった',
+      neu?(f.n>0?'バルカショフ派は決着がつくまで建物に残り、武器を携えたまま立ち去った。彼らが隊列を組む映像を、クレムリンは機会があるたびに流し続けた。「こんな連中と交渉しろと言うのか」。大会はついに、この映像による汚名を拭い去れなかった。'
+            :was?'決着の時には、RNEはもう建物にいなかった。バルカショフは裏切られたと語った。それでも守備側にはファシストのレッテルが貼られたが、なかなか定着しなかった。画面に映し出せる者がいなかったからだ。'
+            :'バルカショフは門前払いされた。ホワイトハウス前の写真に黒い制服は写っておらず、それが、クレムリンが議会を反乱と断じきれなかった理由の一つとなった。')
+      :noA?(f.n>0?'バルカショフ派は最後に隊列を組み、武器を携えて建物を出た。その隊列の映像を、クレムリンは冬のあいだ流し続けた。「中にいたのはこういう連中だ」。バルカショフは冬に逮捕され、2月に恩赦で釈放された。'
+            :was?'最後の局面で、RNEはもう建物にいなかった。それでも守備側にはファシストのレッテルが貼られたが、効き目は薄かった。画面に映し出せる者がいなかったからだ。'
+            :'バルカショフは門前払いされた。議会の壁際にある鉤十字をテレビで映し出せた者はいなかったが、それでホワイトハウスが救われることはなかった。')
+      :f.n>0?(win?'バルカショフ派は20番玄関を守り抜き、勝利の分け前を要求した。拠点となる部屋、武器、そして大会警備の持ち場である。リベラル系の新聞は、その後10年にわたって載せ続けることになる写真を手に入れた。議会の階段に並ぶ黒い制服だ。RNEの武装解除は、新しい政権が自ら行わねばならなかった。'
+                 :'バルカショフ派は玄関で誰よりも長く戦い、その後、武器を持ったまま地下道から脱出した。彼らが隊列を組む映像は、突入を正当化する最大の根拠となった。「あそこにはファシストがいた」。バルカショフは冬に逮捕され、2月に恩赦で釈放された。')
+      :was?(win?'勝利したホワイトハウスにRNEはおらず、大会の勝利をファシストの勝利と呼べる者はいなかった。バルカショフは裏切られたと語った。1年後には、彼の組織が報じられるのは事件記事の中だけになっていた。'
+              :'大会はRNEを追い出し、最精鋭の部隊を失った。バルカショフは部下を連れて立ち去り、戦闘には加わらなかった。それでも守備側にはファシストのレッテルが貼られたが、効き目は薄かった。画面に映し出せる者がいなかったからだ。')
+      :(win?'バルカショフは門前払いされた。これはあの秋において、最も安上がりな決断の一つとなった。写真に黒い制服が写っていなかったため、西側はその日のうちに議会の勝利を承認した。'
+           :'バルカショフは門前払いされた。突入の日、訓練された戦闘員120人の不在は痛手となったが、その代わり、議会の壁にある鉤十字がテレビに映し出されることもなかった。')); }
+  { const f=S.fac.so; add('terekh','「将校同盟」',f.n>0?'最後まで建物内に':'建物にいなかった',neu?(f.n>0?'テレホフ率いる将校たちは最後の日まで建物の防衛を担った。クレムリンには彼を逮捕する度胸もなく、軍への復帰も認めなかった。「将校同盟」は結局、以前と変わらず軍人たちの政治サークルにとどまった。':'「将校同盟」は防衛に加わらなかった。テレホフは国防相の裁判を求めたかと思えば辞任を要求したが、どちらも実現することはなかった。'):f.n>0?(win?'テレホフ配下の将校たちは階級を回復され、軍へと復帰した。しかし、テレホフ本人が参謀本部に迎えられることはなかった。勝利した大会に必要なのは軍であって、軍の中の政治サークルではなかったのだ。':'テレホフは逮捕され、取り調べで暴行を受けた。1994年2月に恩赦で釈放されると、今度は武器を取ることなく「将校同盟」を再建した。')
+      :(win?'「将校同盟」は防衛に加わらなかった。勝利の後、テレホフは国防省の粛清を要求したが、丁重に受け流された。':'テレホフは単独で動き、事態の決着を待たずして逮捕された。1994年2月の恩赦で自由こそ取り戻したものの、階級が戻ることはなかった。')); }
   for(const pid of ['mo','gs','mvd','mer','smo','ost']){ const P=POINTS.find(x=>x.id===pid), v=S.pts[pid], our=v>=(win||neu?50:60), W=PEOPLE[POINT_WHO[pid]];
     add(POINT_WHO[pid],W.nm.split(/[ ・]/).pop().toUpperCase(),P.nm.replace(/ ↑.*/,'')+' · 最終的に'+(v>=65?'最高会議側':v<=35?'クレムリン側':'態度未定')+' ('+v+'%)',neu?EPI_PT_N[pid][our?0:1]:win?EPI_PT[pid][our?0:1]:(noA&&EPI_NOA[pid+(our?2:3)])||EPI_PT[pid][our?2:3]); }
   // части Кремля: кто дошёл до конца, кто встал, кто не пошёл вовсе
   { const A=S.A, kWon=endTier(id)==='lose';
-    if(!A||!A.units||false){ add('grachev','クレムリン側の部隊','突入はなかった',id==='elect_deal'?'モスクワに集められた部隊は環状道路で1週間待機したのち、駐屯地に戻った。兵士たちには、あれは演習だったと告げられた。':'発砲には至らなかった。部隊の車列は河岸通りでしばらく待機し、引き揚げた。もう制圧すべき相手はいなかった。'); }
+    if(!A||!A.units||false){ add('grachev','クレムリン側の部隊','突入はなかった',id==='elect_deal'?'モスクワに集結させられた部隊は環状道路で1週間待機したのち、駐屯地へと引き揚げた。兵士たちには、ただの演習だったと説明された。':'発砲には至らなかった。部隊の車列は河岸通りでしばらく待機したのち、引き揚げていった。もう制圧すべき相手はいなかった。'); }
     else{ const T={
       tanks:{who:'grachev',nm:'橋の上の戦車',sub:'カンテミロフスカヤ師団',
-        refuse:'カンテミロフスカヤ師団の戦車兵は橋に出なかった。連隊長は国防相の書面による命令を求め、夕方までそれを待ち続けた。発砲を拒んだ将校たちは後にひっそりと解任されたが、裁判にかける勇気は誰にもなかった。',
-        out:'戦車は橋に出たが、突入が終わる前に砲撃をやめた。乗員たちはエンジンを切り、カメラの前で車体の上に座っていた。ホワイトハウス前で沈黙する戦車の写真は、世界中の新聞に載った。',
-        won:'戦車は最後まで上層階を砲撃し続けた。噂では、乗員たちには現金が支払われ、住宅が与えられたという。車内にいた将校たちの名を、国防省は長年明かさなかった。',
-        lost:'戦車は日没まで建物を砲撃したが、建物は持ちこたえた。議会を砲撃した将校たちを新しい政権は裁かなかった。ただ、誰も彼らと握手しようとしなくなった。多くがその年のうちに軍を去った。'},
+        refuse:'カンテミロフスカヤ師団の戦車兵は橋へ出ようとしなかった。連隊長は国防相の書面による命令を求め、夕暮れまでそれを待ち続けた。発砲を拒んだ将校たちはのちにひっそりと解任されたが、彼らを裁判にかける度胸のある者は誰一人いなかった。',
+        out:'戦車は橋に進出したものの、突入が終わる前に砲撃を停止した。乗員たちはエンジンを切り、カメラの前で車体の上に腰掛けていた。ホワイトハウスの前で沈黙を守る戦車の写真は、世界中の新聞に掲載された。',
+        won:'戦車は最後まで上層階への砲撃を続けた。乗員たちには現金が支払われ、住宅があてがわれたという噂が流れた。車内にいた将校たちの名を、国防省はその後長年にわたって明かそうとしなかった。',
+        lost:'戦車は日没まで建物を砲撃し続けたが、建物は持ちこたえた。議会を砲撃した将校たちを、新政権が裁くことはなかった。ただ、彼らと握手しようとする者は誰一人いなくなった。その多くが、その年のうちに軍を去っていった。'},
       taman:{who:POINT_WHO.gs,nm:'自動車化狙撃兵',sub:'タマンスカヤ師団',
-        refuse:'タマンスカヤ師団は建物に向かわなかった。参謀本部はクレムリンに燃料不足を報告した。燃料があったことは誰もがわかっていた。',
-        out:'自動車化狙撃兵は突入を始めたが、やり遂げなかった。中隊は基壇のそばで地に伏せ、もはやどんな命令でも立ち上がらせることはできなかった。夕方までに師団は、損害を理由に後退させられた。',
-        won:'タマンスカヤ師団の兵士たちは正面玄関から建物に入った。各階を制圧した徴集兵たちは1か月後に兵舎へ戻され、どこにいたかは口外するなと命じられた。',
-        lost:'自動車化狙撃兵は一日中正面玄関に攻めかかったが、落とせなかった。師団は夜のうちに、隊列も組まず軍楽もなしにモスクワから撤収した。真っ先に解任されたのは師団長だった。'},
+        refuse:'タマンスカヤ師団は建物へ向かわなかった。参謀本部はクレムリンに対し、燃料不足を報告した。燃料があったことは誰もが知っていた。',
+        out:'自動車化狙撃兵は突入を開始したものの、途中で攻勢を止めた。中隊は基壇のそばで地に伏せ、いかなる命令を下そうともはや立ち上がらせることはできなかった。夕方までに師団は、損害が出たことを理由に後退させられた。',
+        won:'タマンスカヤ師団の兵士たちは正面玄関から建物に入った。各階を制圧した徴集兵たちは、1か月後に兵舎へ戻されると、どこにいたかは口外するなと命じられた。',
+        lost:'自動車化狙撃兵は一日中正面玄関に攻めかかったが、制圧することはできなかった。夜のうちに、師団は隊列を組むことも軍楽を響かせることもなくモスクワから撤収した。真っ先に解任されたのは師団長だった。'},
       vv:{who:POINT_WHO.mvd,nm:'国内軍',sub:'ジェルジンスキー師団',
-        refuse:'ジェルジンスキー師団は突入に出なかった。夜明け前、将校の一部が同胞に銃は向けないと表明した。内務相にはこれが「技術的な準備不足」として報告された。',
-        out:'国内軍は20番玄関で戦ったが、最後まで戦わずに撤退した。指揮官たちは上からの命令を待たず、自らの判断で部下を引き揚げた。',
-        won:'ジェルジンスキー師団は20番玄関を制圧した。この秋の勲章を最も多く受けたのは同師団の兵士たちだった。のちに彼らは、モスクワでそれを着けるのをためらった。',
-        lost:'ジェルジンスキー師団は一日中20番玄関に攻めかかった。停戦後、師団は市外へ移され、その損害の数を内務省は機密扱いにした。'},
+        refuse:'ジェルジンスキー師団は突入に出撃しなかった。夜明け前、一部の将校が同胞に銃は向けないと表明したのだ。内務相には、これが「技術的な準備不足」として報告された。',
+        out:'国内軍は20番玄関で戦ったが、最後まで戦い抜くことなく撤退した。指揮官たちは上からの命令を待たず、自らの判断で部下を引き揚げさせた。',
+        won:'ジェルジンスキー師団は20番玄関を制圧した。この秋の動乱で最も多くの勲章を手にしたのは、同師団の兵士たちだった。のちに彼らは、モスクワ市内でその勲章を着けるのをためらった。',
+        lost:'ジェルジンスキー師団は一日中20番玄関を攻め立てた。停戦後、師団は市外へと移され、内務省はその死傷者の数を機密扱いにした。'},
       omon:{who:POINT_WHO.mvd,nm:'OMON',sub:'モスクワ市警察本部',
-        refuse:'OMONは建物に向かわなかった。隊員たちはヘルメットを脱ぎ、ホワイトハウスに背を向けて河岸通りに並んだ。2週間、彼らのもとに通い続けた女性や退役軍人たちは、このことを忘れなかった。',
-        out:'OMONはほかの部隊と一緒に突入を始めたが、昼ごろには動きを止めた。警官たちは、集会を蹴散らすのは慣れているが、議会を落とすために雇われたわけではないと言った。',
-        won:'OMONは軍の後に続き、建物の各階と周辺の中庭を掃討した。クラスナヤ・プレスニャ競技場で拘束者たちに何が行われたかは、その後何年も書き続けられた。',
-        lost:'OMONは扉の前まで迫ったが、押し返された。1週間後、同じ隊員たちが、今度は議会の名において、その同じ議会の警備に就かされた。'},
+        refuse:'OMONは建物へ向かわなかった。隊員たちはヘルメットを脱ぎ、ホワイトハウスに背を向けて河岸通りに整列した。この2週間にわたって彼らのもとに通い続けた女性たちや退役軍人たちは、この光景を忘れなかった。',
+        out:'OMONは他の部隊とともに突入を開始したものの、昼ごろには進軍を止めた。警官たちは、集会を蹴散らすのは手慣れたものだが、議会を落とすために雇われたわけではない、と言った。',
+        won:'OMONは軍の後に続き、建物の各階や周辺の中庭を掃討した。クラスナヤ・プレスニャ競技場で拘束者たちに何が行われたかは、その後何年にもわたって書き続けられた。',
+        lost:'OMONは扉の前まで肉薄したものの、押し返された。その1週間後、同じ隊員たちが、今度は議会の名のもとに、まさにその議会の警備任務に就かされることとなった。'},
       alpha:{who:'yeltsin',nm:'「アルファ」と「ヴィンペル」',sub:'特殊部隊'} };
       for(const u of A.units){ const t=T[u.id]; if(!t)continue; const lost=Math.round(u.lost||0), m=uMorV(u);
         if(u.id==='alpha'){ const al=A.alpha, neg=/alpha/.test(id);
-          add(t.who,t.nm,t.sub+' · '+(neg?'自らの保証で人々を連れ出した':al==='refuse'?'突入を拒否した':al==='attack'?'突入に加わった、死傷者'+fmt(lost):'予備にとどまった'),
-            neg?(id==='draw_alpha'?'「アルファ」の将校たちは一発も撃たずに建物に入り、自分たちの言葉を保証として人々を連れ出した。彼らはカメラの前で、議会への突入はしないと語った。クレムリンはそれを許さなかった。「ヴィンペル」は解体され、「アルファ」は別の官庁の管轄に移された。':'「アルファ」は自らの保証のもとに人々を建物から連れ出した。その保証はバスの前までしか効かなかった。将校たちは後に、できることはやった、自分たちがいなければ死者は10倍になっていたと語った。')
-            :al==='refuse'?'「アルファ」は無線での呼びかけを聞き、その場を動かなかった。将校たちはクレムリンに、丸腰の代議員を相手にする仕事はしないと答えた。特殊部隊の拒否は、まだ迷っていた者すべてにとって突入の終わりを意味した。'
-            :al==='attack'?(kWon?'「アルファ」と「ヴィンペル」は最後に20番玄関へ突入し、ほかの部隊にできなかったことをやってのけた。その日のことを、彼らの将校たちは語りたがらない。':'「アルファ」は突入したが、玄関を落とせなかった。失敗を知らなかった部隊にとって、これは転機となった。将校の半数が辞職願を出した。')
-            :'「アルファ」と「ヴィンペル」は最後まで予備として待機させられ、結局戦闘には投入されなかった。彼らの将校たちは後に、あれはこの秋で最良の命令だったと語った。'); continue; }
+          add(t.who,t.nm,t.sub+' · '+(neg?'自らの保証のもとに人々を連れ出した':al==='refuse'?'突入を拒否した':al==='attack'?'突入に加わった、死傷者'+fmt(lost):'予備にとどまった'),
+            neg?(id==='draw_alpha'?'「アルファ」の将校たちは一発も撃つことなく建物に入り、自らの言葉で安全を保証して人々を連れ出した。彼らはカメラの前で、議会への突入は行わないと言い切った。クレムリンがそれを許すはずもなかった。「ヴィンペル」は解体され、「アルファ」は別の省庁の管轄へと移された。':'「アルファ」は自らの保証のもとに人々を建物から連れ出した。だが、その保証が通用したのはバスの目の前までだった。将校たちはのちに、自分たちにできる限りのことはした、もし介入していなければ死者は10倍に達していただろう、と語った。')
+            :al==='refuse'?'「アルファ」は無線での呼びかけを聞いても、その場を動かなかった。将校たちはクレムリンに、丸腰の代議員を相手にする仕事はしないと答えた。特殊部隊の拒否は、まだ迷っていたすべての者にとって、突入の終わりを意味した。'
+            :al==='attack'?(kWon?'「アルファ」と「ヴィンペル」は最後に20番玄関へ突入し、他のどの部隊にも成し得なかった突破をやり遂げた。だが、その日の出来事について、彼ら将校たちが進んで口を開くことはない。':'「アルファ」は突入したものの、玄関を落とすことはできなかった。これまで無敗を誇った部隊にとって、これは決定的な転機となった。将校の半数が辞職願を提出した。')
+            :'「アルファ」と「ヴィンペル」は最後まで予備兵力として待機させられ、結局戦闘に投入されることはなかった。将校たちはのちに、あれこそがこの秋における最良の命令だったと述懐した。'); continue; }
         const st=u.st==='refuse'&&lost===0?'refuse':(u.cur<=3||m<MOR_HALT)?'out':kWon?'won':'lost';
         const ls=u.id==='tanks'?'':'、死傷者'+fmt(lost), sub=t.sub+' · '+(st==='refuse'?'拒否し、戦闘に加わらなかった':st==='out'?(u.halt||u.cur>3?(u.id==='tanks'?'砲撃をやめた':'停止し、それ以上進まなかった'):'戦闘から外された')+ls:(u.id==='tanks'?'最後まで砲撃した':'最後まで戦った')+ls);
         add(t.who,t.nm,sub,t[st]); } } }
   { const mine=OUTLETS.filter(o=>outSt(S,o)==='vs').length, kr=OUTLETS.filter(o=>outSt(S,o)==='kr').length;
-    add(null,'報道機関',`味方 ${mine}、クレムリン側 ${kr}`,win?(mine>=kr?'大会側についた編集部が、この秋の歴史を最初に書いた。残りの編集部は2週間かけて、本当は何を言いたかったのかを読者に説明した。':'ほとんどの編集部は最後の日まであなたに敵対していた。勝利した大会は、それらを閉鎖するかどうかで揉めた。'+(S.rad>=60?'結局3つを閉鎖し、これが新しい政権の最初のスキャンダルになった。':'1つも閉鎖しなかった。そのことは人々の記憶に残った。'))
-      :(mine>=4?'「プラウダ」「ソヴィエツカヤ・ロシア」「デーニ」をはじめ10余りの媒体が、翌日、大統領令で閉鎖された。一部は別の名前で復刊した。クレムリンを支持した新聞も検閲で白く抜けた紙面のまま発行され、憤慨した。':'野党系の新聞は大統領令で閉鎖された。残りの新聞は検閲で白く抜けた紙面のまま発行されたが、検閲は数日後に撤廃された。')); }
+    add(null,'報道機関',`味方 ${mine}、クレムリン側 ${kr}`,win?(mine>=kr?'大会側についた編集部が、この秋の歴史を真っ先に書いた。残る編集部は2週間かけて、自分たちが本当は何を言いたかったのかを読者に釈明した。':'ほとんどの編集部は最後の日まであなたに敵対していた。勝利を収めた大会は、それらを閉鎖すべきかどうかで紛糾した。'+(S.rad>=60?'結局3社が閉鎖処分となり、これが新政権にとって最初の政治スキャンダルとなった。':'1社も閉鎖しなかった。そのことは人々の記憶に残った。'))
+      :(mine>=4?'「プラウダ」「ソヴィエツカヤ・ロシア」「デーニ」をはじめとする10余りの媒体が、翌日、大統領令によって閉鎖された。その一部は別の名で復刊した。クレムリンを支持した新聞も、検閲で白く抜けた紙面のまま発行されることになり、憤慨した。':'野党系の新聞は大統領令で閉鎖された。残る新聞は検閲で白く抜けた紙面のまま発行されたが、その検閲も数日後には撤廃された。')); }
   { const A=S.A, lost=A?Math.round(A.lost||0):0;
-    add(K==='fell'||K==='held'?'whf':'wh','モスクワ','決着後の街',win?(lost>300?`勝利の代償は、守備側の死傷者${fmt(lost)}人だった。クラスナヤ・プレスニャ競技場の壁際に記念碑が建てられ、かつて鉄条網の両側に分かれていた人々が、今もそこを訪れる。`:'バリケードは1週間で撤去された。蛇腹鉄条網は、もと来た倉庫へ運び戻された。モスクワ市民は台所で、あれは誰の勝利だったのかと長いあいだ議論した。')
-      :(K==='draw'&&S.endId==='held_iso'?'ホワイトハウス前のバリケードは冬まで残った。街の人々は河岸通りを迂回することに慣れた。建物を守り抜いた者たちを、モスクワ市民は感謝もせず、呪いもしなかった。ただ恐れていた。':K==='draw'?'ホワイトハウスは春まで、すすけたまま空き家になっていた。どちらの権力も入居する決心がつかなかった。モスクワには政府が二つあり、同時に一つもなかった。物価は上がり、台所では誰が勝ったかではなく、誰が悪いのかが議論された。':K==='fell'?'白い外壁の黒い焼け跡は、冬までに塗りつぶされた。死者の数は長いあいだ、さまざまに数えられた。公式には約150人。夜間外出禁止令は2週間後に解除された。':K==='surr'?'建物は大きな戦闘なしに明け渡され、それが数百の命を救った。外壁は白いままだった。ホワイトハウスは塀で囲まれ、その塀は今も立っている。':'ホワイトハウスは一発の銃声もなく空になった。1か月後にはもう政府が入居しており、周りには、二度とバリケードの材料が見つからないような塀が建てられた。')); }
-  add('wh','実際の歴史','1993年9月21日～10月4日','大統領令第1400号は9月21日に出された。ホワイトハウスは電気と通信を断たれ、鉄条網で囲まれた。10月3日、最高会議の支持者たちは封鎖線を突破して市庁舎を占拠し、オスタンキノへ向かった。10月4日朝、ノヴォアルバーツキー橋の戦車が議会を砲撃し、夕方までに守備側は投降した。公式発表では約150人が死亡した。12月には新憲法が採択された。');
+    add(K==='fell'||K==='held'?'whf':'wh','モスクワ','決着後の街',win?(lost>300?`勝利の代償は、守備側の死傷者${fmt(lost)}人だった。クラスナヤ・プレスニャ競技場の壁際には記念碑が建てられ、かつて鉄条網の両側に分かれていた人々が、今もそこを訪れている。`:'バリケードは1週間で撤去された。蛇腹鉄条網は元の倉庫へと運び戻された。モスクワ市民は台所で、あれは誰の勝利だったのかと長く議論を交わした。')
+      :(K==='draw'&&S.endId==='held_iso'?'ホワイトハウス前のバリケードは冬まで残った。街の人々は河岸通りを迂回することに慣れていった。建物を守り抜いた者たちを、モスクワ市民は感謝もせず、呪いもしなかった。ただ、恐れていた。':K==='draw'?'ホワイトハウスは春まで、すすけたまま空き家となっていた。どちらの権力も、そこに入る決心がつかなかった。モスクワには二つの政府があり、同時に一つもなかった。物価は上がり、台所で議論されたのは誰が勝ったかではなく、誰が悪かったのかだった。':K==='fell'?'白い外壁に残る黒い焼け跡は、冬までに塗りつぶされた。死者の数はその後も長く、さまざまに推計された。公式には約150人。夜間外出禁止令は2週間後に解除された。':K==='surr'?'建物は大きな戦闘もなく明け渡され、それによって数百の命が救われた。外壁は白いままだった。ホワイトハウスは塀で囲まれ、その塀は今も残っている。':'ホワイトハウスは一発の銃声もなく空になった。1か月後には早くも政府が入り、周囲には、二度とバリケードの材料が見つからないような塀が築かれた。')); }
+  add('wh','実際の歴史','1993年9月21日～10月4日','大統領令第1400号は9月21日に発令された。ホワイトハウスは電気と通信を遮断され、鉄条網で包囲された。10月3日、最高会議の支持者たちは封鎖線を突破して市庁舎を占拠し、オスタンキノへと向かった。10月4日朝、ノヴォアルバーツキー橋の戦車が議会を砲撃し、夕方までに守備側は投降した。公式発表による死者数は約150人。12月には新憲法が採択された。');
   return L;
 }
 function showEpi(i){ const L=epilogue(); i=Math.max(0,Math.min(i||0,L.length-1)); const s=L[i], last=i===L.length-1;
@@ -1220,14 +1220,14 @@ function showEpi(i){ const L=epilogue(); i=Math.max(0,Math.min(i||0,L.length-1))
 }
 // what became of every faction: [ушли до конца, победа, поражение]
 const FATES={
-  kr:['決着前に去った。ルイプキンは誰よりも先に政府と話をつけた。','挙国一致政府に加わり、3つの省を手に入れた。','共産党は12月の選挙への参加を認められた。ルイプキンは新しい国家院の議長になった。'],
-  ros:['地方へ散って各地のソヴィエトをまとめようとしたが、間に合わなかった。','バブーリンが新憲法の起草委員会を率いた。','バブーリンは建物を出たところで殴打された。12月、彼は国家院議員に選ばれ、再び議席を得た。'],
-  agr:['事態が終わる前に地元の州へ帰った。','自分たちの案どおりの土地法を大会で通した。','農業党は国家院に議席を得て、農村予算をめぐって駆け引きをした。'],
-  otc:['軍人の代議員たちは去り、軍管区との人脈も持ち去った。','国防省の要職を得た。','年金なしで予備役に回された。1年後、一部が政界に戻った。'],
-  sm:['誰よりも早くカメラの前に出て、エリツィンもハズブラートフも抜きの選挙を提案した。','妥協の顔になった。若い代議員たちが選挙をめぐる交渉を主導した。','会派は分裂した。所属代議員は新しい政党へ散っていった。'],
-  kol:['一人、また一人と去った。大統領令は各人にポストと1年分の給与を約束していた。','最後まで残り、後になって、一瞬たりとも迷わなかったと語った。','クレムリンから約束どおりのポストと補償を受け取った。'],
-  rne:['最後を待たずに建物を去った。','勝利の分け前を要求した。彼らには別途対処せねばならなかった。','武器を持って地下道から脱出した。バルカショフは冬に逮捕され、恩赦で釈放された。'],
-  so:['独自に行動するため去った。','将校たちは階級を回復されて軍に戻った。','テレホフは逮捕された。1994年2月、恩赦で釈放。'],
+  kr:['事態が決着する前に立ち去った。ルイプキンは誰よりも早く政府と話をつけた。','挙国一致政府に加わり、3つの省を手に入れた。','共産党は12月の選挙への参加を認められた。ルイプキンは新たな国家院の議長に就任した。'],
+  ros:['地方へ散って各地のソヴィエトをまとめようとしたが、間に合わなかった。','バブーリンが新憲法起草委員会を率いた。','バブーリンは建物を出たところで暴行を受けた。12月、彼は国家院議員に当選し、再び議席を得た。'],
+  agr:['事態の終息を待たず、地元の州へ戻った。','自分たちの案どおりの土地法を大会で可決させた。','農業党は国家院に議席を得て、農村予算をめぐる駆け引きを繰り広げた。'],
+  otc:['軍人代議員たちは去り、軍管区とのパイプも持ち去った。','国防省の要職に就いた。','年金も支給されずに予備役へ回された。1年後、その一部が政界へ復帰した。'],
+  sm:['誰よりも早くカメラの前に立ち、エリツィンもハズブラートフも出馬しない選挙を提案した。','妥協の象徴となった。若い代議員たちが選挙に向けた交渉を主導した。','会派は分裂した。所属代議員たちは新たな政党へと散っていった。'],
+  kol:['一人、また一人と去っていった。大統領令は各人にポストと1年分の給与を約束していた。','最後まで残り、後になって、一瞬たりとも迷いはなかったと語った。','クレムリンから約束どおりのポストと補償を受け取った。'],
+  rne:['最後を待たずに建物を去った。','勝利の分け前を要求したため、彼らには別途対処せねばならなかった。','武器を手に地下道から脱出した。バルカショフは冬に逮捕されたが、恩赦で釈放された。'],
+  so:['独自に行動するために去った。','将校たちは階級を回復され、軍に復帰した。','テレホフは逮捕されたが、1994年2月に恩赦で釈放された。'],
 };
 function openFinal(){
   const id=S.endId||'', win=!!(ENDINGS[id]&&ENDINGS[id].win)||id==='held', neu=endTier(id)==='neu', A=S.A, st=S.st||{};
@@ -1236,7 +1236,7 @@ function openFinal(){
     return `<div class="ff"><span class="sw" style="background:${F.c}"></span><div><b>${F.nm.replace(/"/g,'')}</b> <i style="color:${gone?'var(--dim)':L.c}">${gone?'建物にいない':L.nm+' · '+f.n}</i><div>${FATES[F.id][gone?0:win?1:2]}</div></div></div>`;}).join('');
   const forces=[['mo','国防省'],['gs','参謀本部'],['mvd','内務省'],['mer','市庁舎'],['ost','オスタンキノ']].map(([k,n])=>{const v=S.pts[k];return row(n,v>=70?'最高会議側':v>=45?'態度未定':'クレムリン側',v>=70?'p':v>=45?'':'n');}).join('');
   const mine=OUTLETS.filter(o=>outSt(S,o)==='vs').map(o=>o.nm).join('、')||'なし';
-  $('modal-win').innerHTML=`<h2>結果 · 1993年${dateStr(S.day).toUpperCase()}</h2><div class="sub">${win?'勝利：最高会議は持ちこたえた。':neu?'引き分け：建物は失われたが、エリツィンは政治的に深手を負った。':'敗北：エリツィンが勝った。'}${A?'突入は12時間中'+A.r+'時間続いた。':'突入には至らなかった。'}</div>
+  $('modal-win').innerHTML=`<h2>結果 · 1993年${dateStr(S.day).toUpperCase()}</h2><div class="sub">${win?'勝利：最高会議は持ちこたえた。':neu?'引き分け：建物は失われたが、エリツィンも政治的に深手を負った。':'敗北：エリツィンが勝利した。'}${A?'突入は12時間中'+A.r+'時間続いた。':'突入には至らなかった。'}</div>
    <div class="fin"><div><h3>数字</h3>
     ${row('経過日数',S.day)}${row('下した決断',S.chron.length)}${row('正統性',S.leg)}${row('モスクワの支持',S.city+'%')}
     ${row('残った代議員',deputies(S)+' / 265',deputies(S)<QUORUM?'n':'')}${row('去った代議員',st.depOut||0)}${row('戻った代議員',st.depIn||0)}
@@ -1246,8 +1246,8 @@ function openFinal(){
     <h3>味方の報道機関</h3><div class="fo">${mine}</div>
     ${A&&A.muster?'<h3>最後の夜に駆けつけた者</h3>'+A.muster.map(m=>`<div class="fo ${m.g?'p':'n'}">${m.t}</div>`).join(''):''}
    </div><div><h3>その後の運命</h3>${facs}
-    <div class="ff"><span class="sw" style="background:#b3322b"></span><div><b>ハズブラートフとルツコイ</b><div>${win?'繰り上げ選挙まで権力の座にとどまった。その先どうなったかは、歴史にもわからない。':'レフォルトヴォに収監された。1994年2月26日、国家院の恩赦で釈放された。'}</div></div></div>
-    <h3>実際の歴史</h3><div class="fo">大統領令第1400号は9月21日に出された。10月4日、ノヴォアルバーツキー橋の戦車がホワイトハウスを砲撃し、夕方までに守備側は投降した。公式発表では約150人が死亡した。12月には新憲法が採択された。</div>
+    <div class="ff"><span class="sw" style="background:#b3322b"></span><div><b>ハズブラートフとルツコイ</b><div>${win?'繰り上げ選挙まで権力の座にとどまった。その先どうなったのかは、歴史さえも知らない。':'レフォルトヴォに収監された。1994年2月26日、国家院の恩赦により釈放された。'}</div></div></div>
+    <h3>実際の歴史</h3><div class="fo">大統領令第1400号は9月21日に発令された。10月4日、ノヴォアルバーツキー橋の戦車がホワイトハウスを砲撃し、夕方までに守備側は投降した。公式発表による死者数は約150人。12月には新憲法が採択された。</div>
    </div></div><div class="sub" style="text-align:center;margin-top:6px">ゲーム「1993」 · ${authorHTML()}</div><div class="close">ESC：閉じる</div>`;
   $('modal').classList.add('on'); $('modal-win').querySelector('.close').onclick=()=>$('modal').classList.remove('on');
 }
@@ -1319,7 +1319,7 @@ const Font={ list:[['pix','ドット'],['sans','ゴシック'],['serif','明朝'
 const Lang={ list:[['ja','日本語'],['','ロシア語（原文）'],['en','English'],['zh','中文'],['ko','한국어']], cur:()=>GL,
   note:{en:'Translations into English, Chinese and Korean have not been checked by anyone. We cannot guarantee their quality. The original game is in Russian, and the translation may be inaccurate.',zh:'英文、中文和韩文翻译未经任何人校对，无法保证翻译质量。游戏原文为俄语，译文可能不准确。',ko:'영어, 중국어, 한국어 번역은 아무도 검수하지 않았습니다. 번역 품질을 보장할 수 없습니다. 게임 원문은 러시아어이며, 번역이 부정확할 수 있습니다.'},
   sync(){const b=$('lngb'),p=$('lngp'); if(!b)return; if((typeof SINGLE!=='undefined'&&SINGLE)||!LANGS_ON){b.style.display='none';return;} b.textContent='⚑ '+this.list.find(x=>x[0]===GL)[1].toUpperCase()+' ▾';
-    const N=this.note; p.innerHTML='<span class="lx" style="position:absolute;right:6px;top:2px;cursor:pointer;padding:0 4px">✕</span>'+this.list.map(x=>`<div class="l${x[0]===GL?' on':''}" data-l="${x[0]}">${x[1]}</div>`).join('')+`<div class="n">日本語版は非公式の翻訳です（原文はロシア語）。英語・中国語・韓国語の翻訳は、原作者によると誰の確認も受けておらず、品質は保証されていません。</div>`;
+    const N=this.note; p.innerHTML='<span class="lx" style="position:absolute;right:6px;top:2px;cursor:pointer;padding:0 4px">✕</span>'+this.list.map(x=>`<div class="l${x[0]===GL?' on':''}" data-l="${x[0]}">${x[1]}</div>`).join('')+`<div class="n">日本語版は非公式の翻訳です（原文はロシア語）。原作者によれば、英語・中国語・韓国語の翻訳は誰の校正も受けておらず、品質は保証されていません。</div>`;
     p.querySelector('.lx').onclick=e=>{e.stopPropagation();p.style.display='none';}; p.querySelectorAll('.l').forEach(d=>d.onclick=e=>{e.stopPropagation();this.set(d.dataset.l);}); },
   set(l){ if(l===GL){$('lngp').style.display='none';return;} const o=store.get(OPTS)||{}; o.lang=l||'ru'; store.set(OPTS,o); if(l&&window.Stat)Stat.ev('lang-'+l); location.href=location.pathname; } };
 {const b=$('lngb'); if(b){b.onclick=e=>{e.stopPropagation();const p=$('lngp');p.style.display=p.style.display==='none'?'block':'none';}; Lang.sync();document.addEventListener('click',e=>{const p=$('lngp');if(p&&p.style.display!=='none'&&!p.contains(e.target)&&e.target!==b)p.style.display='none';});document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=$('lngp');if(p)p.style.display='none';}});}

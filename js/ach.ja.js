@@ -9,16 +9,16 @@ const ACH=[
  {id:'dep',    nm:'大会、勢揃い',      d:'建物内に代議員220人をそろえて突入を迎える'},
  {id:'bar',    nm:'五重の守り',         d:'バリケードを五重に築く'},
  {id:'mil',    nm:'人民義勇兵', d:'突入までに戦闘員400人をそろえる'},
- {id:'zhupel', nm:'リベラルの悪夢',  d:'RNEを建物に置き、「ファシスト」の烙印を押されたまま、負けずに終える'},
+ {id:'zhupel', nm:'リベラルの悪夢',  d:'RNEを建物に残し、「ファシスト」の烙印を押されたまま、負けずに終える'},
  {id:'fluger', nm:'風見鶏',             d:'RNEを建物に入れてから追い出し、負けずに終える'},
  {id:'refuse', nm:'命令拒否',              d:'突入開始までに、クレムリン側の部隊を少なくとも1つ命令拒否に追い込む'},
  {id:'tanks',  nm:'祖国の煙さえ甘い', d:'橋の上の戦車を止める'},
  {id:'alpha',  nm:'敬礼',       d:'無線で「アルファ」を説得して撤収させる'},
- {id:'parley', nm:'軍使',       d:'エリツィンの電話の後に白旗の使者を送り、クレムリン側の部隊1つを突入から離脱させる'},
+ {id:'parley', nm:'軍使',       d:'エリツィンからの電話の後に白旗の使者を送り、クレムリン側の部隊1つを突入から離脱させる'},
  {id:'meat',   nm:'肉挽き器',          d:'突入部隊に400人の損害を与える'},
  {id:'dark',   nm:'12時間',   d:'日没まで持ちこたえる'},
  {id:'hold',   nm:'一歩も退くな',      d:'どちらの入口も50%を割らせずに、日没まで持ちこたえる'},
- {id:'blood',  nm:'少ない流血で',       d:'日没前に撃退する：クレムリン軍が停止か撤退し、味方の死傷者は400人未満'},
+ {id:'blood',  nm:'少ない流血で',       d:'日没前に撃退する：クレムリン軍が停止または撤退し、味方の死傷者が400人未満'},
  {id:'army',   nm:'軍は人民とともに',    d:'国防省と参謀本部を味方につけて勝利する'},
  {id:'elect',  nm:'選挙',             d:'突入を撃退し、大会の条件で選挙を実現する'},
  {id:'kashin', nm:'オレグ・カシン',         d:'93年のことなら何でも知っている。ほかの実績をすべて獲得する'},
@@ -88,9 +88,9 @@ async function achCount(name){ if(name in ACH_NET)return ACH_NET[name];
 const endEvName=id=>'end-'+({win:'win',neu:'neutral'}[endTier(id)]||'lose')+'-'+id.replace(/_/g,'-');
 const netOk=()=>/^https?:/.test(location.protocol)&&achNetOn!==false;
 const pct=(n,t)=>t?(n>0&&n/t*100<1?'<1':Math.round(n/t*100))+'%':'—';
-async function achNetFill(){ const e=$('ach-net'); if(!netOk()){ if(e)e.textContent='プレイヤーの獲得率は、リンクからゲームを開き、ネットに接続しているときに表示されます。実績はこのブラウザに保存されます。'; return; }
+async function achNetFill(){ const e=$('ach-net'); if(!netOk()){ if(e)e.textContent='プレイヤーの獲得率は、リンクからゲームを開き、ネットに接続している場合に表示されます。実績はこのブラウザに保存されます。'; return; }
   try{const total=await achCount('start'); achNetOn=true;
-    if(e)e.textContent='これまでのプレイヤー：'+fmt(total)+'人。各実績に、獲得したプレイヤーの割合と人数を表示しています。'+(total<20?'まだデータが少なめです。':'');
+    if(e)e.textContent='これまでのプレイヤー：'+fmt(total)+'人。各実績には、獲得したプレイヤーの割合と人数を表示しています。'+(total<20?'まだデータが少なめです。':'');
     const els=[...document.querySelectorAll('#modal-win [data-net]')];
     await Promise.all(els.map(async el=>{try{const n=await achCount(el.dataset.net); el.innerHTML=pct(n,total)+'<small> · '+fmt(n)+'</small>';}catch(e){}}));
   }catch(e){achNetOn=false; {const z=$('ach-net'); if(z)z.textContent='全体カウンターは現在利用できません。実績はこのブラウザに保存されます。';}} }
@@ -107,17 +107,17 @@ function openStats(){const st=achStats(), g=achGot(), win=$('modal-win'); win.cl
      <div class="stm">プレイ回数<b>${st.games||0}</b></div><div class="stm">突入まで到達<b>${st.assaults||0}</b></div>
      <div class="stm">勝利<b class="p">${mine.win}</b></div><div class="stm">引き分け<b>${mine.neu}</b></div><div class="stm">敗北<b class="n">${mine.lose}</b></div>
      <div class="stm">実績<b>${ACH.filter(a=>g[a.id]).length} / ${ACH.length}</b></div>
-     <h3 class="sth">あなたのエンディング</h3>${ids.filter(id=>(st.ends||{})[id]).map(id=>`<div class="stm t-${endTier(id)}">${nm(id)}<b>×${st.ends[id]}</b></div>`).join('')||'<div class="stm">まだ最後までプレイしたゲームはありません</div>'}
+     <h3 class="sth">あなたのエンディング</h3>${ids.filter(id=>(st.ends||{})[id]).map(id=>`<div class="stm t-${endTier(id)}">${nm(id)}<b>×${st.ends[id]}</b></div>`).join('')||'<div class="stm">最後までプレイしたゲームはまだありません</div>'}
      <div class="stn">実績ごとの割合は「実績」画面でご覧ください。チートを使ったゲームは統計に含まれません。</div></div></div>`;
   $('modal').classList.add('on'); win.querySelector('.close').onclick=closeModal; statsFill(ids);
 }
 async function statsFill(ids){const e=$('st-net'), set=(k,v,w)=>{const a=document.querySelector('#modal-win [data-val="'+k+'"]'),b=document.querySelector('#modal-win [data-bar="'+k+'"]'); if(a)a.textContent=v; if(b)b.style.width=Math.max(0,Math.min(100,w||0))+'%';};
   const blank=t=>{document.querySelectorAll('#modal-win [data-val]').forEach(x=>x.textContent='—'); if(e)e.textContent=t;};
-  if(!netOk())return blank('全体の統計は、リンクからゲームを開き、ネットに接続しているときに表示されます。右側は、このブラウザに記録されたあなた個人の統計です。');
+  if(!netOk())return blank('全体の統計は、リンクからゲームを開き、ネットに接続している場合に表示されます。右側は、このブラウザに記録されたあなた個人の統計です。');
   try{const start=await achCount('start'); achNetOn=true; const [dec,ass]=await Promise.all([achCount('decree'),achCount('assault')]);
     const ev=ids.map(endEvName), cnt=await Promise.all(ev.map(n=>achCount(n).catch(()=>0))), tot=cnt.reduce((a,b)=>a+b,0);
     if(!$('st-net'))return;
-    e.textContent='このカウンターは、リンクからプレイする全員で共通です。数えているのはゲーム数ではなく人数で、一人につき一度だけ数えられます。'+(start<20?'まだデータが少ないため、数字は大きく変動します。':'');
+    e.textContent='このカウンターは、リンクからプレイする全員で共通です。集計されるのはゲーム数ではなく人数で、一人につき一度だけカウントされます。'+(start<20?'まだデータが少ないため、数値は大きく変動することがあります。':'');
     set('start',fmt(start),100); set('decree',pct(dec,start)+' · '+fmt(dec),start?dec/start*100:0); set('assault',pct(ass,start)+' · '+fmt(ass),start?ass/start*100:0);
     const T={win:0,neu:0,lose:0}; ids.forEach((id,i)=>{T[endTier(id)]+=cnt[i];});
     for(const t in T)set('tier-'+t,pct(T[t],tot)+' · '+fmt(T[t]),tot?T[t]/tot*100:0);
@@ -128,7 +128,7 @@ function openAch(ch){const g=achGot(), st=achStats(), n=ACH.filter(a=>g[a.id]).l
   win.innerHTML=`<div class="close xtop">✕ 閉じる</div><h2>実績 · ${n} / ${ACH.length}</h2><div class="sub" id="ach-net">実績はこのブラウザに保存されます。チートを使ったゲームでは獲得できません。</div>
    <div class="achg">`+ACH.map(a=>`<div class="ach${g[a.id]?' on':''}"><canvas width="64" height="64" data-a="${a.id}"></canvas><div><b>${a.nm}</b><span>${a.d}</span></div><i data-net="ach-${a.id}"></i></div>`).join('')+`</div>
    <h3 class="achh">あなたの統計</h3><div class="achs">ゲーム数：<b>${st.games||0}</b> · 突入到達：<b>${st.assaults||0}</b> · 勝利：<b class="p">${tiers.win}</b> · 引き分け：<b>${tiers.neu}</b> · 敗北：<b class="n">${tiers.lose}</b></div>
-   <div class="aes">${ends}</div>`+((ch||cheatOn())?`<div class="achc"><b>チート：</b> <u data-c="all">すべて解除</u> <u data-c="none">リセット</u> <u data-c="toast">通知を表示</u> <span>チートで解除した実績は全体の統計に含まれません</span></div>`:'');
+   <div class="aes">${ends}</div>`+((ch||cheatOn())?`<div class="achc"><b>チート：</b> <u data-c="all">すべて解除</u> <u data-c="none">リセット</u> <u data-c="toast">通知を表示</u> <span>チートで解除した実績は全体の統計には反映されません</span></div>`:'');
   win.querySelectorAll('.achc u').forEach(u=>u.onclick=()=>{const c=u.dataset.c; if(c==='toast'){achToast(ACH[Math.floor(Math.random()*ACH.length)].id);return;}
     const g2=achGot(); if(c==='all'){for(const a of ACH)if(!g2[a.id])g2[a.id]='cheat';} else {for(const k in g2)if(g2[k]==='cheat')delete g2[k]; if(u.dataset.sure){store.set(ACH_KEY,{});openAch(1);return;} }
     store.set(ACH_KEY,g2); openAch(1); if(c==='none'){const b=document.querySelector('.achc u[data-c="none"]'); if(Object.keys(g2).length){b.textContent='本物の実績もリセット ('+Object.keys(g2).length+')';b.dataset.sure=1;}}});
